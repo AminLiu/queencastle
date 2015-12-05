@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.goods.FeedBackMapper">
+	<resultMap id="FeedBackResultMap" type="com.queencastle.dao.model.goods.FeedBack">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="info_id" property="infoId" typeHandler="idHandler" />
+		<result column="user_id" property="userId" typeHandler="idHandler" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id,info_id, user_id, content,created_at
+	</sql>
+
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.goods.FeedBack">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_feedback (
+		 info_id, user_id, content,created_at
+		)values
+		( #{infoId,typeHandler=idHandler},#{userId,typeHandler=idHandler},#{content},now())
+	</insert>
+
+	 <select id="getByDemondInfoId" resultMap="FeedBackResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_feedback
+		where info_id = #{infoId,typeHandler=idHandler}
+	</select>
+	
+	<select id="getBySupplyUserId" resultMap="FeedBackResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_feedback 
+		where
+		user_id=#{userId,typeHandler=idHandler}
+	</select>
+	
+	<select id="getFeedBackCountByParams" resultType="java.lang.Integer">
+		select count(*) from queen_feedback
+	</select>
+
+	<select id="getFeedbackByParams" resultMap="FeedBackResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_feedback	
+		order by id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+
+
+
+
+
+
+</mapper>

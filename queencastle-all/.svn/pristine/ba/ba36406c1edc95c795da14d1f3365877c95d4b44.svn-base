@@ -1,0 +1,43 @@
+package com.queencastle.service.test.relations;
+
+import java.util.List;
+
+import org.junit.Ignore;
+import org.junit.Test;
+
+import com.queencastle.dao.model.relations.AuditStatus;
+import com.queencastle.dao.model.relations.GroupLevel;
+import com.queencastle.dao.model.relations.ManagerAuth;
+import com.queencastle.dao.mybatis.IdTypeHandler;
+import com.queencastle.service.test.BaseTest;
+
+public class ManagerAuthTester extends BaseTest {
+
+    @Test
+    @Ignore
+    public void testInsert() {
+        ManagerAuth managerAuth = new ManagerAuth();
+        managerAuth.setAreaId(IdTypeHandler.encode(87));
+        managerAuth.setUserId(IdTypeHandler.encode(21));
+        managerAuth.setAuthId(IdTypeHandler.encode(19));
+        managerAuth.setLevel(GroupLevel.city);
+        managerAuth.setStatus(AuditStatus.undone);
+        managerAuthService.insert(managerAuth);
+    }
+
+    @Test
+    @Ignore
+    public void testGetById() {
+        ManagerAuth managerAuth = managerAuthService.getById(IdTypeHandler.encode(1));
+        System.out.println(managerAuth);
+    }
+
+    @Test
+    @Ignore
+    public void testSearch() {
+        List<ManagerAuth> list =
+                managerAuthService.getByAreaIdAndAuthId(IdTypeHandler.encode(87),
+                        IdTypeHandler.encode(19), GroupLevel.city);
+        System.out.println(list);
+    }
+}

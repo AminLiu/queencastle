@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.goods.ProductMapper">
+	<resultMap id="ProductResultMap" type="com.queencastle.dao.model.goods.Product">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="category_id" property="category.id" typeHandler="idHandler" />
+		<result column="cname" property="cname" jdbcType="VARCHAR" />
+		<result column="ename" property="ename" jdbcType="VARCHAR" />
+		<result column="intro" property="intro" jdbcType="VARCHAR" />
+		<result column="imgs" property="imgs" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id,category_id,cname,ename,intro,imgs,created_at,updated_at
+	</sql>
+
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.goods.Product">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_product (
+		 category_id,cname,ename,intro,imgs,created_at,updated_at
+		)values
+		(#{category.id,typeHandler=idHandler}, #{cname},#{ename},#{intro},#{imgs},now(),now())
+	</insert>
+
+	 
+	
+	<select id="getById" resultMap="ProductResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_product 
+		where
+		id=#{id,typeHandler=idHandler}
+	</select>
+
+	<select id="getByCategoryId" resultMap="ProductResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from queen_product 
+		where
+		category_id=#{categoryId,typeHandler=idHandler}
+	</select>
+
+
+	<select id="getAllProducts" resultMap="ProductResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from queen_product 
+		order by id desc
+	</select>
+
+	<select id="getProductsCountByParams" resultType="java.lang.Integer">
+		select count(*) from queen_product
+	</select>
+	<select id="getProductsByParams" resultMap="ProductResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_product order by id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+
+
+
+
+
+
+
+
+
+
+</mapper>

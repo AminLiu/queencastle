@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="stylesheet" type="text/css" href="resources/css/css.css"/>
+<style type="text/css">
+ html{height: 100%;padding: 0px;margin: 0px;font-family:"Microsoft YaHei","Tahoma";}
+body{margin:0;}
+img {width:100%;}
+ul, li {list-style:none;margin:0;padding:0;}
+.textBlue {color:#41009a;}
+.textGray{color:#666;}
+.textBlue1 {color:#1abeb8;}
+.pageGoodsSource {background:url("/resources/images/bg1.png") no-repeat center;background-size:100% 100%;}
+
+.mainNav {position:fixed;bottom:0;left:0;width:100%;}
+.mainNavList {font-size:0;background:#41009a;}
+.mainNavList > li {position:relative;display:inline-block;width:25%;height:40px;line-height:40px;text-align:center;font-size:14px;color:#fff;}
+.mainNavList > li > div {display:inline-block;border-bottom:1px solid #6198d0;}
+.mainNavList > li.curNav {color:#a6befb;}
+.mainNavSplit {display: inline-block;height: 12px;vertical-align: middle;width: 1px;border-left: 1px solid #fff;position: absolute;right: 0;top: 15px;}
+
+.pageGoodsSource {width:100%;padding-bottom:50px;}
+.goodsHot {display:table;padding:10px 0;margin:0 5%;}
+.goodsHot > div {display:table-cell;vertical-align:middle;}
+.goodsHotLeft {text-align:center;}
+.goodsImg {display:inline-block;width:60px;height:60px;}
+.goodsImg img {border-radius:50%;}
+.hotLabel {font-size:14px;color:#000;text-align:center;white-space:nowrap;padding-top:5px;font-weight:bold;}
+.goodsHotRight {padding-left:3%;font-size:12px;color:#000;line-height:16px;}
+
+.goodsTabsWrapper {padding:15px 5% 0 5%;background:#fff;width:90%;}
+.goodsTabContent {padding:0 3%;}
+.goodsTabs  {font-size:0;padding-bottom:10px;margin:0 5%;width:90%;}
+.goodsTabs > li {display:inline-block;vertical-align:middle;width:25%;font-size:12px;color:#000;text-align:center;}
+.goodsTabs > li:nth-of-type(1) {width:31%;}
+.goodsTabs > li:nth-of-type(2) {width:23%;}
+.goodsTabs > li:nth-of-type(3) {width:23%;}
+.goodsTabs > li:nth-of-type(4) {width:23%;}
+.goodsTabs select {border:none;outline:none;-webkit-appearance:none;}
+.selectArrow {display:inline-block;border-top:4px solid #000;border-left:4px solid transparent;border-right:4px solid transparent;vertical-align:middle;margin-left:-3px;}
+.goodsSearchBtn {display:inline-block;color:#fff;padding:3px 15px;background:#1abeb8;border-radius:20px;}
+.goodsTabItem { display:inline-block;background-color: #fff;padding:3px 5px;}
+.goodsItem {display:table;position:relative;width:100%;vertical-align:middle;padding:10px 0;border-bottom:1px solid #ccc;}
+.goodsItem > div {display:table-cell;vertical-align:middle;}
+.watchBtn {position:absolute;right:0;top:25%;font-size:12px;color:#000;width:15%;}
+.watchBtn img {display:inline-block;width:30%;margin-right:5px;vertical-align:middle;}
+.watchBtn.watchBtnNo {color:#c7c5c5;}
+.otherGoodsImg {width:50px;height:50px;}
+.otherGoodsImg img {border-radius:50%;} 
+.goodsDetail {font-size:12px;color:#000;padding-left:2%;}
+/*此处需要动态计算宽度*/
+.goodsIntro {width:233px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+
+.provideBtn {background:#fff;}
+.provideBtn > a {display:inline-block;background:#1abeb8;height:30px;line-height:30px;color:#fff;font-size:14px;text-align:center;width:80%;margin:15px 10%;border-radius:10px;}
+ 
+</style>
+
+<title>供需列表</title>
+</head>
+<body>
+ <div class="pageGoodsSource">
+	<div class="goodsHot">
+		<div class="goodsHotLeft">
+			<div class="goodsImg"><img src="http://images11.app.happyjuzi.com/usericonurl/14372808138692.jpg" /></div>
+			<div class="hotLabel">今日推荐</div>
+		</div>
+		<div class="goodsHotRight">
+			<div>海润摩尔瘦脸魔v喷雾</div>
+			<div>类目 ：女性护理</div>
+			<div>价格区间：100-300元</div>
+			<div class="textBlue">产品介绍：海润摩尔瘦脸魔v产品是远东集团和北京海润影视联合打。。</div>
+		</div>
+	</div>
+	<ul class="goodsTabs">
+		<li>
+			<div class="goodsTabItem">
+				<select id="timeSelect">
+					<option value="">时间</option>
+					<option value="timeUp">升序</option>
+					<option value="timeDown">降序</option>
+				</select>
+				<div class="selectArrow"></div>
+			</div>
+		</li>
+		<li>
+			<div class="goodsTabItem">
+				<select id="priceSelect">
+					<option value="">价格</option>
+					<option value="priceUp">升序</option>
+					<option value="priceDown">降序</option>
+				</select>
+				<div class="selectArrow"></div>
+			</div>
+		</li>
+<!-- 		<li> -->
+<!-- 			<div class="goodsTabItem"> -->
+<!-- 				<select id="categorySelect"> -->
+<!-- 					<option>类目</option> -->
+<!-- 				</select> -->
+<!-- 				<div class="selectArrow"></div> -->
+<!-- 			</div> -->
+<!-- 		</li> -->
+		<li>
+				<div class="goodsSearchBtn">搜索</div>
+		</li>
+	</ul>
+	
+	<div class="goodsTabsWrapper">
+		
+		<div id="exisitDivOne" class="goodsTabContent" th:if="${vos!=null}">
+			 
+			<div class="goodsItem" th:each="vo:${vos}">
+				<div class="otherGoodsImg"><img src="http://images11.app.happyjuzi.com/usericonurl/14372808138692.jpg" /></div>
+				<div class="goodsDetail">
+				<input type="hidden" th:value="${vo.id}" id="infoId"/>
+					<div>产品名称:&nbsp;<label th:text="${vo.productName}"></label></div>
+<!-- 					<div class="textGray">产品类型:&nbsp;<label th:text="${vo.dsType}"></label></div> -->
+					<div class="textBlue1">价格&nbsp;&nbsp;&nbsp;&nbsp; <label th:text="${vo.price}"></label></div>
+					<div class="goodsIntro textGray" >
+					<div style="float: left">产品数量:&nbsp;<label th:text="${vo.amount}"></label></div>
+					<div style="float: right">点赞数:&nbsp;<label th:text="${vo.praiseCnt}"></label></div>
+					</div>
+					<div>开始时间:&nbsp;<label th:text="${#dates.format(vo.startDate,'yyyy-MM-dd')}"></label>&nbsp;&nbsp;结束时间:&nbsp;<label th:text="${#dates.format(vo.endDate,'yyyy-MM-dd')}"></label></div>
+				</div>
+				<div style="font-size: 15px"><a th:href="${'/attentionDetail?infoId='+ vo.id}">关注详情</a></div>
+				
+			</div>
+			 
+			
+		</div>
+		<div id="exisitDivTwo" class="goodsTabContent">
+		</div>
+	</div>
+	<div class="provideBtn" th:if="${#strings.equalsIgnoreCase(#httpServletRequest.getParameter('type'),'supply')}"><a th:href="@{/goods/index?type=supply}">我要供货</a></div>
+	<div class="provideBtn" th:if="${#strings.equalsIgnoreCase(#httpServletRequest.getParameter('type'),'demand')}"><a th:href="@{/goods/index?type=demand}">我要求货</a></div>
+</div>
+<div class="mainNav">
+	<ul class="mainNavList">
+		<li><div>首页</div><span class="mainNavSplit"></span></li>
+		<li><div>微商团队</div><span class="mainNavSplit"></span></li>
+		<li><div>我的钱袋</div><span class="mainNavSplit"></span></li>
+		<li class="curNav"><div>我的城堡</div></li>
+	</ul>
+</div>
+
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+<script src="/resources/js/date.js"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/resources/js/goods/dsList.js}">
+</script>
+</body>
+</html>

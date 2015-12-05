@@ -1,0 +1,28 @@
+package com.queencastle.dao.mapper.relations;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.Pageable;
+
+import com.queencastle.dao.model.relations.UserManager;
+
+public interface UserManagerMapper {
+
+    int insert(UserManager userManager);
+
+    Integer getCountByParams(@Param("map") Map<String, Object> map);
+
+    List<UserManager> getByParams(@Param("page") Pageable pageable,
+            @Param("map") Map<String, Object> map);
+
+    List<UserManager> getByManagerId(@Param("managerId") String managerId);
+
+    UserManager getByUserId(@Param("userId") String userId);
+
+    UserManager getById(@Param("id") String id);
+
+    UserManager getProvinceManagerByAreaId(@Param("provinceId") String provinceId);
+
+}

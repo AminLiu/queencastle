@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.relations.UserAuditMapper">
+	<resultMap id="UserAuditResultMap" type="com.queencastle.dao.model.relations.UserAudit">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="apply_user" property="applyUser.id" typeHandler="idHandler" />
+		<result column="audit_user" property="auditUser.id" jdbcType="VARCHAR" />
+		<result column="audit_status" property="auditStatus" jdbcType="VARCHAR" />
+		<result column="reason" property="reason" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,apply_user,audit_user,audit_status,reason,created_at,updated_at
+	</sql>
+
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.relations.UserAudit">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_user_audit (
+		apply_user,audit_user,audit_status,reason,created_at,updated_at
+		)values
+		(#{applyUser.id,typeHandler=idHandler},#{auditUser.id,typeHandler=idHandler},
+		#{auditStatus}, #{reason},now(),now())
+	</insert>
+	
+	<select id="getById" resultMap="UserAuditResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_audit
+		where id = #{id,typeHandler=idHandler}
+	</select>
+	
+	<select id="getByUserId" resultMap="UserAuditResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_audit
+		where apply_user = #{applyUserId,typeHandler=idHandler}
+	</select>
+	
+	
+	<select id="getUserAuditsCountByParams" resultType="java.lang.Integer">
+ 		select count(*) from queen_user_audit   
+ 	</select>
+ 	
+ 	<select id="getUserAuditsByParams" resultMap="UserAuditResultMap">
+ 		select
+ 		 <include refid="Base_Column_List" />
+		from queen_user_audit  
+		order by id desc
+		limit #{page.offset}, #{page.size}
+ 	</select>
+	
+	<update id="updateStatusAndReason" parameterType="com.queencastle.dao.model.relations.UserAudit">
+		update queen_user_audit set 
+		audit_user =#{auditUser.id,typeHandler=idHandler},
+		audit_status=#{auditStatus},reason=#{reason}
+		where id = #{id,typeHandler=idHandler}
+	</update>
+	
+	 
+</mapper>

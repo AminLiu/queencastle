@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html >
+  <head>
+  <META HTTP-EQUIV="pragma" CONTENT="no-cache"/> 
+  <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"/> 
+  <META HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT"/> 
+    <meta charset="UTF-8"/>
+    <title>用户注册</title>
+    <link rel="stylesheet" href="resources/css/reset.css"/>
+    <link rel="stylesheet" href="resources/css/style.css"/>
+    <script type="text/javascript" src="resources/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="resources/js/md5.js"></script>
+    <script type="text/javascript" >
+
+    $(function(){
+    	
+    	$("#registerBtn").click(function(){
+    		var userName  = $("#username").val();
+			var passWord1 = $("#password1").val();
+			var passWord2 = $("#password2").val();
+			
+			if(userName == "" || passWord1 == ""|| passWord2 == ""){
+				$("#userLoginMsg").html("用户名或密码不能为空");
+				$("#loginInfo").html("");
+				return false;
+			}else if(passWord1 != passWord2 ){
+				$("#userLoginMsg").html("两次密码不一致");
+				return false;
+			}
+			
+			
+			else{
+				$('#password1').val(CryptoJS.MD5($('#password1').val()));
+	    		$("#RegisterFrm").submit();
+			}
+		
+    	});
+    });
+    
+    </script>
+  </head>
+  <body>
+    <section>
+  <span></span>
+  <h1>管理用户注册</h1>
+  <form id="RegisterFrm" method="post" action="/registerUser">
+  <div style="color:red;"><label id="userLoginMsg"></label></div>
+  <div style="color:red;"><label th:if="${info!=null}" id="loginInfo" th:text="${info}"></label></div>
+    <input placeholder='用户名' id="username"  type='text' name="username"/>
+    <input placeholder='密码' id="password1" type='password' name="password"/>
+    <input placeholder='确认' id="password2" type='password' name="password"/>
+    <input placeholder='手机号' id="phone" type='text' name="phone"/>
+    <input placeholder='来源' id="source" type='text' name="source"/>
+    <input placeholder='昵称' id="outnick" type='text' name="outnick"/>
+     <button id="registerBtn">注册</button>
+  </form>
+ 
+  <h2>
+    <a href='login'>已有账号，返回登录</a>
+  </h2>
+</section>
+    
+    
+    
+    
+    
+  </body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.shop.ShopOrderMapper">
+	<resultMap id="ShopOrderMap" type="com.queencastle.dao.model.shop.ShopOrder">
+	<id column="id" property="id" typeHandler="idHandler" />
+	<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+	<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<select id="getById"  resultMap="ShopOrderMap">
+		select 
+		id,created_at,updated_at
+		from queen_shoporder where id=#{id,typeHandler=idHandler}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	</mapper>

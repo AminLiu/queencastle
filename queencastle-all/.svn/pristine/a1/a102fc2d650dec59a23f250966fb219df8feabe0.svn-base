@@ -1,0 +1,52 @@
+package com.queencastle.dao.vo;
+
+public class AuditVO {
+    private String userId;
+    private String nickName;
+    private String weixinNo;
+    private String phone;
+    private String address;
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getWeixinNo() {
+        return weixinNo;
+    }
+
+    public void setWeixinNo(String weixinNo) {
+        this.weixinNo = weixinNo;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+
+
+}

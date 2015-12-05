@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.RoleInfoMapper">
+	<resultMap id="RoleResultMap" type="com.queencastle.dao.model.RoleInfo">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="cname" property="cname" jdbcType="VARCHAR" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id,cname,memo,created_at,updated_at
+	</sql>
+
+	<select id="getById" resultMap="RoleResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from role_info
+		where id = #{id,typeHandler=idHandler}
+	</select>
+
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.RoleInfo">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT
+			LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into role_info (
+		cname,memo,created_at,updated_at
+		)values
+		(#{cname},#{memo},now(),now())
+	</insert>
+
+	<update id="updateById" parameterType="com.queencastle.dao.model.RoleInfo">
+		update role_info 
+		<set>
+		<if test="cname != null and cname !=''">
+			cname=#{cname},
+		</if>
+		<if test="memo != null and memo !=''">
+			memo=#{memo},
+		</if>
+			updated_at=now()
+		</set>
+		where id = #{id,typeHandler=idHandler}
+	</update>
+
+	<select id="getRoleCountByParams" resultType="java.lang.Integer">
+		select count(*) from role_info
+	</select>
+	<select id="getRoleByParams" resultMap="RoleResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from role_info order by id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+
+	<select id="getAllRole"  resultMap="RoleResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from role_info order by id desc
+	</select>
+
+
+</mapper>

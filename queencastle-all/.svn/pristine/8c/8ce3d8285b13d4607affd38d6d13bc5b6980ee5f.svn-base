@@ -1,0 +1,100 @@
+<div style="width: 100%; height: 100%;">
+	<table id="demandInfoTableId" title="供需列表" style="width: 100%; height: 450px">
+	</table>
+	<div id="demandInfoToolbar">
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="auditDemandInfo(1)">审核通过</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="auditDemandInfo(2)">审核不通过</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="doForSearch()">查询</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="doAdd()">新增</a>
+	</div>
+	 <div id="dsSearchDlg" class="easyui-dialog" style="width:360px;height:300px;padding:10px 20px"
+            closed="true" buttons="#dsSearchDlg-buttons">
+     	<form id="dsSearchFrm" method="post">
+     	<div class="fitem">
+	     	<label>产品名称:</label>
+	     	<input type="text" id="pname" placeholder="请输入产品名称"/>
+     	</div>
+     	<div class="fitem">
+	     	<label>开始时间:</label>
+	     	<input type="text" id="startDate" class="easyui-datebox" />
+     	</div>
+     	<div class="fitem">
+	     	<label>结束时间:</label>
+	     	<input type="text" id="endDate" class="easyui-datebox" />
+     	</div>
+     	<div class="fitem">
+	     	<label>供需类型:</label>
+	     	<select style="width:170px;" id="dsType">
+	     		<option value="supply">供货</option>
+	     		<option value="demand">求货</option>
+	     	</select>
+     	</div>
+        </form>
+    </div>
+     <div id="dsSearchDlg-buttons">
+     	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="searchDsInfo()" style="width:90px">查询</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dsSearchDlg').dialog('close')" style="width:90px">取消 </a>
+    </div>
+    
+     <div id="dsAddDlg" class="easyui-dialog" style="width:360px;height:600px;padding:10px 20px"
+            closed="true" buttons="#dsAddDlg-buttons">
+     	<form id="dsAddFrm" method="post">
+     	<div class="fitem">
+	     	<label>选择产品:</label>
+	     	<input id="productId" name="productId" />
+     	</div>
+     	<div class="fitem">
+     		<label>产品数量:</label>
+	     	<input name="amount" class="easyui-numberspinner" />
+     	</div>
+     	<div class="fitem">
+	     	<label>开始时间:</label>
+	     	<input type="text" id="startDate" class="easyui-datebox" />
+     	</div>
+     	<div class="fitem">
+	     	<label>结束时间:</label>
+	     	<input type="text" id="endDate" class="easyui-datebox" />
+     	</div>
+     	<div class="fitem">
+	     	<label>供需类型:</label>
+	     	<select style="width:170px;" name="dsType">
+	     		<option value="supply">供货</option>
+	     		<option value="demand">求货</option>
+	     	</select>
+     	</div>
+     	<div class="fitem">
+	     	<label>备注信息:</label>
+	     	<textarea name="memo"></textarea>
+     	</div>
+     	<div class="fitem">
+     	<label>收货地址：</label>
+     	</div>
+     	<div class="fitem">
+	     	<label>省：</label>
+  		    <input id="provinceId"  name="provinceId" />
+     	</div>
+     	<div class="fitem" id="cityDiv">
+	     	<label>市：</label>
+	        <input id="cityId"   name="cityId" />
+     	</div>
+     	<div class="fitem" id="areaDiv">
+	     	<label>地区：</label>
+	        <input id="areaId"   name="areaId" />
+     	</div>
+     	<div class="fitem">
+	     	<label>详细地址：</label>
+	        <input id="address" name="address" />
+     	</div>
+        </form>
+    </div>
+     <div id="dsAddDlg-buttons">
+     	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveDsInfo()" style="width:90px">确定</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dsAddDlg').dialog('close')" style="width:90px">取消 </a>
+    </div>
+    
+    
+    
+    
+    
+	<script type="text/javascript" charset="utf-8" th:src="@{/resources/js/goods/demandInfolist.js}"></script>
+</div>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.shop.ShopItemMapper">
+	<resultMap id="ShopItemMap" 
+		type="com.queencastle.dao.model.shop.ShopItem">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="shopProduct_id" property="shopProduct.id" jdbcType="BIGINT"   typeHandler="idHandler" />
+		<result column="amount" property="amount" jdbcType="BIGINT"    />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,shopProduct_id,amount,created_at,updated_at
+	</sql>
+
+	<select id="getById" resultMap="ShopItemMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_shop_shopitem where id=#{id,typeHandler=idHandler}
+	</select>
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.shop.ShopItem">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into
+		queen_shop_shopitem(shopProduct_id,amount,created_at,updated_at)
+		values(
+		#{shopProduct.id,typeHandler=idHandler},
+		#{amount},
+		now(),now())
+	</insert>
+
+
+
+</mapper>

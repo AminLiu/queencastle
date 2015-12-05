@@ -1,0 +1,20 @@
+package com.queencastle.dao.mapper.shop;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.Pageable;
+
+import com.queencastle.dao.model.shop.ShopItem;
+
+public interface ShopItemMapper {
+	ShopItem getById(@Param("id") String id);
+
+	int insert(ShopItem shopItem);
+
+	List<ShopItem> getShopItemByParams(@Param("page") Pageable pageable, @Param("map") Map<String, Object> map);
+
+	Integer getShopItemCountByParams(@Param("map") Map<String, Object> map);
+
+}

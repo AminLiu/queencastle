@@ -1,0 +1,15 @@
+package com.queencastle.service.interf.shop;
+
+import java.util.Map;
+
+import com.queencastle.dao.PageInfo;
+import com.queencastle.dao.model.shop.ShopItem;
+
+public interface ShopItemService {
+	ShopItem getById(String id);
+
+	int insert(ShopItem shopItem);
+
+	PageInfo<ShopItem> getShopItemByParams(int page, int rows, Map<String, Object> map);
+
+}

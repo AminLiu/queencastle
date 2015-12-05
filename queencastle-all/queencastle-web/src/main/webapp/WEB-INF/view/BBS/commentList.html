@@ -1,0 +1,33 @@
+<div style="width: 100%; height: 100%;">
+	<table id="CommentTableId" title="评论列表" style="width: 100%; height: 450px">
+	</table>
+	<div id="CommentToolbar">
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addComment()">增加</a>
+	</div>
+
+ <div id="commentDlg" class="easyui-dialog" style="width:360px;height:310px;padding:10px 20px"
+            closed="true" buttons="#commentDlg-buttons">
+        <form id="commentFrm" method="post"  enctype="multipart/form-data">
+            <div class="fitem">
+                <label>文章编号:</label>
+                <input name="articleId" class="easyui-textbox" required="true"/>
+            </div>
+             <div class="fitem">
+                <label>评论内容:</label>
+                <input name="content" class="easyui-textbox" required="true"/>
+            </div>
+<!--              <div class="fitem"> -->
+<!--                 <label>评论留言的人:</label> -->
+<!--                 <input name="userId" class="easyui-textbox" required="true"/> -->
+<!--             </div> -->
+        	
+        </form>
+    </div>
+    <div id="commentDlg-buttons">
+     	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveComment()" style="width:90px">保存 </a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#commentDlg').dialog('close')" style="width:90px">取消 </a>
+    </div>
+    
+	<script type="text/javascript" charset="utf-8" th:src="@{/resources/js/BBS/commentlist.js}"></script>
+</div>
+

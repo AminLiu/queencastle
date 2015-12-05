@@ -1,0 +1,23 @@
+package com.queencastle.service.config;
+
+/**
+ * 全局常量，对于可变与不可变，这里不纠结java反模式
+ * 
+ * @author YuDongwei
+ *
+ */
+public final class GlobalValue {
+    public static final String LOGIN_SESSION_ID = "sid";
+    public static final Object LOGIN_USER_ID = "loginId";
+    public static final String QINIU_HOST = "http://7xn1k0.com1.z0.glb.clouddn.com/";
+    public static final String WEIXIN_TOKEN = "queentoken";
+    public static final String WEIXIN_APPID = "wx5d969d791a2f8855";
+    public static final String WEIXIN_SECRET = "38446ec1a80a752e7b07cd9348d8cae4";
+    public static final String WEIXIN_CALLBACK = "/weixinCallerBack";
+    public final static String[] sequence = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B",
+            "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T",
+            "U", "V", "W", "X", "Y", "Z"};
+
+    /** 群大小 */
+    public final static int GROUP_SIZE = 100;
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.weixin.UserIntentionMapper">
+	<resultMap id="UserIntentionResultMap" type="com.queencastle.dao.model.weixin.UserIntention">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="user_id" property="userId" typeHandler="idHandler" jdbcType="BIGINT"  />
+		<result column="timework_id" property="timeWork.id" typeHandler="idHandler" jdbcType="BIGINT"  />
+		<result column="teamcnt_id" property="teamCnt.id" typeHandler="idHandler" jdbcType="BIGINT"  />
+		<result column="sale_info" property="saleInfo" jdbcType="VARCHAR" />
+		<result column="saleamount_id" property="saleAmount.id" typeHandler="idHandler" jdbcType="BIGINT"  />
+		<result column="plan_info" property="planInfo" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+	 
+ 
+	<sql id="Base_Column_List">
+		id,user_id,timework_id,teamcnt_id,sale_info, saleamount_id,plan_info,created_at
+	</sql>
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.weixin.UserIntention">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_user_intention 
+		(user_id,timework_id,teamcnt_id,sale_info, saleamount_id,plan_info,created_at)
+		values
+		(#{userId,typeHandler=idHandler},#{timeWork.id,typeHandler=idHandler},
+		#{teamCnt.id,typeHandler=idHandler},#{saleInfo},#{saleAmount.id,typeHandler=idHandler},#{planInfo},now())
+	</insert>
+
+ 
+
+	<select id="getById" resultMap="UserIntentionResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_intention  where id=#{id,typeHandler=idHandler}
+	</select>
+
+	 
+
+</mapper>

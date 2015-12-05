@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8"/>
+    <title>用户登录</title>
+    <link rel="stylesheet" href="resources/css/reset.css"/>
+    <link rel="stylesheet" href="resources/css/style.css"/>
+    <script type="text/javascript" src="resources/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" th:inline="text">
+    $(function(){
+    	$("#loginBtn").click(function(){
+    		$("#loginFrm").submit();
+    	});
+    });
+    
+    </script>
+  </head>
+  <body>
+    <section>
+  <span></span>
+  <h1>管理用户登录</h1>
+  <form id="loginFrm" method="get" action="/login">
+    <input placeholder='用户名' type='text' name="username"/>
+    <input placeholder='密码' type='password' name="password"/>
+  </form>
+  <button id="loginBtn">登录</button>
+  <h2>
+    <a href='#'>忘记密码?</a>
+  </h2>
+</section>
+    
+    
+    
+    
+    
+  </body>
+</html>

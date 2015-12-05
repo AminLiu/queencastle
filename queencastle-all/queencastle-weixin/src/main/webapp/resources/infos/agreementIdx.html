@@ -1,0 +1,312 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no" />
+<title>协议总则</title>
+<style>
+html {
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
+	font-family: "Microsoft YaHei", "Tahoma";
+}
+
+body {
+	margin: 0;
+}
+
+img {
+	width: 100%;
+}
+
+p {
+	padding: 0;
+	margin: 0;
+}
+
+.textBlue {
+	color: #41009a;
+}
+
+.textGray {
+	color: #666;
+}
+
+.textBlue1 {
+	color: #1abeb8;
+}
+
+.adjustDIV {
+	width: 100%;
+	height: 10px;
+}
+
+.clearfix:after {
+	content: "020";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.clearfix {
+	zoom: 1;
+}
+
+.pageAgreement {
+	background: url("/resources/images/bg1.png") no-repeat center;
+	background-size: 100% 100%;
+	padding-bottom: 40px;
+}
+
+.agreementWrapper {
+	margin: 10px 5%;
+	background: #fff;
+}
+
+.agreementTitle {
+	font-size: 20px;
+	color: #000;
+	text-align: center;
+	padding: 10px 0;
+}
+
+.agreementContent {
+	border: 1px solid #ccc;
+	margin: 0 5%;
+	font-size: 12px;
+	line-height: 20px;
+}
+
+.textIndent {
+	text-indent: 25px;
+}
+
+.textIndentDouble {
+	text-indent: 50px;
+}
+
+.accept {
+	font-size: 0;
+	text-align: center;
+	padding: 10px 0;
+}
+
+.accept>div {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.acceptText {
+	font-size: 16px;
+	color: #000;
+}
+
+.checkBox {
+	width: 14px;
+	height: 14px;
+	border: 1px solid #ccc;
+	background: #fff;
+	margin-right: 8px;
+}
+
+.checkBox.checked {
+	font-size: 14px;
+	color: red;
+	font-weight: bold;
+}
+
+.nextBtn {
+	padding-bottom: 20px;
+}
+
+.nextBtn a {
+	display: block;
+	width: 90%;
+	height: 35px;
+	line-height: 35px;
+	margin: 0px 5%;
+	font-size: 14px;
+	color: #fff;
+	font-weight: bold;
+	background: #41009a;
+	text-align: center;
+}
+
+.bottomNav {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	background: #41009a;
+}
+
+.bottomNav ul {
+	font-size: 0;
+}
+
+.bottomNav li {
+	display: inline-block;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.navItem1, .navItem2 {
+	width: 48%;
+	font-size: 16px;
+	color: #fff;
+}
+
+.navSplit {
+	width: 4%;
+	height: 44px;
+}
+
+.navIcon {
+	display: inline-block;
+	width: 10%;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.navText {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.navSplitIcon {
+	display: inline-block;
+	width: 1px;
+	height: 26px;
+	background: #fff;
+	margin-top: 10px;
+}
+</style>
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$("#moreBtn").click(function() {
+			var showStyle = $("#moreContent").css("display");
+			if (showStyle == "block") {
+				$("#spanTxt").text("点击展开");
+			}
+			if (showStyle == "none") {
+				$("#spanTxt").text("点击收起");
+			}
+			$("#moreContent").slideToggle("slow");
+
+		});
+		$(".navItem1").click(function(){
+			window.location = '/queenIdx';
+		});
+		$(".navItem2").click(function(){
+			window.location = '/userCenter';
+		});
+		$("#goNextPage").click(function(){
+			if(window.location.search == "?type=supply"){
+				window.location.href="/resources/infos/supplyAgreement.html";
+			}else if(window.location.search == "?type=demand"){
+				window.location.href="/resources/infos/demandAgreement.html";
+			}
+		});
+	});
+</script>
+</head>
+<body class="pageAgreementBg">
+	<div class="pageAgreement">
+		<div class="adjustDIV"></div>
+		<div class="agreementWrapper">
+			<div class="agreementTitle">协议总则</div>
+			<div class="agreementContent">
+				<p>尊敬的女王城堡微商联盟会员：</p>
+				<p>您好！</p>
+				<p class="textIndent">在您注册成为本平台用户/或开通使用平台服务前请务必仔细阅读以下条款。若您一旦注册/或使用平台服务，则您接受本平台的服务必须接受以下条款的约束。</p>
+				<p class="textIndent">本服务协议内容包括以下条款及已经发布的或将来可能发布的各类规则。所有规则为协议不可分割的一部分，与协议正文具有同等法律效力。本协议是您与本平台共同签订的，适用于您在本平台的全部活动。在您注册成为用户时，您已经阅读、理解并接受本协议的全部条款及各类规则，并承诺遵守中国现行的法律、法规、规章及其他政府规定，如有违反而导致任何法律后果的发生，您将以自己的名义独立承担所有相应的法律责任。</p>
+				<div id="moreBtn"
+					style="padding: 0 30%; margin: 5px; width: 40%; background: #dedede; text-align: center;">
+					<label id="spanTxt">点击展开</label>
+				</div>
+				<div id="moreContent" style="display: none;">
+					<p class="textIndent">本平台有权根据需要不时地制定、修改本协议或各类规则，如有协议及规则有任何变更，本平台将以微信公众号文章的方式推送公告，经修订的协议、规则一经在公布后，立即自动生效。您应不时地注意本协议及附属规则的变更，若您不同意相关变更，本平台有权不经过任何告知终止、中止本协议或限制您进入本平台的全部或者部分板块且不承担任何法律责任。</p>
+					<p class="textIndent">您确认本服务协议后，本服务协议即在您和本平台之间产生法律效力。您只要在注册后，使用平台功能时，勾选了同意“平台服务协议”并按照本平台的规定，您的行为即表示同意并签署了本服务协议。本服务协议不涉及您与本平台的其他用户之间因网上交易而产生的法律关系及法律纠纷，但您在此同意将全面接受和履行与本平台其他用户在本平台签订的任何电子法律文本，并承诺按照该法律文本享有和/或放弃相应的权利、承担和/或豁免相应的义务。</p>
+
+					<p>用户权利：</p>
+					<p class="textIndent">1、在您按照注册页面提示填写信息后，意味着您已经获得本平台的登录权。您应提供及时、详尽准确的个人资料，并不断更新注册资料，符合及时、详尽准确的要求。您应妥善保管您的账户（用户名）和密码，以及免密登录设备的安全，通过您的账户（用户名）和密码/或免密设备操作/或实施的行为，将视为您本人的行为，由您本人承担相应的责任和后果。如果您发现他人不当使用您的账户或有任何其他可能危及您的账户安全的情形时，您应当立即以联系公众号客服等有效方式，要求本平台暂停相关服务。在此，您理解本平台对您的请求采取行动需要合理时间，本平台对在采取行动前已经产生的后果（包括但不限于您的任何损失）不承担任何责任。</p>
+					<p>使用规则</p>
+					<p class="textIndent">1、您可以自行注册账户名称、编辑头像、简介等注册信息，但您承诺遵守法律法规、社会主义制度、国家利益、公民合法权益、公共秩序、社会道德风尚和信息真实性等七条底线，并遵守《互联网用户账号名称管理规定》及相关管理规定，且账号名称、头像和简介等注册信息中不得含有违法和不良信息，包括但不限于下列情形：</p>
+					<p class="textIndentDouble">1) 违反宪法或法律法规规定的；</p>
+					<p class="textIndentDouble">2) 危害国家安全，泄露国家秘密，颠覆国家政权，破坏国家统一的；</p>
+					<p class="textIndentDouble">3)损害国家荣誉和利益的，损害公共利益的；</p>
+					<p class="textIndentDouble">4) 煽动民族仇恨、民族歧视，破坏民族团结的；</p>
+					<p class="textIndentDouble">5) 破坏国家宗教政策，宣扬邪教和封建迷信的；</p>
+					<p class="textIndentDouble">6) 散布谣言，扰乱社会秩序，破坏社会稳定的；</p>
+					<p class="textIndentDouble">7) 散布淫秽、色情、赌博、暴力、凶杀、恐怖或者教唆犯罪的；</p>
+					<p class="textIndentDouble">8)侮辱或者诽谤他人，侵害他人合法权益的；</p>
+					<p class="textIndentDouble">9) 含有法律、行政法规禁止的其他内容的。</p>
+					<p class="textIndent">您使用本平台账号，制作、发布、传播信息内容的，应当使用真实身份信息及个人资料，不得以虚假、冒用的身份信息进行注册；若您的个人资料有任何变动，应及时更新。因您以虚假信息骗取账号名称注册，或您账号头像、简介等注册信息存在违法和不良信息的，或利用本平台账号实施重复侵权行为的，去哪儿有权采取通知您限期改正、暂停使用、注销登记等措施。</p>
+
+					<p class="textIndent">2、您在使用本平台服务时，必须遵守中华人民共和国相关法律法规的规定，您应同意将不会利用该服务进行任何违法或不正当的活动，包括但不限于下列行为:</p>
+
+					<p class="textIndentDouble">2.1 上载、展示、张贴、传播或以其它方式传送含有下列内容之一的信息：</p>
+					<p class="textIndentDouble">1) 反对宪法所确定的基本原则的；</p>
+					<p class="textIndentDouble">2) 危害国家安全，泄露国家秘密，颠覆国家政权，破坏国家统一的；</p>
+					<p class="textIndentDouble">3) 损害国家荣誉和利益的</p>
+					<p class="textIndentDouble">4) 煽动民族仇恨、民族歧视、破坏民族团结的；</p>
+					<p class="textIndentDouble">5) 破坏国家宗教政策，宣扬邪教和封建迷信的；</p>
+					<p class="textIndentDouble">6)散布谣言，扰乱社会秩序，破坏社会稳定的；</p>
+					<p class="textIndentDouble">7) 散布淫秽、色情、赌博、暴力、凶杀、恐怖或者教唆犯罪的；</p>
+					<p class="textIndentDouble">8)侮辱或者诽谤他人，侵害他人合法权利的；</p>
+					<p class="textIndentDouble">9)
+						含有虚假、有害、胁迫、侵害他人隐私、骚扰、侵害、中伤、粗俗、猥亵、或其它道德上令人反感的内容</p>
+					<p class="textIndentDouble">10)
+						含有中国法律、法规、规章、条例以及任何具有法律效力之规范所限制或禁止 的其它内容的。</p>
+					<p class="textIndentDouble">2.2 为任何非法目的而使用网络服务系统。</p>
+					<p class="textIndentDouble">2.3 利用本平台网络服务从事以下活动：</p>
+					<p class="textIndentDouble">1)未经允许，进入计算机信息网络或者使用计算机信息网络资源的；未经允许，对计算机信息网络功能进行删除、修改或者增加的；未经允许，对进入计算机信息网络中存储、处理或者传输的数据和应用程序进行删除、修改或者增加的；故意制作、传播计算机病毒等破坏性程序的；其他危害计算机信息网络安全的行为。</p>
+					<p class="textIndentDouble">2)
+						对本平台上的任何数据作商业性利用，包括但不限于在未经本平台事先书面同意的情况下，以复制、传播等任何方式使用本平台展示的资料。</p>
+					<p class="textIndentDouble">3)
+						使用任何装置、软件或例行程序等其他方式干预或试图干预本平台的正常运作或正在本平台上进行的任何交易、活动，或采取任何将导致不合理的庞大数据负载加诸本平台网络设备的行动。</p>
+					<p class="textIndentDouble">4)
+						违反诚实信用原则的不正当竞争行为，或恶意下订单或虚假交易等其他恶意扰乱交易秩序的行为。</p>
+					<p class="textIndentDouble">5) 与网上交易无关的其他行为。</p>
+
+					<p>服务的变更、中断或终止</p>
+					<p class="textIndent">1、您完全理解并同意，本服务涉及到互联网及移动通讯等服务，可能会受到各个环节不稳定因素的影响。因此任何因不可抗力、计算机病毒或黑客攻击、系统不稳定、用户所在位置、用户关机、GSM网络、互联网络、通信线路等其他去哪儿无法预测或控制的原因，造成服务中断、取消或终止的风险，由此给您带来的损失本平台不承担赔偿责任。</p>
+					<p class="textIndent">2、平台需要定期或不定期地对提供网络服务的平台或相关的设备进行检修或者维护，如因此类情况而造成网络服务（包括收费网络服务）在合理时间内的中断，本平台无需为此承担任何责任，但本平台应尽可能事先进行通知。</p>
+					<p class="textIndent">3、您完全理解并同意，除本服务协议另有规定外，鉴于网络服务的特殊性，本平台有可能变更、中断或终止部分或全部的网络服务，本平台无需为此承担任何责任，但本平台应尽可能事先进行通知，并尽可能给您预留时间以便处理相关权益。</p>
+				</div>
+			</div>
+			<div class="accept">
+				<div class="checkBox checked">√</div>
+				<div class="acceptText">我接受服务协议</div>
+			</div>
+			<div class="nextBtn" id="goNextPage">
+				<a >下一步</a>
+			</div>
+		</div>
+		<div class="adjustDIV"></div>
+		<div class="bottomNav">
+			<ul>
+				<li class="navItem1">
+					<div class="navIcon">
+						<img src="/resources/images/icon1.png" />
+					</div>
+					<div class="navText">首页</div>
+				</li>
+				<li class="navSplit"><div class="navSplitIcon"></div></li>
+				<li class="navItem2">
+					<div class="navIcon">
+						<img src="/resources/images/icon2.png" />
+					</div>
+					<div class="navText">个人中心</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+</body>
+</html>

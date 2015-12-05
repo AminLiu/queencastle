@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="keywords" content="mobile web app, mobile template, mobile design, mobile app design, mobile app theme, mobile wordpress theme, my mobile app" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=no" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<link rel="stylesheet" type="text/css" href="resources/css/css.css"/>
+<title>个人中心</title>
+<style type="text/css">
+.mainNav {position:fixed;bottom:0;left:0;width:100%;}
+.mainNavList {font-size:0;background:#41009a;}
+.mainNavList > li {position:relative;display:inline-block;width:25%;height:40px;line-height:40px;text-align:center;font-size:14px;color:#fff;}
+.mainNavList > li > div {display:inline-block;border-bottom:1px solid #6198d0;}
+.mainNavList > li.curNav {color:#a6befb;}
+.mainNavSplit {display: inline-block;height: 12px;vertical-align: middle;width: 1px;border-left: 1px solid #fff;position: absolute;right: 0;top: 15px;}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	text-align:center;
+	font-size:16px;
+}
+
+.go_left{
+	padding-left: 10px;
+	
+}
+.aiIcon img{
+border-radius:50%; 
+}
+</style>
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" th:inline="javascript"></script>
+</head>
+<body>
+    <div class="main">
+    <div class="logo"><div class="img">个人中心<img src="resources/img/logo.png"/></div></div>
+    <div class="header">
+            <a href="#"  class="go_left"><img src="resources/img/go.png"/></a>
+            <span>我</span>
+            <a href="#" class="fa_left"><img src="resources/img/fabu.png"/></a>
+    
+    </div>
+    <div class="wrap" >
+    <ul id="container">
+    <li class="box" >
+    <div class="author">
+		<p class="author_name"><label>手机号 ：</label><label th:text="${user.username}"></label></p>
+	</div>
+	<div>
+	<input type="hidden" th:value="${udi.userId}" id="userId"/>
+		<label>用户ID：</label><label th:text="${udi.userId}"></label>
+	</div>
+	<div>
+		<label>来源：</label><label th:text="${user.source}" ></label>
+	</div>
+	
+	
+
+    			<div class="aiIcon" th:if="${udi.img!=null}">
+    			<div th:each="img:${udi.img}">
+				<img	th:src="${udi.img}"    />
+					 </div>
+			</div>
+
+   	<div>
+		<label>地区：省：</label>
+		<label th:text="${province.cname}"></label>
+	    <label>     市：</label>
+	    <label th:text="${city.cname}"></label>   
+	</div>
+		
+	</li>
+    </ul>
+    <div> <a href="/infos" style="mmargin-left 3px ">产品中心</a></div>
+    </div>
+    	<div class="mainNav">
+		<ul class="mainNavList">
+			<li><div>首页</div> <span class="mainNavSplit"></span></li>
+			<li><div>微商团队</div> <span class="mainNavSplit"></span></li>
+			<li><div>我的钱袋</div> <span class="mainNavSplit"></span></li>
+			<li class="curNav"><div>我的城堡</div></li>
+		</ul>
+	</div>
+    </div>
+
+</body>
+</html>

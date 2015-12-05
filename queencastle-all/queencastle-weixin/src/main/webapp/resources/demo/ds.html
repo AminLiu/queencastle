@@ -1,0 +1,221 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no"/>
+<title>我要供货</title>
+<style>
+html{height: 100%;padding: 0px;margin: 0px;font-family:"Microsoft YaHei","Tahoma";}
+body{margin:0;}
+img {width:100%;}
+ul, li {list-style:none;margin:0;padding:0;}
+input, textarea {background:#fff2f5;outline:none;border:1px solid #ccc;}
+.textBlue {color:#41009a;}
+.textGray{color:#666;}
+.textBlue1 {color:#1abeb8;}
+.clearfix:after { content:"."; display:block; height:0; visibility:hidden; clear:both; }                                                            
+.clearfix { zoom:1; }  
+.adjustDIV {width:100%;height:20px;}
+
+
+.supplyDemandOfGoods {background:url("/resources/images/bg.jpg") no-repeat center;background-size:100% 100%;padding-bottom:20px;}
+.wrapper {width:90%;margin:0 5%;padding-bottom:20px;}
+.step {display:none;}
+.stepContent {background:#fff2f5;width:90%;padding:0 5%;border-top:1px solid #ccc;}
+.curStep {display:block;}
+
+.goodsDetail {border-top:1px solid #ccc;padding-top:10px;}
+.inputWrapper {font-size:0;padding-bottom:10px;}
+.inputWrapper > div {display:inline-block;width:30%;font-size:14px;color:#000;}
+.inputWrapper > input {display:inline-block;width:70%;font-size:14px;color:#000;outline:none;border:1px solid #ccc;padding:5px 0 5px 5px;background:#fff2f5;}
+.inputWrapper .timeInput {width:70%;}
+.timeInput input {display:inline-block;width:45%;font-size:12px;color:#000;outline:none;border:1px solid #ccc;padding:5px 0 5px 5px;background:#fff2f5;}
+.timeInput span {display:inline-block;font-size:20px;color:#ccc;}
+.textareaWrapper > div {font-size:14px;color:#000;padding-bottom:5px;}
+.textareaWrapper > textarea {width:100%;height:20%;margin-bottom:10px;background:#fff2f5;}
+.textareaWrapper1 > div {font-size:14px;color:#000;padding-bottom:5px;}
+.textareaWrapper1 > textarea {width:100%;height:25%;margin-bottom:10px;background:#fff2f5;}
+.fileInputWrapper {font-size:14px;color:#000;padding-bottom:20px;}
+.fileInputBox {font-size:0;height:18%;}
+.boxOne {position:relative;display:inline-block;width:31.3%;margin:0 1%;}
+.fileMask {position:absolute;top:0;left:0;}
+.boxOne > input {position:absolute;top:0;left:0;width:100%;opacity:0;}
+.fileInputLabel {padding-bottom:5px;}
+.addressInputWrapper {font-size:0;}
+.addressInputLabel {display:inline-block;width:30%;font-size:14px;color:#000;vertical-align:top;}
+.addressInput {display:inline-block;width:70%;}
+.someInputs > input {display:inline-block;width:30%;margin-right:3%;padding:5px 0 5px 5px;}
+.showAddress {width:100%;padding:5px 0;margin:5px 0 10px 0;}
+
+.stepBtn > a{display:inline-block;width:100%;margin:20px 0;background:#3b109d;color:#fff;font-size:14px;font-weight:bold;text-align:center;padding:8px 0;}
+.secondStepBtn {font-size:0;text-align:right;}
+.secondStepBtn > a {display:inline-block;width:46%;margin:20px 0;background:#3b109d;color:#fff;font-size:14px;font-weight:bold;text-align:center;padding:8px 0;}
+.secondStepBtn > a:nth-of-type(1) {float:left;}
+
+.stepTitle {font-size:20px;color:#ccc;}
+.stepTitle > div {width:50%;float:left;text-align:center;padding:15px 0;}
+.stepLabel {padding-bottom:5px;}
+.curStepTip {color:#3b109d;}
+
+.bottomNav {position:fixed;bottom:0;width:100%;background:#41009a;}
+.bottomNav ul {font-size:0;}
+.bottomNav li {display:inline-block;vertical-align:middle;text-align:center;}
+.navItem1, .navItem2 {width:48%;font-size:16px;color:#fff;}
+.navSplit {width:4%;height:44px;}
+.navIcon {display:inline-block;width:10%;vertical-align:middle;margin-right:5px;}
+.navText {display:inline-block;vertical-align:middle;}
+.navSplitIcon {display:inline-block;width:1px;height:26px;background:#fff;margin-top: 10px;}
+</style>
+</head>
+<body>
+<div class="supplyDemandOfGoods">
+	<div class="adjustDIV"></div>
+	<div class="wrapper">
+		<div class="step curStep">
+			<div class="stepContent">
+				<div class="stepTitle clearfix">
+					<div class="stepItem first curStepTip">
+						<div class="stepLabel">第1步</div>
+						<div class="stepLabelImg"><img src="/resources/images/a1.png" /></div>
+					</div>
+					<div class="stepItem second">
+						<div class="stepLabel">第2步</div>
+						<div class="stepLabelImg"><img src="/resources/images/a2_1.png" /></div>
+					</div>
+				</div>
+				<div class="goodsDetail">
+					<div class="inputWrapper">
+						<div>产品名称</div>
+						<input type="text" />
+					</div>
+					<div class="inputWrapper">
+						<div>产品类目</div>
+						<input type="text" />
+					</div>
+					<div class="textareaWrapper">
+						<div>产品描述</div>
+						<textarea></textarea>
+					</div>
+					<div class="fileInputWrapper">
+						<div class="fileInputLabel">产品图片</div>
+						<div class="fileInputBox">
+							<div class="boxOne">
+								<div class="fileMask"><img src="/resources/images/a3.png" /></div>
+								<input type="file" />
+							</div>
+							<div class="boxOne">
+								<div class="fileMask"><img src="/resources/images/a3.png" /></div>
+								<input type="file" />
+							</div>
+							<div class="boxOne">
+								<div class="fileMask"><img src="/resources/images/a3.png" /></div>
+								<input type="file" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="stepBtn"><a>下一步</a></div>
+		</div>
+		<div class="step">
+			<div class="stepContent">
+				<div class="stepTitle clearfix">
+					<div class="stepItem first">
+						<div class="stepLabel">第1步</div>
+						<div class="stepLabelImg"><img src="/resources/images/a1_1.png" /></div>
+					</div>
+					<div class="stepItem second curStepTip">
+						<div class="stepLabel">第2步</div>
+						<div class="stepLabelImg"><img src="/resources/images/a2.png" /></div>
+					</div>
+				</div>
+				<div class="goodsDetail">
+					<div class="inputWrapper">
+						<div>供货数量</div>
+						<input type="text" />
+					</div>
+					<div class="inputWrapper">
+						<div>供货价格</div>
+						<input type="text" />
+					</div>
+					<div class="inputWrapper">
+						<div>供货时间</div>
+						<div class="timeInput">
+							<input type="text" placeholder="起始时间" />
+							<span>-</span>
+							<input type="text" placeholder="结束时间" />
+						</div>
+					</div>
+					<div class="addressInputWrapper">
+						<div class="addressInputLabel">收货地址</div>
+						<div class="addressInput">
+							<div class="someInputs">
+								<input type="text" placeholder="省" />
+								<input type="text" placeholder="市" />
+								<input type="text" placeholder="区" />
+							</div>
+							<input class="showAddress" type="text" />
+						</div>
+							
+					</div>
+					<div class="textareaWrapper1">
+						<div>售后要求说明</div>
+						<textarea></textarea>
+					</div>
+						
+				</div>
+			</div>
+			<div class="secondStepBtn">
+				<a>上一步</a>
+				<a>提交</a>
+			</div>
+		</div>
+		
+		
+	</div>
+	<div class="bottomNav">
+		<ul>
+			<li class="navItem1">
+				<div class="navIcon"><img src="/resources/images/icon1.png" /></div>
+				<div class="navText">首页</div>
+			</li>
+			<li class="navSplit"><div class="navSplitIcon"></div></li>
+			<li class="navItem2">
+				<div class="navIcon"><img src="/resources/images/icon2.png" /></div>
+				<div class="navText">个人中心</div>
+			</li>
+		<ul>
+	</div>
+</div>
+
+
+<script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+<script>
+
+
+window.onload = function(){
+	$(".boxOne").height($(".fileMask").height());
+	$(".boxOne input").height($(".fileMask").height());
+	//让背景填充整个屏幕和内容区
+	if($(".supplyDemandOfGoods").height() < $(window).height() ){
+		$(".supplyDemandOfGoods").height($(window).height()  );
+	}	
+}
+//第一步和第二步切换
+$(".first").on("click", function(){
+	$(".step").hide();
+	$(".step").eq(0).show();
+	$(".stepItem").removeClass("curStepTip");
+	$(".step").eq(0).find(".first").addClass("curStepTip");
+});
+$(".second").on("click", function(){
+	$(".step").hide();
+	$(".step").eq(1).show();
+	$(".stepItem").removeClass("curStepTip");
+	$(".step").eq(1).find(".second").addClass("curStepTip");
+});
+</script>	
+</body>
+</html>

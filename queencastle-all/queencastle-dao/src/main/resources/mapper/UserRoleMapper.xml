@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.UserRoleInfoMapper">
+	<resultMap id="UserRoleInfoResultMap" type="com.queencastle.dao.model.UserRoleInfo">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<id column="user_id" property="userId" typeHandler="idHandler" />
+		<id column="role_id" property="roleId" typeHandler="idHandler" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id,user_id, role_id, 
+		created_at,updated_at
+	</sql>
+
+	<select id="getById" resultMap="UserRoleInfoResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from userrole_info
+		where id = #{id,typeHandler=idHandler}
+	</select>
+
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.UserRoleInfo">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT
+			LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into userrole_info (
+		id,user_id, role_id, created_at,updated_at
+		)values
+		(#{id},#{userId,typeHandler=idHandler},#{roleId,typeHandler=idHandler},now(),now())
+	</insert>
+
+	<update id="updateById" parameterType="com.queencastle.dao.model.UserRoleInfo">
+		update userrole_info 
+		<set>
+		<if test="userId != null and userId !=''">
+			user_id=#{userId,typeHandler=idHandler},
+		</if>
+		<if test="roleId != null and roleId !=''">
+			role_id=#{roleId,typeHandler=idHandler},
+		</if>
+		
+			updated_at=now()
+		</set>
+		where id = #{id,typeHandler=idHandler}
+	</update>
+
+	<select id="getUserRoleCountByParams" resultType="java.lang.Integer">
+		select count(*) from userrole_info
+	</select>
+	<select id="getUserRoleByParams" resultMap="UserRoleInfoResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from userrole_info order by id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+
+	<select id="getByUserId" resultMap="UserRoleInfoResultMap"> 
+	select
+		<include refid="Base_Column_List" />
+		from userrole_info 
+	where user_id=#{userId,typeHandler=idHandler}
+	</select>
+
+	<select id="getRoleIdByUserId" resultType="java.lang.Integer"> 
+	select	role_id
+		from userrole_info 
+	where user_id=#{userId,typeHandler=idHandler}
+	</select>
+
+	<delete id="deleteByUserId">
+		delete from userrole_info
+	where user_id=#{userId,typeHandler=idHandler}
+	</delete>
+
+	<delete id="deleteByUserIdAndRolds">
+		delete from userrole_info
+	where user_id=#{userId,typeHandler=idHandler}
+	<if test="roleIdSet!=null and roleIdSet.size()>0">
+		and  role_id in
+		<foreach collection="roleIdSet" item="roleId" open="(" close=")" separator=",">
+			#{roleId,typeHandler=idHandler}
+		</foreach>
+	</if>
+	</delete>
+
+
+
+</mapper>

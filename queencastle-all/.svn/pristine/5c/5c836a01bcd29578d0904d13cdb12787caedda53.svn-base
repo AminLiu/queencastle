@@ -1,0 +1,29 @@
+package com.queencastle.dao.model.relations;
+
+/**
+ * 群等级
+ * 
+ * @author YuDongwei
+ *
+ */
+public enum GroupLevel {
+    /** 省级群 */
+    province,
+    /** 地区群 */
+    city,
+    /** 县级群 */
+    area;
+
+    public static GroupLevel getByName(String name) {
+        switch (name) {
+            case "province":
+                return province;
+            case "city":
+                return city;
+            case "area":
+                return area;
+            default:
+                return null;
+        }
+    }
+}

@@ -1,0 +1,25 @@
+package com.queencastle.service.interf.relations;
+
+import java.util.List;
+import java.util.Map;
+
+import com.queencastle.dao.PageInfo;
+import com.queencastle.dao.model.relations.GroupLevel;
+import com.queencastle.dao.model.relations.ManagerAuth;
+import com.queencastle.dao.vo.AuditVO;
+
+public interface ManagerAuthService {
+    int insert(ManagerAuth managerAuth);
+
+    ManagerAuth getById(String id);
+
+    int updateStatusById(ManagerAuth managerAuth);
+
+    PageInfo<ManagerAuth> getByParams(int page, int rows, Map<String, Object> map);
+
+    List<ManagerAuth> getByAreaIdAndAuthId(String areaId, String authId, GroupLevel level);
+
+    List<AuditVO> handlerAuth(List<ManagerAuth> auths);
+
+
+}

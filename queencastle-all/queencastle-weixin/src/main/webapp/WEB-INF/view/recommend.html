@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>我的推荐</title>
+</head>
+<body>
+	<div th:if="${vos!=null}">
+		<div th:each="vo:${vos}">
+			<div style="border-bottom: 1px solid #e0dee0;">
+			<div>
+				名字<label th:text="${vo.userId}"></label>
+			</div>
+			<div>
+				头像<img th:src="${vo.headImg}"/>
+			</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

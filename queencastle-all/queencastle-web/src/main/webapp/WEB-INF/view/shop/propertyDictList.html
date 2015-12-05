@@ -1,0 +1,38 @@
+<div style="width: 100%; height: 100%;">
+	<div style="width:40%;height:500px;position:absolute;left:0;top:0;">
+		<table id="domainTableId" title="大类列表" style="width: 100%; height: 100%;">
+		</table>
+	</div>
+	<div id="domainToolbar">
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="addPropertyDict()">增加子类</a>
+		<!-- <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="seePropertyDict()">查看子类</a> -->
+	</div>
+	
+	 <div id="addDlg" class="easyui-dialog" style="width:360px;height:310px;padding:10px 20px"
+            closed="true" buttons="#addDlg-buttons">
+        <form id="addFrm" method="post"  enctype="multipart/form-data">
+            <div class="fitem">
+                <label>大类名称:</label>
+                <input id="id" name="id"    class="easyui-textbox" required="true"/>
+            </div>
+           <div class="fitem">
+                <label>子类名称:</label>
+                <input id="cname" name="cname"  class="easyui-validatebox"   required="true"></input>
+            </div>
+             
+        </form>
+    </div>
+	
+	<div style="width:60%;height:500px;position:absolute;left:40%;top:0;">
+		<table id="propertyTableId" title="小类列表" style="width: 100%; height: 100%;">
+		</table>
+	</div>
+	<div id="propertyToolbar">
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="()">搜索</a>
+	</div>
+	  <div id="addDlg-buttons">
+     	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="savePropertyDict()" style="width:70px;height:20px">保存 </a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#addDlg').dialog('close')" style="width:70px;height:20px">取消 </a>
+    </div> 
+	<script type="text/javascript" charset="utf-8" th:src="@{/resources/js/shop/propertyDictList.js}"></script>
+</div>

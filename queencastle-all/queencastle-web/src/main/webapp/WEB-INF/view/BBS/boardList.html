@@ -1,0 +1,28 @@
+<div style="width: 100%; height: 100%;">
+	<table id="BoardTableId" title="板块列表" style="width: 100%; height: 450px">
+	</table>
+	<div id="BoardToolbar">
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addBoard()">增加</a>
+	</div>
+	
+		 <div id="boardDlg" class="easyui-dialog" style="width:360px;height:310px;padding:10px 20px"
+            closed="true" buttons="#boardDlg-buttons">
+        <form id="boardFrm" method="post"  enctype="multipart/form-data">
+            <div class="fitem">
+                <label>版块标题:</label>
+                <input name="title" class="easyui-textbox" required="true"/>
+            </div>
+             <div class="fitem">
+                <label>产品图片:</label>
+                <input name="img" class="sysFile"   style="width:260px;"/>
+            </div>
+        	
+        </form>
+    </div>
+    <div id="boardDlg-buttons">
+     	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveBoard()" style="width:90px">保存 </a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#boardDlg').dialog('close')" style="width:90px">取消 </a>
+    </div>
+
+	<script type="text/javascript" charset="utf-8" th:src="@{/resources/js/BBS/boardlist.js}"></script>
+</div>

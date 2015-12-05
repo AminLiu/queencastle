@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div id="exisitDivOne" class="goodsTabContent" th:if="${vos!=null}">
+
+		<div class="goodsItem" th:each="vo:${vos}">
+			<div class="otherGoodsImg">
+				<img
+					src="http://images11.app.happyjuzi.com/usericonurl/14372808138692.jpg" />
+			</div>
+			<div class="goodsDetail">
+
+				<div>
+					用户名:&nbsp;<label th:text="${vo.username}"></label>
+				</div>
+<!-- 				<div> -->
+<!-- 					用户地址:&nbsp;<label th:text="${vo.province}"></label> -->
+<!-- 				</div> -->
+			</div>
+<!-- 			<div> -->
+<!-- 				关注时间:&nbsp;<label -->
+<!-- 					th:text="${#dates.format(vo.startDate,'yyyy-MM-dd')}"></label>&nbsp;&nbsp;结束时间:&nbsp;<label -->
+<!-- 					th:text="${#dates.format(vo.endDate,'yyyy-MM-dd')}"></label> -->
+<!-- 			</div> -->
+		</div>
+
+	</div>
+
+
+
+</body>
+</html>

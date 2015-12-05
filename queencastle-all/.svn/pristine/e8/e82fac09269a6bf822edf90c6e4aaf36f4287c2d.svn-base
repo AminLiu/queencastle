@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="format-detection" content="telephone=no"/>
+<title>新增产品</title>
+<link rel="stylesheet" href="/resources/css/jquery.mobile-1.4.5.min.css"/>
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+<script src="/resources/js/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+<form method="post" action="/addProduct"  enctype="multipart/form-data" data-ajax='false' >
+  	<div data-role="fieldcontain">
+	    <input type="text" placeholder="请输入产品名称" name="cname" id="text"  />
+	</div>
+	<div data-role="fieldcontain">
+		<fieldset data-role="fieldcontain">
+        	<label for="categoryId">选择产品类型 </label>
+      	 <select name="categoryId" id="categoryId" th:if="${categories!=null}"  data-native-menu="false">
+         <option th:each="category:${categories}" th:value="${category.id}" th:text="${category.cname}"></option>
+ 
+        	</select>
+      	</fieldset>
+	</div>
+	<div data-role="fieldcontain">
+	   <label for="intro">产品介绍</label>
+		<textarea name="intro" id="intro"></textarea>
+	</div>
+	<div data-role="fieldcontain">
+	   <label for="imgs">产品图片</label>
+	   <input type="file"  name="imgs"/> 
+	   <input type="file"  name="imgs"/> 
+	</div>
+    <a href="demandSupplyIdx"> <input type="submit" data-inline="true" value="提交"/></a>
+</form>
+
+</body>
+</html>

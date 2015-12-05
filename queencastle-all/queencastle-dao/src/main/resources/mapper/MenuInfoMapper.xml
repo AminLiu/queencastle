@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.MenuInfoMapper">
+	<resultMap id="MenuInfoResultMap" type="com.queencastle.dao.model.MenuInfo">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="parent_id" property="parentId" typeHandler="idHandler" />
+		<result column="cname" property="cname" jdbcType="VARCHAR" />
+		<result column="ename" property="ename" jdbcType="VARCHAR" />	
+		<result column="href" property="href" jdbcType="VARCHAR" />
+		<result column="rank" property="rank" jdbcType="BIGINT" />	
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id,parent_id, cname, ename,href, rank,
+		created_at,updated_at
+	</sql>
+
+	<select id="getById" resultMap="MenuInfoResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from menu_info
+		where id = #{id,typeHandler=idHandler}
+	</select>
+
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.MenuInfo">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT
+			LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into menu_info (
+		 parent_id, cname, ename,href, rank,created_at,updated_at
+		)values
+		( #{parentId,typeHandler=idHandler},#{cname},#{ename},#{href},#{rank},now(),now())
+	</insert>
+
+	<update id="updateById" parameterType="com.queencastle.dao.model.MenuInfo">
+		update menu_info 
+		<set>
+		<if test="parentId != null and parentId !=''">
+			parent_id=#{parentId,typeHandler=idHandler},
+		</if>
+		<if test="cname != null and cname !=''">
+			cname=#{cname},
+		</if>
+		<if test="ename != null and ename !=''">
+			ename=#{ename},
+		</if>
+		<if test="href != null and href !=''">
+			href=#{href},
+		</if>
+		<if test="rank != null and rank !=''">
+			rank=#{rank},
+		</if>
+			updated_at=now()
+		</set>
+		where id = #{id,typeHandler=idHandler}
+	</update>
+
+	<select id="getMenuCountByParams" resultType="java.lang.Integer">
+		select count(*)
+		from menu_info
+	</select>
+	<select id="getMenuByParams" resultMap="MenuInfoResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from menu_info order by id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+
+	<select id="getMenuByParentId" resultMap="MenuInfoResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from menu_info 
+		where
+		parent_id=#{parentId,typeHandler=idHandler}
+	</select>
+
+	<select id="getByPIdAndRoleId" resultMap="MenuInfoResultMap">
+	select a.* from menu_info a,rolemenu_info b 
+	where a.id=b.menu_id 
+		and b.role_id=#{roleId,typeHandler=idHandler}
+		and a.parent_id=#{parentId,typeHandler=idHandler}
+	</select>
+	<select id="getMenusByPIdAndUserId" resultMap="MenuInfoResultMap">
+		select c.* from userrole_info a ,rolemenu_info b,menu_info c 
+			where a.role_id=b.role_id
+			and c.id=b.menu_id
+			and a.user_id=#{userId,typeHandler=idHandler}
+			and c.parent_id=#{parentId,typeHandler=idHandler}
+	</select>
+	
+	
+
+</mapper>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.relations.UserMemberMapper">
+	<resultMap id="UserMemberResultMap" type="com.queencastle.dao.model.relations.UserMember">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="user_id" property="userId" typeHandler="idHandler" />
+		<result column="group_id" property="groupId" typeHandler="idHandler" />
+		<result column="code" property="code" jdbcType="VARCHAR"/>
+		<result column="m_type" property="type" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap type="com.queencastle.dao.vo.CountVO" id="CountVOResult">
+		<result column="group_id" property="id" typeHandler="idHandler" />
+		<result column="cnt" property="cnt"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,user_id,group_id,code,m_type,created_at,updated_at
+	</sql>
+	
+	<sql id="search">
+		<where>
+		<if test="queryParam.userCode != null and queryParam.userCode !='' ">
+		  code like CONCAT(CONCAT('%', #{queryParam.userCode}),'%') 
+		</if>
+		</where>
+	</sql>
+	
+	<sql id="search_my">
+		<where>
+		  group_id in(
+		  select distinct(a.group_id) from queen_user_member a  where a.user_id=#{map.userId,typeHandler=idHandler} 
+		  )
+		  <if test="map.userCode != null and map.userCode !='' ">
+		 and  code like CONCAT(CONCAT('%', #{map.userCode}),'%') 
+		</if>
+			  
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.relations.UserMember">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_user_member (
+		user_id,group_id,code,m_type,created_at,updated_at
+		)values
+		(#{userId,typeHandler=idHandler}, #{groupId,typeHandler=idHandler},#{code},#{type},now(),now())
+	</insert>
+	
+	<select id="getById" resultMap="UserMemberResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_member
+		where id = #{id,typeHandler=idHandler}
+	</select>
+	
+	<select id="getByUserId" resultMap="UserMemberResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from queen_user_member
+		where user_id = #{userId,typeHandler=idHandler}
+	</select>
+	
+	
+	<select id="getLatestByUserId" resultMap="UserMemberResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from queen_user_member
+		where user_id = #{userId,typeHandler=idHandler} order by id desc limit 0,1
+	</select>
+	
+	<select id="getByGroupId" resultMap="UserMemberResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_member 
+		where group_id = #{groupId,typeHandler=idHandler}
+	</select>
+
+ 	<select id="getUserMembersCountByParams" resultType="java.lang.Integer">
+ 		select count(*) from queen_user_member <include refid="search"/>
+ 	</select>
+ 	
+ 	<select id="getUserMembersByParams" resultMap="UserMemberResultMap">
+ 		select
+ 		 <include refid="Base_Column_List" />
+		from queen_user_member <include refid="search"/>
+		order by id desc
+		limit #{page.offset}, #{page.size}
+ 	</select>
+	
+	
+	<select id="getMaxCodeByGroupId" resultType="java.lang.String">
+	select max(code) from queen_user_member
+		where group_id = #{groupId,typeHandler=idHandler}
+	</select>
+	
+	<select id="getUserIdByCodeAndType" resultMap="UserMemberResultMap" >
+		select <include refid="Base_Column_List" />
+		from queen_user_member
+		where code=#{code} and m_type=#{type}
+	</select>
+	
+	
+ 
+	<select id="getMyMembersCountByParams" resultType="java.lang.Integer">
+ 		select count(*) from queen_user_member <include refid="search_my"/>
+ 	</select>
+ 	
+ 	<select id="getMyMembersByParams" resultMap="UserMemberResultMap">
+ 		select
+ 		 <include refid="Base_Column_List" />
+		from queen_user_member <include refid="search_my"/>
+		order by id desc
+		limit #{page.offset}, #{page.size}
+ 	</select>
+	
+	
+	
+	
+	
+
+	<select id="getAllUsableGroupId" resultMap="CountVOResult">
+		select count(*), group_id from queen_user_member group by group_id having count(*)&lt;#{groupSize}
+	</select>
+	
+	
+	<select id="judgeMember" resultType="java.lang.Integer">
+		select count(*) from queen_user_member where user_id = #{userId,typeHandler=idHandler}
+	</select>
+	
+	<select id="getByGroupIdAndUserId" resultMap="UserMemberResultMap">
+		select <include refid="Base_Column_List"/> from 
+		queen_user_member where user_id = #{userId,typeHandler=idHandler}
+		and group_id = #{groupId,typeHandler=idHandler}
+	</select>
+	
+
+</mapper>

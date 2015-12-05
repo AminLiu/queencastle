@@ -1,0 +1,44 @@
+package com.queencastle.service.interf.weixin;
+
+import java.util.Map;
+
+import com.queencastle.dao.model.User;
+
+public interface WeiXinService {
+
+    String getAccessToken();
+
+    /**
+     * 模板代理消息发送
+     * 
+     * @param toUser
+     * @param proxyUser
+     * @return
+     */
+    boolean sendTemplateProxyMessage(String toUser, User proxyUser);
+
+    /**
+     * 模板会员消息发送
+     * 
+     * @param toUser
+     * @param proxyUser
+     * @return
+     */
+    boolean sendTemplateMemberMsg(String toUser, User memberUser);
+
+    String generateForeverMaterial(String userId);
+
+    /**
+     * 同步线上用户和本地数据库内用户
+     * 
+     * @return
+     */
+    boolean syncUserWithOnLine();
+
+    User generateWeiXinUser(String openId, String accessToken);
+
+    void analyseMap(Map<String, Object> map, String accessToken);
+
+
+
+}

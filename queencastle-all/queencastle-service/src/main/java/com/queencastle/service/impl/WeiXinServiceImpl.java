@@ -1,0 +1,184 @@
+package com.queencastle.service.impl;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.queencastle.dao.model.User;
+import com.queencastle.dao.model.UserDetailInfo;
+import com.queencastle.dao.model.relations.UserQRCode;
+import com.queencastle.dao.utils.jedis.StringJedisCache;
+import com.queencastle.service.config.GlobalValue;
+import com.queencastle.service.interf.UserDetailInfoService;
+import com.queencastle.service.interf.UserService;
+import com.queencastle.service.interf.relations.QRCodeDownLoaderService;
+import com.queencastle.service.interf.relations.UserQRCodeService;
+import com.queencastle.service.interf.weixin.WeiXinService;
+import com.queencastle.service.utils.WeiXinHelper;
+
+@Service
+public class WeiXinServiceImpl implements WeiXinService {
+    private Logger logger = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private StringJedisCache accessTokenCache;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Autowired
+    private ThreadPoolTaskExecutor taskExecutor;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserDetailInfoService userDetailInfoService;
+
+    @Autowired
+    private UserQRCodeService userQRCodeService;
+
+
+    @Autowired
+    private QRCodeDownLoaderService qRCodeDownLoaderService;
+
+    @Override
+    public String getAccessToken() {
+        String accessToken = accessTokenCache.getData("accessToken");
+        if (StringUtils.isBlank(accessToken)) {
+            accessToken =
+                    WeiXinHelper
+                            .getAccessToken(GlobalValue.WEIXIN_APPID, GlobalValue.WEIXIN_SECRET);
+            accessTokenCache.setData("accessToken", accessToken);
+        }
+        return accessToken;
+    }
+
+    @Override
+    public boolean sendTemplateProxyMessage(final String toUser, final User proxyUser) {
+        taskExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                WeiXinHelper
+                        .templateProxyMessage(restTemplate, toUser, proxyUser, getAccessToken());
+            }
+        });
+        return false;
+    }
+
+    @Override
+    public boolean sendTemplateMemberMsg(final String toUser, final User memberUser) {
+        taskExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                // WeiXinHelper.templateProxyMessage(restTemplate, toUser, memberUser,
+                // getAccessToken());
+            }
+        });
+        return false;
+    }
+
+    @Override
+    public String generateForeverMaterial(String userId) {
+        // 对用户的推荐二维码信息进行查询
+        try {
+            UserQRCode userQRCode = userQRCodeService.getByUserId(userId);
+            String picUrl = null;
+            if (userQRCode != null) {
+                picUrl = GlobalValue.QINIU_HOST + userQRCode.getImg();
+            }
+            String ticket = null;
+            if (StringUtils.isBlank(picUrl)) {
+                String accessToken = getAccessToken();
+                String seceneId = userId;
+                ticket = WeiXinHelper.createPermanentQRCode(accessToken, seceneId, restTemplate);
+                if (StringUtils.isNoneBlank(ticket)) {
+                    ticket = URLEncoder.encode(ticket, "utf-8");
+                    picUrl = String.format(WeiXinHelper.GET_QRCODE_URL, ticket);
+                    // download QRCODE in non-block thread
+                    qRCodeDownLoaderService.downLoad(ticket, userId);
+
+                }
+            }
+            return picUrl;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public boolean syncUserWithOnLine() {
+        String accessToken = getAccessToken();
+        Map<String, Object> map = WeiXinHelper.getFirstPageUser(accessToken, restTemplate);
+        analyseMap(map, accessToken);
+        return false;
+    }
+
+    @Override
+    public void analyseMap(Map<String, Object> map, String accessToken) {
+        Integer total = (Integer) map.get("total");
+        System.out.println(total);
+        Integer openIdCnt = (Integer) map.get("count");
+        System.out.println(openIdCnt);
+        String nextOpenId = (String) map.get("next_openid");
+        System.out.println(nextOpenId);
+        Map<String, Object> data = (Map<String, Object>) map.get("data");
+        List<String> openIds = (List<String>) data.get("openid");
+        if (openIds != null) {
+            for (String openId : openIds) {
+                // 判断用户是否在数据库中，进行更新/新增操作
+                User user = userService.loadUserByOpenIdAndSource("weixin", openId);
+                if (user == null) {
+                    generateWeiXinUser(openId, accessToken);
+                }
+            }
+        }
+    }
+
+    @Override
+    public User generateWeiXinUser(String openId, String accessToken) {
+        try {
+            // String accessToken = getAccessToken();
+            Map<String, Object> userMap =
+                    WeiXinHelper.getWeixinUserInfoUnionID(openId, accessToken);
+            for (Map.Entry<String, Object> entry : userMap.entrySet()) {
+                logger.error(entry.getKey() + "<---->" + entry.getValue());
+            }
+
+            User user = new User();
+            user.setAdmin(false);
+            String sex = "1";
+            try {
+                sex = (String) userMap.get("sex");
+            } catch (Exception e) {
+                sex = "1";
+            }
+
+            user.setSex(sex);
+            user.setSource("weixin");
+            user.setOutNick((String) userMap.get("nickname"));
+            user.setOpenId(openId);
+            user.setHeadImg((String) userMap.get("headimgurl"));
+            userService.insert(user);
+
+            UserDetailInfo detailInfo = new UserDetailInfo();
+            detailInfo.setUserId(user.getId());
+            detailInfo.setCountry((String) userMap.get("country"));
+            detailInfo.setProvince((String) userMap.get("province"));
+            detailInfo.setCity((String) userMap.get("city"));
+            userDetailInfoService.insert(detailInfo);
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+}

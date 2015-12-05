@@ -1,0 +1,164 @@
+package com.queencastle.weixin.controllers.goods;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.queencastle.dao.model.SysResourceInfo;
+import com.queencastle.dao.model.User;
+import com.queencastle.dao.model.goods.Category;
+import com.queencastle.dao.model.goods.DemandSupplyInfo;
+import com.queencastle.dao.model.goods.DemandSupplyType;
+import com.queencastle.dao.model.goods.Product;
+import com.queencastle.dao.mybatis.IdTypeHandler;
+import com.queencastle.dao.utils.DateUtils;
+import com.queencastle.dao.utils.PinYinUtils;
+import com.queencastle.service.interf.ResourceUploadService;
+import com.queencastle.service.interf.SysResourceInfoService;
+import com.queencastle.service.interf.goods.CategoryService;
+import com.queencastle.service.interf.goods.DemandSupplyInfoService;
+import com.queencastle.service.interf.goods.ProductService;
+import com.queencastle.service.sessions.PermissionContext;
+
+/**
+ * 产品，类别，供需接口
+ * 
+ * @author YuDongwei
+ *
+ */
+@Controller
+public class ProductCategoryController {
+
+    private Logger logger = LoggerFactory.getLogger(ProductCategoryController.class);
+
+    @Autowired
+    private CategoryService categoryService;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private DemandSupplyInfoService demandSupplyInfoService;
+
+    @Autowired
+    private ResourceUploadService resourceUploadService;
+    @Autowired
+    private SysResourceInfoService sysResourceInfoService;
+
+    /*********************** Index ******************************/
+    @RequestMapping("/abc")
+    public String abc() {
+        
+//        System.out.println("ssssssssssssssssssssssssaaaaaaaaaaaaaaaaa");
+        return "chooseStyle";
+    }
+    @RequestMapping("/categoryIdx")
+    public String categoryIdx() {
+        return "addCategory";
+    }
+
+    @RequestMapping("/productIdx")
+    public String productIdx(Model model) {
+        List<Category> categories = categoryService.getAllCategories();;
+        model.addAttribute("categories", categories);
+        return "addProduct";
+    }
+
+    @RequestMapping("/demandSupplyIdx")
+    public String demandSupplyIdx(Model model, String type) {
+        List<Product> products = productService.getAllProducts();
+        model.addAttribute("products", products);
+        model.addAttribute("type", type);
+        return "addDemandSupply";
+    }
+
+
+    /*********************** Add ******************************/
+    @ResponseBody
+    @RequestMapping("/addCategory")
+    public boolean addCategory(String cname) {
+        Category category = new Category();
+        category.setCname(cname);
+   
+        categoryService.insert(category);
+        return true;
+    }
+
+    @RequestMapping("/addProduct")
+    public String addProduct(String cname, String categoryId, String intro,
+            @RequestParam("imgs") MultipartFile[] imgs) {
+        try {
+            Product product = new Product();
+            product.setCname(cname);
+            String ename = PinYinUtils.fullPinyin(cname);
+            product.setEname(ename);
+            Category category = new Category();
+            category.setId(categoryId);
+            product.setCategory(category);
+            product.setIntro(intro);
+            User currentUser = PermissionContext.getUser();
+            for (MultipartFile mfile : imgs) {
+                byte[] bytes = mfile.getBytes();
+                String originName = mfile.getOriginalFilename();
+                String fileName = DateUtils.getCurrFullTime() + "_" + originName;
+                String key = resourceUploadService.uploadBytes(bytes, fileName);
+                if (StringUtils.isNoneBlank(key)) {
+                    SysResourceInfo info = new SysResourceInfo();
+                    info.setFileKey(key);
+                    info.setFileName(fileName);
+                    info.setOriginName(originName);
+                    String ext = originName.substring((originName.lastIndexOf(".") + 1));
+                    info.setFileExt(ext);
+                    if (currentUser != null) {
+                        info.setUserId(currentUser.getId());
+                    } else {
+                        info.setUserId(IdTypeHandler.encode(1L));
+                    }
+                    sysResourceInfoService.insert(info);
+                }
+
+            }
+
+            productService.insert(product);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+        return "upload";
+    }
+
+    @ResponseBody
+    @RequestMapping("/addDemandSupplyInfo")
+    public boolean addDemandSupplyInfo(String productId, int amount, int price, String startDate,
+            String endDate, String memo, String type) {
+        DemandSupplyInfo demandSupplyInfo = new DemandSupplyInfo();
+        demandSupplyInfo.setAmount(amount);
+        demandSupplyInfo.setPrice(price);
+        demandSupplyInfo.setStartDate(DateUtils.getYmdDate(startDate));
+        demandSupplyInfo.setEndDate(DateUtils.getYmdDate(endDate));
+        Product product = new Product();
+        product.setId(productId);
+        demandSupplyInfo.setProduct(product);
+        demandSupplyInfo.setMemo(memo);
+        demandSupplyInfo.setDsType(DemandSupplyType.getByName(type));
+        // demandSupplyInfoService.insert(demandSupplyInfo);
+        return true;
+    }
+
+    /*********************** Search ******************************/
+    @ResponseBody
+    @RequestMapping("/getAllCategories")
+    public List<Category> getAllCategories() {
+        return categoryService.getAllCategories();
+    }
+
+
+
+}

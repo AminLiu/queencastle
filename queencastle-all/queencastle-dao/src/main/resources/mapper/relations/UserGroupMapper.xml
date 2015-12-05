@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.relations.UserGroupMapper">
+	<resultMap id="UserGroupResultMap" type="com.queencastle.dao.model.relations.UserGroup">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="cname" property="cname" jdbcType="VARCHAR" />
+		<result column="code" property="code" jdbcType="VARCHAR"/>
+		<result column="img" property="img" jdbcType="VARCHAR" />
+		<result column="profile" property="profile" jdbcType="VARCHAR" />
+		<result column="g_type" property="type" jdbcType="VARCHAR" />
+		
+		<result column="master_id" property="masterId" typeHandler="idHandler" />
+		
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+
+	<sql id="Base_Column_List">
+		id,cname,code, img,profile,created_at,updated_at,g_type,master_id
+	</sql>
+	<sql id="Search_Column_List">
+	b.id,b.cname,b.code, b.img,b.profile,b.created_at,b.updated_at,b.g_type,b.master_id
+	</sql>
+	
+	<sql id="search">
+	<where>
+			a.group_id=b.id and a.m_type='master'
+			<if test="map.userId != null">
+			and	a.user_id=#{map.userId,typeHandler=idHandler}
+			</if>
+			 
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.relations.UserGroup">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_user_group (
+		cname,code, img,profile,created_at,updated_at,g_type,master_id
+		)values
+		(#{cname}, #{code},#{img},#{profile},now(),now(),#{type},#{masterId,typeHandler=idHandler})
+	</insert>
+	
+	<select id="getById" resultMap="UserGroupResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_group
+		where id = #{id,typeHandler=idHandler}
+	</select>
+	
+	<select id="getByCode" resultMap="UserGroupResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_group 
+		where code like concat(#{code},'%')
+	</select>
+
+ 	<select id="getUserGroupsCountByParams" resultType="java.lang.Integer">
+		select count(b.id) from queen_user_member a , queen_user_group b <include refid="search"/>
+	</select>
+	
+	<select id="getUserGroupsByParams" resultMap="UserGroupResultMap">
+		select
+		<include refid="Search_Column_List" />
+		from queen_user_member a , queen_user_group b <include refid="search"/>  order by b.id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+	<select id="getByGroupCode"  resultMap="UserGroupResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_group 
+		where code=#{groupCode}
+	
+	</select>
+	<update id="updataById" parameterType="com.queencastle.dao.model.relations.UserGroup">
+		update queen_user_group
+		<set>
+		<if test="cname != null and cname !=''">
+		   cname=#{cname},
+		</if>
+		<if test="profile != null and profile !=''">
+		   profile=#{profile},
+		</if>
+		<if test="img != null and img !=''">
+		   img=#{img},
+		</if>
+			updated_at=now()
+		</set>
+		 where id=#{id,typeHandler=idHandler}
+	</update>
+	
+	
+	<select id="getCodeListByBase" resultType="java.lang.String">
+		select code from queen_user_group where code like CONCAT(#{baseCode} ,'%')
+	</select>
+
+	<select id="getByMasterId"  resultMap="UserGroupResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from queen_user_group 
+		where g_type=#{type}
+		and master_id=#{masterId,typeHandler=idHandler}
+	
+	
+	</select>
+
+
+
+
+</mapper>

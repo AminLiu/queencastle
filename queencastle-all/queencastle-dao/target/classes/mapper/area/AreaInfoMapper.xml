@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.area.AreaInfoMapper">
+
+	<resultMap id="ProvinceResultMap" type="com.queencastle.dao.model.area.Province">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="cname" property="cname" jdbcType="VARCHAR" />
+		<result column="ename" property="ename" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<resultMap id="CityResultMap" type="com.queencastle.dao.model.area.City">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="cname" property="cname" jdbcType="VARCHAR" />
+		<result column="ename" property="ename" jdbcType="VARCHAR" />
+		<result column="province_code" property="provinceCode" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="areaResultMap" type="com.queencastle.dao.model.area.Area" >
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="cname" property="cname" jdbcType="VARCHAR" />
+		<result column="ename" property="ename" jdbcType="VARCHAR" />
+		<result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="search">
+		<where>
+		<if test="cname != null and cname !=''">
+		  cname like CONCAT(CONCAT('%', #{cname}),'%') 
+		</if>
+		</where>
+	</sql>
+
+	<update id="normalizeProvince" parameterType="com.queencastle.dao.model.area.Province">
+		update
+		queen_province set ename=#{ename}
+		where id = #{id,typeHandler=idHandler}
+	</update>
+
+	<update id="normalizeCity" parameterType="com.queencastle.dao.model.area.City">
+		update queen_city set
+		ename=#{ename}
+		where id = #{id,typeHandler=idHandler}
+	</update>
+	
+	<update id="normalizeArea" parameterType="com.queencastle.dao.model.area.Area">
+		update queen_area set
+		ename=#{ename}
+		where id = #{id,typeHandler=idHandler}
+	</update>
+
+	<select id="getAllProvinces" resultMap="ProvinceResultMap">
+		select * from
+		queen_province
+	</select>
+
+	<select id="getByProvinceCode" resultMap="CityResultMap">
+		select * from
+		queen_city where province_code=#{provinceCode}
+	</select>
+
+	<select id="getProvinceById" resultMap="ProvinceResultMap">
+		select * from
+		queen_province where id = #{id,typeHandler=idHandler}
+	</select>
+
+	<select id="getCityById" resultMap="CityResultMap">
+		select * from queen_city
+		where id = #{id,typeHandler=idHandler}
+	</select>
+	<select id="getProvinceByprovinceCode" resultMap="ProvinceResultMap">
+		select
+		*
+		from queen_province where code=#{provinceCode}
+	</select>
+	<select id="getByCityCode" resultMap="CityResultMap">
+		select	*	from queen_city
+		where code=#{cityCode}
+	</select>
+
+	<select id="getProvincesCount" resultType="java.lang.Integer">
+		select count(*)	from queen_province <include refid="search"/>
+	</select>
+	
+	<select id="getProvinces" resultMap="ProvinceResultMap">
+		select *	from queen_province   <include refid="search"/>
+		limit #{page.offset}, #{page.size}
+	</select>
+	
+	<select id="getCitysCount" resultType="java.lang.Integer">
+		select count(*)	from queen_city  <include refid="search"/>
+	</select>
+	
+	<select id="getCitys" resultMap="CityResultMap">
+			select *	from queen_city   <include refid="search"/>
+		limit #{page.offset}, #{page.size}
+	</select>
+	
+	
+	<select id="getAreasByCityCode" resultMap="areaResultMap">
+		select * from queen_area where  city_code=#{cityCode}
+	</select>
+	
+	<select id="getAllAreasByAreaCode" resultMap="areaResultMap">
+		select * from queen_area where code=#{areaCode}
+	</select>
+
+</mapper>

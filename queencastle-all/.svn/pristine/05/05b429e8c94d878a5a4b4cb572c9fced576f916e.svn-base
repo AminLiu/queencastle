@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.relations.ManagerAuthMapper">
+	<resultMap id="ManagerAuthResultMap" type="com.queencastle.dao.model.relations.ManagerAuth">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="area_id" property="areaId" typeHandler="idHandler" />
+		<result column="auth_id" property="authId" typeHandler="idHandler" />
+		<result column="user_id" property="userId" typeHandler="idHandler" />
+		<result column="level" property="level" jdbcType="VARCHAR" />
+		<result column="auth_status" property="status" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="group_id" property="groupId" typeHandler="idHandler" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,area_id,auth_id,user_id,level,auth_status,created_at,updated_at,group_id
+	</sql>
+
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.relations.ManagerAuth">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_manager_auth (
+		area_id,auth_id,user_id,level,auth_status,created_at,updated_at,group_id
+		)values
+		(#{areaId,typeHandler=idHandler},#{authId,typeHandler=idHandler},#{userId,typeHandler=idHandler},
+		#{level}, #{status},now(),now(),#{groupId,typeHandler=idHandler})
+	</insert>
+	
+	<select id="getById" resultMap="ManagerAuthResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_manager_auth
+		where id = #{id,typeHandler=idHandler}
+	</select>
+	
+	
+ 	<update id="updateStatusById"  parameterType="com.queencastle.dao.model.relations.ManagerAuth">
+ 		update queen_manager_auth
+ 		 <set>
+			<if test="status != null and status !=''">
+				auth_status=#{status},
+			</if>
+			updated_at=now()
+		</set>
+		where id = #{id,typeHandler=idHandler}
+ 	</update>
+ 	
+ 	
+ 	 <select id="getCountByParams" resultType="java.lang.Integer">
+ 		select count(*) from queen_manager_auth   
+ 	</select>
+ 	<select id="getByParams" resultMap="ManagerAuthResultMap">
+ 		select
+ 		 <include refid="Base_Column_List" />
+		from queen_manager_auth  
+		order by id desc
+		limit #{page.offset}, #{page.size}
+ 	</select>
+	
+	<select id="getByAreaIdAndAuthId" resultMap="ManagerAuthResultMap">
+	select
+ 		 <include refid="Base_Column_List" />
+		from queen_manager_auth  
+		where area_id=#{areaId,typeHandler=idHandler}
+		and level=#{level}
+		and auth_id=#{authId,typeHandler=idHandler}
+	</select>
+
+</mapper>

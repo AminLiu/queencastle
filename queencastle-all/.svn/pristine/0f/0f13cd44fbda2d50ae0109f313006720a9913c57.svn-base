@@ -1,0 +1,57 @@
+package com.queencastle.service.test.relations;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import com.queencastle.dao.model.relations.GroupLevel;
+import com.queencastle.dao.model.relations.UserManager;
+import com.queencastle.dao.mybatis.IdTypeHandler;
+import com.queencastle.dao.vo.UserManagerVO;
+import com.queencastle.service.test.BaseTest;
+
+public class UserManagerTester extends BaseTest {
+
+    @Test
+    @Ignore
+    public void testInsert() {
+        List<String> list = new ArrayList<String>();
+        list.add("1,province,0");
+
+        list.add("2,city,1");
+        list.add("3,city,1");
+
+        list.add("4,area,2");
+        list.add("5,area,2");
+        list.add("6,area,3");
+        list.add("7,area,3");
+        list.add("8,area,3");
+
+        for (String line : list) {
+            String[] array = line.split(",");
+            String userId = IdTypeHandler.encode(Long.parseLong(array[0]));
+            GroupLevel level = GroupLevel.getByName(array[1]);
+            String managerId = IdTypeHandler.encode(Long.parseLong(array[2]));
+            insertData(userId, level, managerId);
+        }
+    }
+
+    public void insertData(String userId, GroupLevel level, String managerId) {
+        UserManager userManager = new UserManager();
+        userManager.setCname(RandomStringUtils.randomAlphanumeric(10));
+        userManager.setLevel(level);
+        userManager.setManagerId(managerId);
+        userManager.setUserId(userId);
+        userManagerService.insert(userManager);
+    }
+
+    @Test
+    public void testMyTeam() {
+        String userId = IdTypeHandler.encode(1);
+        UserManagerVO result = userManagerService.getMyWholeTeam(userId);
+        System.out.println(result);
+    }
+}

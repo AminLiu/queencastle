@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+    <link rel="stylesheet" href="resources/css/reset.css"/>
+    <link rel="stylesheet" href="resources/css/style.css"/>
+<title>请选择您的需求。</title>
+</head>
+<body>
+1
+<form id="supplyFrm" method="post" action="/chooseStyle">
+ <h1>
+<a href="categoryIdx"><input id="supplyBtn" type="submit" >我要供货</input></a>
+</h1>
+<h2>
+<button id="demandBtn">我要求货</button>
+</h2>
+</form>
+</body>
+</html>

@@ -1,0 +1,66 @@
+package com.queencastle.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.queencastle.dao.PageInfo;
+import com.queencastle.dao.mapper.MenuInfoMapper;
+import com.queencastle.dao.model.MenuInfo;
+import com.queencastle.service.interf.MenuService;
+
+@Service
+public class MenuServiceImpl implements MenuService {
+
+    @Autowired
+    private MenuInfoMapper menuInfoMapper;
+
+    @Transactional
+    @Override
+    public int insert(MenuInfo menuInfo) {
+        return menuInfoMapper.insert(menuInfo);
+    }
+
+    @Override
+    public MenuInfo getById(String id) {
+        return menuInfoMapper.getById(id);
+    }
+
+    @Override
+    public int updateById(MenuInfo menuInfo) {
+        return menuInfoMapper.updateById(menuInfo);
+    }
+
+    @Override
+    public PageInfo<MenuInfo> getMenuByParams(int page, int rows, Map<String, Object> map) {
+        PageInfo<MenuInfo> pageInfo = new PageInfo<MenuInfo>();
+        pageInfo.setPage(page);
+        Integer count = menuInfoMapper.getMenuCountByParams(map);
+        if (count == null || count == 0) {
+            pageInfo.setTotal(0);
+            pageInfo.setRows(new ArrayList<MenuInfo>());
+            return pageInfo;
+        }
+        pageInfo.setTotal(count);
+        page = (page <= 1) ? 1 : page;
+        Pageable pageable = new PageRequest(page - 1, rows);
+
+        List<MenuInfo> list = menuInfoMapper.getMenuByParams(pageable, map);
+        pageInfo.setRows(list);
+        return pageInfo;
+    }
+
+
+    // @Override
+    // public PageInfo<MenuInfo> getMenuInfoByParams(int page, int rows, Map<String, Object> map) {
+    // // TODO Auto-generated method stub
+    // return null;
+    // }
+
+}

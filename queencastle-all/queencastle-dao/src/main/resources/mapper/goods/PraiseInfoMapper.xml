@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.goods.PraiseInfoMapper">
+
+	<sql id="Base_Column_List">
+		id,info_id,user_id,r_type,created_at,updated_at
+	</sql>
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.goods.PraiseInfo">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_praise (
+		 info_id, user_id,r_type,created_at,updated_at
+		)values
+		( #{infoId,typeHandler=idHandler},#{userId,typeHandler=idHandler},#{type},now(),now())
+	</insert>
+
+	 
+	
+	<select id="getCnt" resultType="java.lang.Integer">
+		select count(*) from queen_praise where 
+		 info_id= #{infoId,typeHandler=idHandler}
+		and   user_id=#{userId,typeHandler=idHandler}
+	</select>
+ 
+
+	<update id="update">
+		update queen_praise set
+		 r_type=#{type},
+		 updated_at=now() where 
+		 info_id= #{infoId,typeHandler=idHandler}
+		and   user_id=#{userId,typeHandler=idHandler}
+		 
+	
+	</update>
+
+	
+	<select id="getTypeByUserId" resultType="com.queencastle.dao.model.goods.PraiseType">
+		select r_type from queen_praise where 
+		info_id= #{infoId,typeHandler=idHandler}
+		and
+		 user_id=#{userId,typeHandler=idHandler}
+	</select>
+	
+	
+	<select id="getUserIdByInfoId" resultType="java.lang.String">
+		select 
+		<include refid="Base_Column_List" />
+		from queen_praise
+		 where 
+		 info_id=#{infoId,typeHandler=idHandler}
+	</select>
+ 
+
+
+</mapper>

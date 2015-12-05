@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.data.SaleDataMapper">
+	<resultMap id="SaleDataResultMap" type="com.queencastle.dao.model.data.SaleData">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />	
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="province" property="province" jdbcType="VARCHAR" />	
+		<result column="city" property="city" jdbcType="VARCHAR" />	
+		<result column="area" property="area" jdbcType="VARCHAR" />	
+		<result column="phone" property="phone" jdbcType="VARCHAR" />	
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, order_no, user_name, address, province, city,area,phone,created_at
+	</sql>
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.data.SaleData">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT
+			LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_sale_data (
+		 order_no, user_name, address,province, city,area,phone,created_at
+		)values
+		( #{orderNo},#{userName},#{address},#{province},#{city},#{area},#{phone},now())
+	</insert>
+ 
+	<insert id="batchInsert" parameterType="java.util.List">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT
+			LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_sale_data (
+		 order_no, user_name, address,province, city,area,phone,created_at
+		)values
+		 <foreach collection="dataList" item="item" index="index"   separator=","> 
+		( #{item.orderNo},#{item.userName},#{item.address},#{item.province},#{item.city},#{item.area},#{item.phone},now())
+        </foreach>
+	</insert>
+	
+	<select id="getDataCountByParam" resultType="java.lang.Integer">
+		select count(*) from queen_sale_data
+	</select>
+	
+	<select id="getDatasByParam" resultMap="SaleDataResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from queen_sale_data   order by id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+	
+	
+
+</mapper>

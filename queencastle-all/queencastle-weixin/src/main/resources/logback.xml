@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true" scanPeriod="3 seconds">
+	<contextName>queencastle-weixin</contextName>
+	<appender name="ROOT_FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/logs/queencastle_weixin.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>/logs/queencastle_weixin.%d{yyyy-MM-dd}.%i.log
+			</FileNamePattern>
+			<MaxHistory>300</MaxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{0}
+				[%file:%line] -%msg%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>
+				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%file:%line]- %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	<jmxConfigurator />
+	<root level="INFO">
+		<appender-ref ref="ROOT_FILE" />
+		<!-- <appender-ref ref="STDOUT" /> -->
+	</root>
+	<logger name="com.queencastle" level="INFO" />
+</configuration>

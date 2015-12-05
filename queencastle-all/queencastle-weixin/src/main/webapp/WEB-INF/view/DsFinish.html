@@ -1,0 +1,155 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="format-detection" content="telephone=no"/>
+
+<title>供求货中心</title>
+<style>
+html{height: 100%;padding: 0px;margin: 0px;font-family:"Microsoft YaHei","Tahoma";}
+body{margin:0;}
+img {width:100%;}
+ul, li {list-style:none;margin:0;padding:0;}
+.textBlue {color:#41009a;}
+.textGray{color:#666;}
+.textBlue1 {color:#1abeb8;}
+.adjustDIV {width:100%;height:20px;}
+.pageGoodsSource {background:url("/resources/images/bg1.png") no-repeat center;background-size:100% 100%;padding-bottom:50px;}
+
+.mainNav {position:fixed;bottom:0;left:0;width:100%;}
+.mainNavList {font-size:0;background:#41009a;}
+.mainNavList > li {position:relative;display:inline-block;width:25%;height:40px;line-height:40px;text-align:center;font-size:14px;color:#fff;}
+.mainNavList > li > div {display:inline-block;border-bottom:1px solid #6198d0;}
+.mainNavList > li.curNav {color:#a6befb;}
+.mainNavSplit {display: inline-block;height: 12px;vertical-align: middle;width: 1px;border-left: 1px solid #fff;position: absolute;right: 0;top: 15px;}
+
+.pageGoodsSource {width:100%;}
+.pageContent {width:90%;margin:0 5%;background:#fff;}
+.goodsHot {width:90%;margin:0 5%;padding-bottom:10px;border-bottom:1px solid #ccc;}
+.goodsContent {display:table;width:100%;padding:10px 0;}
+.goodsContent > div {display:table-cell;vertical-align:top;width:40%;}
+.goodsHotLeft {text-align:center;}
+.goodsImg {position:relative;display:inline-block;width:86%;}
+.bTip {position:absolute;top:0;right:0;width:40%;}
+.sTip {position:absolute;top:0;right:0;width:40%;}
+.hotLabel {font-size:14px;color:#000;text-align:center;white-space:nowrap;padding-top:5px;font-weight:bold;}
+.goodsHotRight {padding-left:3%;font-size:12px;color:#000;line-height:18px;}
+.goodsHotRight > div {border-top: 1px solid #ccc;}
+.goodsHotRight > div:nth-of-type(1) {border-top:none;}
+.goodsHot .goodsIntro {display:table;width:100%;font-size:12px;color:#000;line-height:20px;}
+.goodsHot .goodsIntro > span {display:table-cell;vertical-align:top;}
+.goodsHot .goodsIntro > span:nth-of-type(1) {white-space: nowrap;}
+
+.otherGoods {width:90%;padding:5%;}
+.otherGoodsLabel {font-size:14px;padding-bottom:10px;}
+.otherGoodsContent {width:100%;overflow:hidden;}
+.goodsWrapper {font-size:0;}
+.otherGoodsItem {position:relative;display:inline-block;width:30.3%;font-size:10px;margin:0 1% 0 2%;}
+.otherGoodsImg {padding-bottom:5px;}
+
+.box {display:inline-block;width:100%;}
+
+.dots {font-size:0;width:100%;padding:10px 0%;text-align:center;}
+.dots li {display:inline-block;width:10px;height:10px;border-radius:50%;background:#ccc;margin-left:5%;}
+.dots li:nth-of-type(1) {margin-left:0%;}
+.dots .curDot {background:#000;}
+
+.provideBtn {background:#fff;padding-bottom:10px;}
+.provideBtn > a {display:inline-block;background:#3b109d;height:30px;line-height:30px;color:#fff;font-size:14px;text-align:center;width:90%;margin:0px 5%;}
+
+.bottomNav {position:fixed;bottom:0;width:100%;background:#41009a;}
+.bottomNav ul {font-size:0;}
+.bottomNav li {display:inline-block;vertical-align:middle;text-align:center;}
+.navItem1, .navItem2 {width:48%;font-size:16px;color:#fff;}
+.navSplit {width:4%;height:44px;}
+.navIcon {display:inline-block;width:10%;vertical-align:middle;margin-right:5px;}
+.navText {display:inline-block;vertical-align:middle;}
+.navSplitIcon {display:inline-block;width:1px;height:26px;background:#fff;margin-top: 10px;}
+</style>
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+</head>
+<body>
+<div class="pageGoodsSource">
+	<div class="adjustDIV"></div>
+	<div class="pageContent">
+		<div class="goodsHot">
+			<div class="goodsContent">
+				<div class="goodsHotLeft">
+					<div class="goodsImg">
+						<img th:src="${vo.img}"/>
+						<!-- <img src="/resources/images/goods_1.jpg" />
+						<div class="bTip"><img src="/resources/images/g4.png" /></div> -->
+					</div>
+				</div>
+				<div class="goodsHotRight">
+					<div><span th:text="${vo.productName}"></span></div>
+					<div>类目 ：<span th:text="${vo.dsType}"></span></div>
+					<div>求购数量：<span class="TextBlue" th:text="${vo.amount}"></span></div>
+					<div>求购金额：<span class="TextBlue" th:text="${vo.price}"></span></div>
+					<div>求购人：we**arerock</div>
+					<div>求购编号：343452</div>
+				</div>
+			</div>
+			<div class="goodsIntro">
+				<span>产品介绍：</span>
+				<span th:text="${vo.memo}"></span></div>
+		</div>
+			<div class="otherGoods">
+				<div class="otherGoodsLabel">他的其他求供货：</div>
+				<div class="otherGoodsContent">
+					<div class="goodsWrapper">
+						<div class="box curtBox">
+							<div th:if="${voThree!=null}">
+								<div class="otherGoodsItem" th:each="vt:${voThree}">
+									<a class="otherGoodsImg">
+										<div class="otherGoodsImg">
+											<img th:src="${vt.img}" />
+										</div>
+										<div>
+											<span th:text="${vt.productName}"></span>
+										</div>
+										<div>
+											类目 ：<span th:text="${vt.dsType}"></span>
+										</div>
+										<div>
+											数量：<span class="TextBlue" th:text="${vt.amount}"></span>
+										</div>
+										<div>
+											金额：<span class="TextBlue" th:text="${vt.price}"></span>
+										</div> <!-- <div class="sTip"><img src="/resources/images/g2.png" /></div> -->
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="provideBtn"><a>联系客服</a></div>
+		<div th:if="${att!=null}">
+		<div class="provideBtn"><a th:title="${vo.id}">取消关注</a></div>
+		</div>
+		<div th:if="${att==null}">
+		<div class="provideBtn"><a th:title="${vo.id}">关注</a></div>
+		</div>
+	</div>
+	<div class="adjustDIV"></div>
+	<div class="bottomNav">
+		<ul>
+			<li class="navItem1">
+				<div class="navIcon"><img src="/resources/images/icon1.png" /></div>
+				<div class="navText">首页</div>
+			</li>
+			<li class="navSplit"><div class="navSplitIcon"></div></li>
+			<li class="navItem2">
+				<div class="navIcon"><img src="/resources/images/icon2.png" /></div>
+				<div class="navText">个人中心</div>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<script type="text/javascript"  th:src="@{/resources/js/goods/detail.js}"  th:inline="javascript"></script>
+</body>
+</html>

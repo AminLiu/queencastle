@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.relations.UserRelationMapper">
+	<resultMap id="UserRelationResultMap" type="com.queencastle.dao.model.relations.UserRelation">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="user_id" property="userId" typeHandler="idHandler" />
+		<result column="parent_id" property="parentId" typeHandler="idHandler" />
+		<result column="r_type" property="type" jdbcType="VARCHAR" />
+		<result column="layer" property="layer" jdbcType="INTEGER" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id,user_id,parent_id, r_type,layer,created_at,updated_at
+	</sql>
+
+	
+
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.relations.UserRelation">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_user_relation (
+		user_id,parent_id, r_type,layer,created_at,updated_at
+		)values
+		(#{userId,typeHandler=idHandler}, #{parentId,typeHandler=idHandler},#{type},#{layer},now(),now())
+	</insert>
+	
+	<select id="getById" resultMap="UserRelationResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_relation
+		where id = #{id,typeHandler=idHandler}
+	</select>
+	
+	<select id="getByParentIdAndType" resultMap="UserRelationResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_relation 
+		where
+		parent_id=#{parentId,typeHandler=idHandler}
+		and r_type=#{type}
+	</select>
+	
+	<select id="getCntByUserId" resultType="java.lang.Integer">
+		select count(*) from queen_user_relation
+		where
+		user_id=#{userId,typeHandler=idHandler}
+	</select>
+	
+	<select id="getByUserId" resultMap="UserRelationResultMap">
+	select  <include refid="Base_Column_List" /> from queen_user_relation
+		where
+		user_id=#{userId,typeHandler=idHandler}
+	</select>
+	
+	
+	
+	<select id="getByParentId"  resultType="java.lang.Integer">
+		select distinct(layer) from queen_user_relation
+		where
+		parent_id=#{parentId,typeHandler=idHandler}
+	</select>
+ 	<select id="getLevelByUserId" resultType="java.lang.Integer">
+		select layer from queen_user_relation
+		where
+		user_id=#{userId,typeHandler=idHandler}
+	</select>
+ 
+	<select id="getUserIdByParentId"  resultType="java.lang.String">
+		select user_id from queen_user_relation
+		where
+		parent_id=#{parentId,typeHandler=idHandler}
+	</select>
+	
+	<select id="getAgencyCountByParams" resultType="java.lang.Integer">
+ 		select count(*) from queen_user_relation 
+ 	</select>
+ 	
+ 	<select id="getAgencyByParams" resultMap="UserRelationResultMap">
+ 		select
+ 		 <include refid="Base_Column_List" />
+		from queen_user_relation
+		order by id desc
+		limit #{page.offset}, #{page.size}
+ 	</select>
+
+
+</mapper>

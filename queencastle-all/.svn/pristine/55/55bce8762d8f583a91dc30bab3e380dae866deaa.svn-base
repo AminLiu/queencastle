@@ -1,0 +1,78 @@
+package com.queencastle.dao.model.relations;
+
+import com.queencastle.dao.model.BaseModel;
+
+/**
+ * 地区县区一级的管理员审核拉群
+ * 
+ * @author YuDongwei
+ *
+ */
+public class ManagerAuth extends BaseModel {
+
+    private static final long serialVersionUID = 9129646692223823230L;
+    /** 地区编号 */
+    private String areaId;
+    /** 审核人编号 */
+    private String authId;
+    /** 被审核人的编号 */
+    private String userId;
+    /** 区域层级 */
+    private GroupLevel level;
+    /** 审核状态,这里有：未审核和审核通过与否 */
+    private AuditStatus status;
+    /** 被分配到的群的编号 */
+    private String groupId;
+
+
+    public String getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
+    }
+
+    public String getAuthId() {
+        return authId;
+    }
+
+    public void setAuthId(String authId) {
+        this.authId = authId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public GroupLevel getLevel() {
+        return level;
+    }
+
+    public void setLevel(GroupLevel level) {
+        this.level = level;
+    }
+
+    public AuditStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AuditStatus status) {
+        this.status = status;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+
+
+}

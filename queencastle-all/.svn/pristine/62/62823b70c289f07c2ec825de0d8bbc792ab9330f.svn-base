@@ -1,0 +1,44 @@
+package com.queencastle.dao.model.relations;
+
+/**
+ * 审核状态
+ * 
+ * @author YuDongwei
+ *
+ */
+public enum AuditStatus {
+    /** 系统待审核和地区管理员待审核 */
+    undone,
+    /** 系统审核通过 */
+    success,
+    /** 系统审核不通过 */
+    fail,
+    /** 省级管理员审核,全部为通过 */
+    audit,
+    /** 地区级管理员通过发送二维码拉群 */
+    sent,
+    /** 进入地方群成为群成员 */
+    member,
+    /** 授权 */
+    auth;
+    public static AuditStatus getByName(String name) {
+        switch (name) {
+            case "undone":
+                return undone;
+            case "success":
+                return success;
+            case "fail":
+                return fail;
+            case "audit":
+                return audit;
+            case "sent":
+                return sent;
+            case "member":
+                return member;
+            case "auth":
+                return auth;
+            default:
+                return undone;
+        }
+    }
+}

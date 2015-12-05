@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.loggs.UserLogMapper">
+	<resultMap id="LoggsMapper" type="com.queencastle.dao.model.loggs.UserLog">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="user_id" property="userId" typeHandler="idHandler" />
+		<result column="object_id" property="objectId" typeHandler="idHandler" />
+		<result column="log_type" property="logType" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.loggs.UserLog">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT
+			LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_log (
+		user_id,object_id, log_type,content,created_at
+		)values
+		(
+		#{userId,typeHandler=idHandler}, #{objectId,typeHandler=idHandler},#{logType},#{content},now())
+	</insert>
+
+
+
+</mapper>

@@ -1,0 +1,36 @@
+package com.queencastle.service.test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Test;
+import com.queencastle.dao.model.MenuInfo;
+import com.queencastle.dao.model.RoleMenuInfo;
+import com.queencastle.dao.model.UserRoleInfo;
+import com.queencastle.dao.mybatis.IdTypeHandler;
+
+public class getMenuByUserId extends BaseTest {
+	
+	@Test
+	public void testGetMenuByUserId() {
+		UserRoleInfo userRoleInfo = new UserRoleInfo();
+		String userId = IdTypeHandler.encode(2L);
+		userRoleInfo.setUserId(userId);
+
+		List<RoleMenuInfo> s = userRoleInfoService.getMenuByUserId(userId);
+		String menuId=null;
+		for (RoleMenuInfo info : s) {
+			System.out.println("hhhhhhhhhaaaaaaaaaaaaaaaaaaaaaaaaaaa+" + info.getMenuId());
+			menuId=info.getMenuId();
+			System.out.println(menuId);
+			if (!menuId.isEmpty()) {
+				List<MenuInfo> list=menuService.getMenuByParentId(menuId);
+				for (MenuInfo info2 : list) {
+					System.out.println("菜单："+info2.getCname());
+				}
+			}
+		}
+		
+
+	}
+}

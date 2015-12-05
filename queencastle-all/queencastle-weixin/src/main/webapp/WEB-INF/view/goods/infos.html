@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="stylesheet" type="text/css" href="/resources/css/css.css"/>
+<style>
+html{height: 100%;padding: 0px;margin: 0px;font-family:"Microsoft YaHei","Tahoma";}
+body{margin:0;}
+img {width:100%;}
+ul, li {list-style:none;margin:0;padding:0;}
+.textBlue {color:#41009a;}
+.textGray{color:#999;}
+.textBlue1 {color:#3b109d;}
+.pageGoodsSource {background:url("/resources/images/bg1.png") no-repeat center;background-size:100% 100%;padding-bottom:50px;}
+
+.pageGoodsSource {width:100%;padding-bottom:50px;}
+.goodsHot {display:table;padding:10px 0;margin:0 5%;}
+.goodsHot > div {display:table-cell;vertical-align:middle;}
+.goodsHotLeft {text-align:center;}
+.goodsImg {display:inline-block;width:60px;height:60px;}
+.goodsImg img {border-radius:50%;}
+.hotLabel {font-size:14px;color:#000;text-align:center;white-space:nowrap;padding-top:5px;font-weight:bold;}
+.goodsHotRight {padding-left:3%;font-size:12px;color:#000;line-height:16px;}
+
+.goodsTabsWrapper {padding:15px 0% 0 0%;background:#fff;width:90%;margin: 0 5%;height: 53%;overflow: auto;}
+.goodsTabContent {padding:0 3%;}
+.goodsTabs  {font-size:0;padding-bottom:10px;margin:0 5%;width:90%;}
+.goodsTabs > li {display:inline-block;vertical-align:middle;width:25%;font-size:12px;color:#000;text-align:center;}
+.goodsTabs > li:nth-of-type(1) {width:31%;}
+.goodsTabs > li:nth-of-type(2) {width:23%;}
+.goodsTabs > li:nth-of-type(3) {width:23%;}
+.goodsTabs > li:nth-of-type(4) {width:23%;}
+.goodsTabs select {border:none;outline:none;-webkit-appearance:none;}
+.selectArrow {display:inline-block;border-top:4px solid #000;border-left:4px solid transparent;border-right:4px solid transparent;vertical-align:middle;margin-left:-3px;}
+.actArrow {display:inline-block;border-top:4px solid #000;border-bottom:none;border-left:4px solid transparent;border-right:4px solid transparent;vertical-align:middle;}
+.actArrowChange {display:inline-block;border-bottom:4px solid #000;border-top:none;border-left:4px solid transparent;border-right:4px solid transparent;vertical-align:middle;}
+.goodsSearchBtn {display:inline-block;color:#fff;padding:3px 15px;background:#1abeb8;border-radius:20px;}
+.goodsTabItem { display:inline-block;background-color: #fff;padding:3px 5px;}
+.goodsItem {display:table;position:relative;width:100%;vertical-align:middle;padding:10px 0;border-bottom:1px solid #ccc;}
+.otherGoodsImg, .goodsDetail {display:table-cell;vertical-align:middle;}
+.watchBtn {position:absolute;right:0px;top:25%;font-size:12px;color:#3b109d;width:30%;text-align:center;}
+.watchBtn img {display:block;width:100%;margin-right:5px;vertical-align:middle;}
+.watchImg {display:inline-block;width:20%;}
+.watchBtn.watchBtnNo {color:#c7c5c5;}
+.otherGoodsImg {width:50px;height:50px;}
+.otherGoodsImg img {border-radius:50%;} 
+.goodsDetail {font-size:12px;color:#000;padding-left:2%;}
+
+
+.provideBtn {background:#fff;position:fixed;bottom:0;width:100%;text-align:center;}
+.provideBtn > a {display:inline-block;background:#3b109d;height:35px;line-height:35px;color:#fff;font-size:14px;text-align:center;width:100%;margin:0 0;}
+
+/* .bottomNav {position:fixed;bottom:0;width:100%;background:#41009a;} */
+ 
+</style>
+<title th:if="${#strings.equalsIgnoreCase(#httpServletRequest.getParameter('type'),'supply')}" >供货中心</title>
+<title th:if="${#strings.equalsIgnoreCase(#httpServletRequest.getParameter('type'),'demand')}" >求货中心</title>
+</head>
+<body>
+<div class="pageGoodsSource">
+	<div class="goodsHot">
+		<div class="goodsHotLeft">
+			<div class="goodsImg"><img src="/resources/images/goods_1.jpg" /></div>
+			<div class="hotLabel">今日推荐</div>
+		</div>
+		<div class="goodsHotRight">
+			<div>海润摩尔瘦脸魔v喷雾</div>
+			<div>类目 ：女性护理</div>
+			<div class="textBlue">价格：300元</div>
+			<div class="textBlue">数量：300件</div>
+			<div>求货倒计时：3天</div>
+			<div>产品介绍：海润摩尔瘦脸魔v产品是远东集团和北京海润影视联合打。。</div>
+		</div>
+	</div>
+	<ul class="goodsTabs">
+		<li>
+			<div class="goodsTabItem">
+  				<span id="timeSelect">发布时间</span>  
+<!-- 				<select > -->
+<!-- 					<option value="timeUp">升序</option> -->
+<!-- 					<option value="timeDown">降序</option> -->
+<!-- 				</select> -->
+				<span class="actArrow"></span>
+			</div>
+		</li>
+		<li>
+			<div class="goodsTabItem">
+				<span id="praiseSelect">关注度</span>
+<!-- 				<select id="praiseSelect"> -->
+<!-- 					<option value="praiseUp">升序</option> -->
+<!-- 					<option value="praiseDown">降序</option> -->
+<!-- 				</select> -->
+				<span class="actArrow actArrowChange"></span>
+			</div>
+		</li>
+		<li>
+			<div class="goodsTabItem">
+				<span id="priceSelect">价格</span>
+<!-- 				<select id="priceSelect"> -->
+<!-- 					<option value="priceUp">升序</option> -->
+<!-- 					<option value="priceDown">降序</option> -->
+<!-- 				</select> -->
+				<span class="actArrow"></span>
+			</div>
+		</li>
+		<li>
+			<div class="goodsTabItem">
+				<select>
+					<option>类目1</option>
+					<option>类目2</option>
+					<option>类目3</option>
+				</select>
+				<div class="selectArrow"></div>
+			</div>
+		</li>
+	</ul>
+	<div class="goodsTabsWrapper">
+		
+		<div id="exisitDivOne" class="goodsTabContent" th:if="${vos!=null}">
+			<div class="goodsItem" th:each="vo:${vos}">
+				<div class="otherGoodsImg"><img src="/resources/images/goods_1.jpg" /></div>
+				<div class="goodsDetail">
+					<input type="hidden" th:value="${vo.id}"/>
+					<div>产品名称:&nbsp;<label th:text="${vo.productName}"></label></div>
+					<div class="textGray">产品类型:&nbsp;<label th:text="${vo.dsType}"></label></div>
+					<div class="textBlue1">价格&nbsp;&nbsp;&nbsp;&nbsp; <label th:text="${vo.price}"></label></div>
+					<div class="textBlue1">数量 <label th:text="${vo.amount}"></label></div>
+					<div class="textGray">求/供货倒计时：<label th:text="${vo.dayGap}"></label>天</div>
+				</div>
+				<div class="watchBtn">
+					<div class="watchImg"><img th:title="${vo.id}" src="/resources/images/attention1.jpg"  /></div>
+					<div><label th:text="${vo.praiseCnt}"></label>人关注</div>
+				</div>
+			</div>
+			
+		</div>
+		<div id="exisitDivTwo" class="goodsTabContent">
+		</div>
+	</div>
+	<div class="provideBtn" th:if="${#strings.equalsIgnoreCase(#httpServletRequest.getParameter('type'),'demand')}"><a th:href="@{/goods/index?type=supply}">我要供货</a></div>
+	<div class="provideBtn" th:if="${#strings.equalsIgnoreCase(#httpServletRequest.getParameter('type'),'supply')}"><a th:href="@{/goods/index?type=demand}">我要求货</a></div>
+ 	
+</div>
+
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+<script src="/resources/js/date.js"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/resources/js/goods/dsList.js}"></script>
+ 	
+</body>
+</html>

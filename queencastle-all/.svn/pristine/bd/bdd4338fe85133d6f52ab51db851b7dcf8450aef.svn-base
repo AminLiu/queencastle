@@ -1,0 +1,28 @@
+package com.queencastle.dao.mapper.relations;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.Pageable;
+
+import com.queencastle.dao.model.relations.GroupLevel;
+import com.queencastle.dao.model.relations.ManagerAuth;
+
+public interface ManagerAuthMapper {
+
+    int insert(ManagerAuth managerAuth);
+
+    ManagerAuth getById(@Param("id") String id);
+
+    int updateStatusById(ManagerAuth managerAuth);
+
+    Integer getCountByParams(@Param("map") Map<String, Object> map);
+
+    List<ManagerAuth> getByParams(@Param("page") Pageable pageable,
+            @Param("map") Map<String, Object> map);
+
+    List<ManagerAuth> getByAreaIdAndAuthId(@Param("areaId") String areaId,
+            @Param("authId") String authId, @Param("level") GroupLevel level);
+
+}

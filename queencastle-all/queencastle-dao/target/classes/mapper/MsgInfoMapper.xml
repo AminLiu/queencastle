@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.MsgInfoMapper">
+	<resultMap id="MsgInfoResultMap" type="com.queencastle.dao.model.MsgInfo">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="user_id" property="userId" typeHandler="idHandler" jdbcType="BIGINT"  />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="images" property="images" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,user_id,title,content,images,created_at,updated_at
+	</sql>
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.MsgInfo">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT
+			LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into msg_info (
+		user_id,title,content,images,created_at,updated_at)
+		values(
+		#{userId,typeHandler=idHandler},#{title},
+		#{content},#{images},now(),now())
+	</insert>
+
+	<select id="getById" resultMap="MsgInfoResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from msg_info
+		where id = #{id,typeHandler=idHandler}
+		
+	</select>
+	<update id="updateById" parameterType="com.queencastle.dao.model.MsgInfo">
+		update msg_info
+		<set>
+			<if test="userId != null and userId !=''">
+				user_id=#{userId,typeHandler=idHandler},
+			</if>
+			<if test="title != null and title != ''">
+				title = #{title},
+			</if>
+			<if test="content != null and content !=''">
+				content=#{content},
+			</if>
+			<if test="images != null and images !=''">
+				images=#{images},
+			</if>
+			updated_at=now()
+		</set>
+		where id = #{id,typeHandler=idHandler}
+	</update>
+
+
+</mapper>

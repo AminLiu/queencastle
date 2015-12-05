@@ -1,0 +1,87 @@
+package com.queencastle.web.controllers;
+
+import java.util.UUID;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.queencastle.dao.model.User;
+import com.queencastle.dao.utils.jedis.StringJedisCache;
+import com.queencastle.service.config.GlobalValue;
+import com.queencastle.service.impl.security.PermissionManage;
+import com.queencastle.service.interf.UserService;
+import com.queencastle.service.utils.CookieUtil;
+
+@Controller
+public class UserLoginController {
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private PermissionManage permissionManage;
+    @Autowired
+    private StringJedisCache sessionIdCache;
+
+    /***
+     * 用户登录
+     * 
+     * @param username
+     * @param password
+     * @return
+     */
+    @RequestMapping("/login")
+    public String login(HttpServletRequest request, HttpServletResponse response, String username,
+            String password) {
+        // 如果有过期的session先清理掉
+        clearSessionIdFromCookie(request, response);
+        // 如果用户存在，就重新生成新的cookie，存放客户端
+        User user = userService.getByUsername(username);
+        if (user == null) {
+
+        } else {
+            generateLoginedSession(request, response, user);
+        }
+        return "sysmain";
+    }
+
+    private void generateLoginedSession(HttpServletRequest request, HttpServletResponse response,
+            User user) {
+        String sessionId = CookieUtil.getSesssionIdFromCookies(request);
+        if (StringUtils.isNoneBlank(sessionId)) {
+        }
+        String randomUUId = UUID.randomUUID().toString();
+        CookieUtil.putSessionIdInCookies(request, response, GlobalValue.LOGIN_SESSION_ID,
+                randomUUId);
+        sessionIdCache.setData(randomUUId, randomUUId);
+    }
+
+    private void clearSessionIdFromCookie(HttpServletRequest request, HttpServletResponse response) {
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null)
+            return;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(GlobalValue.LOGIN_SESSION_ID)) {
+                String sid = cookie.getValue();
+                if (StringUtils.isNoneBlank(sid))
+                    clearValueInCookies(response, GlobalValue.LOGIN_SESSION_ID, sid);
+                // 缓存中清理掉
+                sessionIdCache.clearKey(sid);
+            }
+        }
+
+
+    }
+
+    private void clearValueInCookies(HttpServletResponse response, String key, String value) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.bbs.BBSArticleMapper">
+	<resultMap id="BBSArticlesMap" type="com.queencastle.dao.model.bbs.BBSArticle">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="board_id" property="boardId" typeHandler="idHandler" />
+		<result column="author" property="author.id"  typeHandler="idHandler" />
+		<result column="title" property="title" jdbcType="VARCHAR" />	
+		<result column="img" property="img" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />	
+		<result column="praise_cnt" property="praiseCnt" jdbcType="BIGINT" />	
+		<result column="page_view" property="pageView" jdbcType="BIGINT" />	
+		<result column="attention_cnt" property="attentionCnt" jdbcType="BIGINT" />
+		<result column="comment_cnt" property="commentCnt" jdbcType="BIGINT" />
+		<result column="top" property="top" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="VARCHAR" />	
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,board_id,author,title,img,content,praise_cnt,page_view,attention_cnt,comment_cnt,top,type,created_at,updated_at
+	</sql>
+	
+	<insert id="insert" parameterType="com.queencastle.dao.model.bbs.BBSArticle">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+	insert into queen_article(
+	board_id,author,title,img,content,
+	praise_cnt,page_view,attention_cnt,comment_cnt,top,type,created_at,updated_at)
+	values(
+	#{boardId,typeHandler=idHandler},
+	#{author.id,typeHandler=idHandler},
+	#{title},#{img},
+	#{content},#{praiseCnt},#{pageView},
+	#{attentionCnt},#{commentCnt},
+	#{top},#{type},now(),now())
+	</insert>
+	
+	<select id="getById" resultMap="BBSArticlesMap">
+		select 
+		<include refid="Base_Column_List"/>
+		from queen_article where id=#{id,typeHandler=idHandler}
+	</select>
+	
+	
+	<select id="getBBSArticleCountByParams" resultType="java.lang.Integer">
+		select count(*) from queen_article
+	</select>
+	
+	<select id="getBBSArticleByParams" resultMap="BBSArticlesMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_article order by id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+	
+	
+	
+</mapper>

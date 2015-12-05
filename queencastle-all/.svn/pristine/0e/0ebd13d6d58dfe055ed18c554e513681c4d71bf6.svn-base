@@ -1,0 +1,79 @@
+package com.queencastle.service.test;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.Ignore;
+import org.junit.Test;
+
+import com.queencastle.dao.PageInfo;
+import com.queencastle.dao.model.MenuInfo;
+import com.queencastle.dao.mybatis.IdTypeHandler;
+import com.queencastle.dao.utils.PinYinUtils;
+
+public class MenuInfoTester extends BaseTest {
+
+    @Test
+//    @Ignore
+    public void testInsert() {
+
+        List<String> list = new ArrayList<String>();
+
+        list.add("用户管理");
+        list.add("角色管理");
+        list.add("菜单管理");
+        list.add("产品管理");
+        list.add("财务管理");
+
+        for (int i = 1; i < list.size() + 1; i++) {
+            MenuInfo info = new MenuInfo();
+            String cname = list.get(i - 1);
+            String ename = PinYinUtils.fullPinyin(cname);
+            info.setCname(cname);
+            info.setEname(ename);
+            info.setRank(i);
+            info.setParentId(IdTypeHandler.encode(1));
+            menuService.insert(info);
+        }
+
+
+    }
+
+    @Test
+    @Ignore
+    public void testUpdate() {
+        MenuInfo info = new MenuInfo();
+        info.setId("1");
+        info.setParentId("101");
+        info.setCname("bxm");
+        info.setEname("nwcb");
+        info.setRank(8);
+        menuService.updateById(info);
+    }
+
+
+
+    @Test
+    @Ignore
+    public void testGetById() {
+        String id = IdTypeHandler.encode(1L);
+        MenuInfo info = menuService.getById(id);
+        if (info != null) {
+            System.out.println(info.getCname());
+            System.out.println(info.getEname());
+            System.out.println(info.getRank());
+        }
+    }
+
+    @Test
+    @Ignore
+    public void testPageInfo() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        PageInfo<MenuInfo> pageInfo = menuService.getMenuByParams(1, 10, map);
+        if (pageInfo != null) {
+            System.out.println(pageInfo.getRows().size());
+        }
+    }
+}

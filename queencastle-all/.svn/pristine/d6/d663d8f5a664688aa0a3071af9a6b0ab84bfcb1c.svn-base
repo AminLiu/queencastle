@@ -1,0 +1,48 @@
+package com.queencastle.dao.vo;
+
+import java.util.List;
+
+import com.queencastle.dao.model.relations.GroupLevel;
+
+public class UserManagerVO {
+
+    private String managerId;
+    private String cname;
+    private List<UserManagerVO> members;
+    private GroupLevel level;
+
+    public String getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(String managerId) {
+        this.managerId = managerId;
+    }
+
+    public List<UserManagerVO> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<UserManagerVO> members) {
+        this.members = members;
+    }
+
+    public String getCname() {
+        return cname;
+    }
+
+    public void setCname(String cname) {
+        this.cname = cname;
+    }
+
+    public GroupLevel getLevel() {
+        return level;
+    }
+
+    public void setLevel(GroupLevel level) {
+        this.level = level;
+    }
+
+
+
+}

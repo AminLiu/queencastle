@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="format-detection" content="telephone=no"/>
+<title>用户入群</title>
+<style>
+html{height: 100%;padding: 0px;margin: 0px;font-family:"Microsoft YaHei","Tahoma";}
+body{margin:0;}
+img {width:100%;}
+ul, li {list-style:none;margin:0;padding:0;}
+ 
+.pageIndex {background:url("/resources/images/bg1.png") no-repeat center;background-size:100% 100%;position:fixed;top:0;left:0;bottom:0; right:0;z-index:-1;margin-bottom:0;padding-bottom:40px;}
+
+.blackLabel{
+font-size:14px;
+}
+.blueLabel{
+font-size:18px;  letter-spacing:2px;
+}
+.bottomNav {position:fixed;bottom:0;width:100%;background:#41009a;opacity:0.5;}
+.bottomNav ul {font-size:0;}
+.bottomNav li {display:inline-block;vertical-align:middle;text-align:center;}
+.navItem1, .navItem2 {width:48%;font-size:16px;color:#fff;}
+.navSplit {width:4%;height:44px;}
+.navIcon {display:inline-block;width:10%;vertical-align:middle;margin-right:5px;}
+.navText {display:inline-block;vertical-align:middle;}
+.navSplitIcon {display:inline-block;width:1px;height:26px;background:#fff;margin-top: 10px;}
+.textIndent {
+	text-indent: 35px;
+}
+</style>
+	
+</head>
+<body>
+<div class="pageIndex">
+ <div style="width:90%; padding:22% 5% 0 5%;  vertical-align:middle;">
+ 	 <p class="blueLabel textIndent" id="firstPara" style="margin-bottom:3em;">女王城堡信使已经收到您的 通关申请密函<label style="color:blue;font-weight: bold;" th:text="${cname}">（注册区域）</label>使者<label style="font-weight:bold;">24小时内</label>为您呈上女王城堡的 <label style="color:black;font-weight: bold;">通关申请回函！</label> </p>  
+ 	 
+ 	 <p class="blackLabel  textIndent" style="bottom:0;" id="secondPara">如有其他问题咨询，您可以直接回复公众号骚扰我喔~~~，我是巴拉巴拉帅滴小王子，随时陪你扯淡，不要客气，喜欢被骚扰，嘻嘻~~~</p>
+ </div>
+<div style="text-align:center;" id="navBtnDiv">
+ 	 <p class="blueLabel textIndent">溜达溜达我们的城堡吧~~~~</p> 
+ 		<a    th:href="@{/resources/infos/welcome.html}"   style="margin:5px;font-size:16px;color:#FFFFFF;width:35%;padding:2% 3%;  display:inline-block;background:#41009a;"><span>城堡介绍</span></a>
+ 		<label   style="margin:5px;font-size:16px;color:#FFFFFF;width:35%;padding:2% 3%; display:inline-block;background:#41009a;">城堡秘密</label>
+ 		<label   style="margin:5px;font-size:16px;color:#FFFFFF;width:35%;padding:2% 3%; display:inline-block;background:#41009a;">城堡内幕</label>
+ 		<a th:href="@{/resources/infos/jml.html}"  style="margin:5px;font-size:16px;color:#FFFFFF;width:35%;padding:2% 3%; display:inline-block;background:#41009a;">女王成长攻略</a>
+</div>
+	<div class="bottomNav" style="display:none;" id="hsDiv">
+		<ul>
+			<li class="navItem1">
+				<div class="navIcon"><img src="/resources/images/icon1.png" /></div>
+				<div class="navText">首页</div> 
+			</li>
+			<li class="navSplit"><div class="navSplitIcon"></div></li>
+			<li class="navItem2">
+				<div class="navIcon"><img src="/resources/images/icon2.png" /></div>
+				<div class="navText">个人中心</div> 
+			</li>
+		</ul>
+	</div> 
+</div>
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+
+<script   type="text/javascript" th:inline="javascript" >
+/*<![CDATA[*/
+var startX = 0, startY = 0;  
+            
+function touchSatrtFunc(evt){
+	  var touch = evt.touches[0]; //获取第一个触点  
+      var x = Number(touch.pageX); //页面触点X坐标  
+      var y = Number(touch.pageY); //页面触点Y坐标  
+      //记录触点初始位置  
+      startX = x;  
+      startY = y;  
+	console.log(evt.target);
+}
+function touchMoveFunc(evt){
+	  var touch = evt.touches[0]; //获取第一个触点  
+      var x = Number(touch.pageX); //页面触点X坐标  
+      var y = Number(touch.pageY); //页面触点Y坐标  
+
+      //判断滑动方向  
+//       if (x - startX > 0   ) {  
+//     	  alert("左右滑动");
+//       }  
+      if (y - startY < 0) { 
+    	  var value = $("#hsDiv").css("display");
+    	if(value =="none"){
+    		$("#hsDiv").fadeIn();
+    	}
+      }else{
+    	  $("#hsDiv").fadeOut();
+      }  
+
+}
+function touchEndFunc(evt){
+}
+
+$(function(){
+
+	var ua = navigator.userAgent;
+	if(ua.indexOf("iPhone OS 4_")>0){
+	//	$("#firstPara").css("margin-bottom","3.5em");
+		$("#navBtnDiv").css("text-align","center");
+		$("#navBtnDiv").css("position","fixed");
+		$("#navBtnDiv").css("right","0");
+		$("#navBtnDiv").css("bottom","50px;");
+		
+		$("#hsDiv").css("position","fixed");
+		$("#hsDiv").css("top","0");
+		$("#hsDiv").css("width","100%");
+		$("#hsDiv").css("height","45px");
+		$("#hsDiv").css("background","#41009a");
+		$("#hsDiv").css("opacity","0.5");
+	}
+	if(ua.indexOf("iPhone OS 8_")>0 || ua.indexOf("iPhone OS 9_")>0){
+		$("#navBtnDiv").css("margin-top","3em");
+		$("#firstPara").css("font-size","20px");
+		$("#secondPara").css("font-size","18px");
+		
+	}
+	
+	$(".navItem1").click(function(){
+		window.location = /*[[@{/queenIdx}]]*/;
+	});
+	$(".navItem2").click(function(){
+		window.location = /*[[@{/userCenter}]]*/;
+	});
+	
+  
+	 
+	document.addEventListener('touchstart', touchSatrtFunc, false); 
+	document.addEventListener('touchmove', touchMoveFunc, false); 
+	document.addEventListener('touchend', touchEndFunc, false); 
+});
+ 
+/*]]>*/
+</script>
+
+ 
+
+</body>
+</html>

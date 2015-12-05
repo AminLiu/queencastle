@@ -1,0 +1,51 @@
+package com.queencastle.service.test.shop;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.Ignore;
+import org.junit.Test;
+
+import com.queencastle.dao.PageInfo;
+import com.queencastle.dao.model.shop.OrderItem;
+import com.queencastle.dao.model.shop.ShopProduct;
+import com.queencastle.dao.mybatis.IdTypeHandler;
+import com.queencastle.service.test.BaseTest;
+
+public class OrderItemTester extends BaseTest {
+
+	@Test
+	@Ignore
+	public void getByIdTest() {
+		String id = IdTypeHandler.encode(1l);
+		OrderItem result = orderItemService.getById(id);
+		if (result != null) {
+			System.out.println("=========" + result.getShopProduct().getId());
+			System.out.println("=========" + result.getAmount());
+		} else {
+			System.out.println("=========");
+		}
+	}
+
+	@Test
+	@Ignore
+	public void OrderItemTest() {
+
+		OrderItem orderItem = new OrderItem();
+		ShopProduct shopProduct = shopProductService.getById(IdTypeHandler.encode(1));
+		orderItem.setShopProduct(shopProduct);
+		orderItem.setAmount(100);
+		orderItemService.insert(orderItem);
+	}
+
+	@Test
+	@Ignore
+	public void OrderItemPageInfoTest() {
+
+		Map<String, Object> map = new HashMap<>();
+		PageInfo<OrderItem> result = orderItemService.getOrderItemByParams(1, 3, map);
+		System.out.println("===========" + result.getPage());
+		System.out.println("==========" + result.getTotal());
+	}
+
+}

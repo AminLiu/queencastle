@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="format-detection" content="telephone=no"/>
+
+<title>SDK</title>
+<link rel="stylesheet" href="/resources/css/jquery.mobile-1.4.5.min.css"/>
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+<script src="/resources/js/jquery.mobile-1.4.5.min.js"></script>
+<script src="/resources/js/jquery.form.js"></script>
+</head>
+<body>
+
+</body>
+<script type="text/javascript" th:inline="javascript">
+wx.config({
+    debug: false,
+    appId: 'wx18d1d108e0a3e5f4',
+    timestamp: '<%=request.getAttribute("timestamp")%>',
+    nonceStr: '<%=request.getAttribute("nonceStr")%>',
+    signature: '<%=request.getAttribute("signature")%>',
+    jsApiList: [
+	    // 所有要调用的 API 都要加到这个列表中
+	    'chooseImage',
+	    'previewImage',
+	    'uploadImage',
+	    'downloadImage'
+    ]
+    });
+  
+
+
+</script>
+</html>

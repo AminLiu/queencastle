@@ -1,0 +1,69 @@
+package com.queencastle.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.queencastle.dao.PageInfo;
+import com.queencastle.dao.mapper.RoleMenuInfoMapper;
+import com.queencastle.dao.model.RoleMenuInfo;
+import com.queencastle.service.interf.RoleMenuInfoService;
+
+@Service
+public class RoleMenuInfoServiceImpl implements RoleMenuInfoService {
+    @Autowired
+    private RoleMenuInfoMapper roleMenuInfoMapper;
+
+    @Override
+    public int insert(RoleMenuInfo roleMenuInfo) {
+
+        return roleMenuInfoMapper.insert(roleMenuInfo);
+    }
+
+    @Override
+    public int updateById(RoleMenuInfo roleMenuInfo) {
+
+        return roleMenuInfoMapper.updateById(roleMenuInfo);
+    }
+
+    @Override
+    public RoleMenuInfo getById(String id) {
+        // TODO Auto-generated method stub
+        return roleMenuInfoMapper.getById(id);
+    }
+
+    @Override
+    public PageInfo<RoleMenuInfo> getRoleMenuByParams(int page, int rows, Map<String, Object> map) {
+        PageInfo<RoleMenuInfo> roleMenuInfo = new PageInfo<RoleMenuInfo>();
+        roleMenuInfo.setPage(page);
+        Integer count = roleMenuInfoMapper.getRoleMenuCountByParams(map);
+        if (count == null || count == 0) {
+            roleMenuInfo.setTotal(0);
+            roleMenuInfo.setRows(new ArrayList<RoleMenuInfo>());
+            return roleMenuInfo;
+        }
+        roleMenuInfo.setTotal(count);
+        page = (page <= 1) ? 1 : page;
+        Pageable pageable = new PageRequest(page - 1, rows);
+
+        List<RoleMenuInfo> list = roleMenuInfoMapper.getRoleMenuByParams(pageable, map);
+        roleMenuInfo.setRows(list);
+        return roleMenuInfo;
+    }
+
+    @Override
+    public List<RoleMenuInfo> getByRoleId(String roleId) {
+        if (StringUtils.isNoneBlank(roleId)) {
+            return roleMenuInfoMapper.getByRoleId(roleId);
+        }
+        return null;
+    }
+
+
+}

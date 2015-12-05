@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8"/>
+    <title>用户登录</title>
+    <link rel="stylesheet" href="resources/css/reset.css"/>
+    <link rel="stylesheet" href="resources/css/style.css"/>
+    <script type="text/javascript" src="resources/js/jquery-1.10.2.min.js"></script>
+      <script type="text/javascript" src="resources/js/md5.js"></script>
+    <script type="text/javascript" th:inline="text">
+    $(function(){
+    	//实现用户密码MD5加密功能，post提交
+    	$("#loginBtn").click(function(){
+    		var userName = $("#j_username").val();
+			var passWord = $("#j_password").val();
+			if(userName == "" || passWord == ""){
+				$("#userLoginMsg").html("用户名或密码为空");
+				$("#loginInfo").html("");
+				return false;
+			}else{
+				$('#j_password').val(CryptoJS.MD5($('#j_password').val()));
+	    		$("#loginFrm").submit();
+			}
+		
+    	});
+    });
+    
+    </script>
+  </head>
+  <body>
+    <section>
+  <span></span>
+  <h1>管理用户登录</h1>
+  <form id="loginFrm" method="post" action="/login">
+  <div style="color:red;"><label id="userLoginMsg"></label></div>
+    <div style="color:red;"><label th:if="${info!=null}" id="loginInfo" th:text="${info}"></label></div>
+  
+    <input placeholder='用户名' id="j_username"  type='text' name="username"/>
+    <input placeholder='密码' id="j_password" type='password' name="password"/>
+  </form>
+  <button id="loginBtn">登录</button>
+  <h2>
+    <a href='#'>忘记密码?</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/register">注册</a>
+  </h2>
+</section>
+    
+    
+    
+    
+    
+  </body>
+</html>

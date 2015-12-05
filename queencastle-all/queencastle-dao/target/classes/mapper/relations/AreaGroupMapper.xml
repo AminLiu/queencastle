@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.relations.AreaGroupMapper">
+	<resultMap id="AreaGroupResultMap" type="com.queencastle.dao.model.relations.AreaGroupInfo">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<id column="area_id" property="areaId" typeHandler="idHandler" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="area_type" property="type" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,area_id,code,area_type,created_at
+	</sql>
+
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.relations.AreaGroupInfo">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_area_group (
+		area_id,code,area_type,created_at
+		)values
+		(#{areaId,typeHandler=idHandler},#{code}, #{type},now())
+	</insert>
+	
+	<select id="getById" resultMap="AreaGroupResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_area_group
+		where id = #{id,typeHandler=idHandler}
+	</select>
+	
+	 	<select id="getResultsCountByParams" resultType="java.lang.Integer">
+ 		select count(*) from queen_area_group   
+ 	</select>
+ 	
+ 	<select id="getResultsByParams" resultMap="AreaGroupResultMap">
+ 		select
+ 		 <include refid="Base_Column_List" />
+		from queen_area_group  
+		order by id desc
+		limit #{page.offset}, #{page.size}
+ 	</select>
+	
+	<select id="getByAreaIdAndType" resultMap="AreaGroupResultMap">
+	select
+ 		 <include refid="Base_Column_List" />
+		from queen_area_group  
+		where area_id=#{areaId,typeHandler=idHandler}
+		and area_type=#{type}
+	</select>
+
+</mapper>

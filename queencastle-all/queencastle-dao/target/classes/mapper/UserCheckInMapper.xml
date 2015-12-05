@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.UserCheckInMapper">
+	<resultMap id="CheckInResultMap" type="com.queencastle.dao.model.UserCheckIn">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="user_id" property="userId" typeHandler="idHandler" jdbcType="BIGINT"  />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id, user_id,created_at
+	</sql>
+
+	 
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.UserCheckIn">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT
+			LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_user_checkin (
+		user_id, created_at
+		)values
+		(#{userId,typeHandler=idHandler},now())
+	</insert>
+
+
+	<select id="getByUserId" resultMap="CheckInResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_checkin  where username=#{username}
+	</select>
+
+
+
+
+
+
+</mapper>

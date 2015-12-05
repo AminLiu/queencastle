@@ -1,0 +1,82 @@
+<div style="width: 100%; height: 100%;">
+	
+	<table id="userTableId" title="用户列表" style="width: 100%; height: 450px">
+	</table>
+	<div id="userToolbar">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addUser()">新增</a>
+		<a href="#" class="easyui-linkbutton" iconCls="icon-sysuser" plain="true" onclick="configUserRole()">配置用户角色</a>
+<!-- 		<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="configUserGroup()">配置用户群</a> -->
+<!-- 		<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="configUserMaster()">设为地区群主</a> -->
+<!-- 		<a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="configUserMember()">设为管理员/普通成员</a> -->
+		<div id="tb" style="padding:3px">
+			<span>用户名:</span>
+			<input type="text" style="line-height:22px;border:1px solid #ccc" placeholder="请输入要查询的用户名" id="s_username" size="20" onkeydown="if(event.keyCode==13){ searchUser()}"/>
+			<a href="javascript:searchUser()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
+		</div>
+	</div>
+	 <div id="userRoleDlg" class="easyui-dialog" style="width:360px;height:300px;padding:10px 20px"
+            closed="true" buttons="#userRoleDlg-buttons">
+        <form id="userRoleFrm" method="post">
+       		<label style="color:red;">注意：系统管理员拥有所有的权限，慎重！</label>
+	        <div  style="margin:5px;font-size:16px;">
+	         <ul id="userRoleTree"></ul>
+	        </div>
+        </form>
+    </div>
+    <div id="userRoleDlg-buttons">
+     	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveUserRoleCfg()" style="width:90px">确定 </a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#userRoleDlg').dialog('close')" style="width:90px">取消 </a>
+    </div>
+    
+    	 <div id="userInfoDlg" class="easyui-dialog" style="width:320px;height:350px;padding:10px 20px"
+            closed="true" buttons="#userInfoDlg-buttons">
+        <form id="userInfoFrm" method="post">
+	     	<div class="fitem">
+		     	<label>群名称:</label>
+		     	<input type="text" id="cname"/>
+	     	</div>
+	     	<div class="fitem">
+		     	<label>群备注:</label>
+		     	<textarea   id="profile"></textarea>
+	     	</div>
+        </form>
+    </div>
+    <div id="userInfoDlg-buttons">
+     	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveUserMasterInfoCfg()" style="width:90px">确定 </a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#userInfoDlg').dialog('close')" style="width:90px">取消 </a>
+    </div>
+    
+    
+    
+     <div id="userMemberDlg" class="easyui-dialog" style="width:320px;height:350px;padding:10px 20px"
+            closed="true" buttons="#userMemberDlg-buttons">
+        <form id="userMemberFrm" method="post">
+       		<div class="fitem">
+		     	<label>用户身份:</label>
+		     	<select id="memberSelect">
+		     	<option value="admin">管理员</option>
+		     	<option value="member">群成员</option>
+		     	</select>
+	     	</div>
+	     	<div class="fitem">
+		     	<label>用户组:</label>
+		     	<input id="groupSlect"  style="width:100px;"/>
+	     	</div>
+	     	 
+        </form>
+    </div>
+    <div id="userMemberDlg-buttons">
+     	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveUserMemberInfoCfg()" style="width:90px">确定 </a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#userMemberDlg').dialog('close')" style="width:90px">取消 </a>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+	<script type="text/javascript" charset="utf-8" th:src="@{/resources/js/users/userlist.js}"></script>
+</div>

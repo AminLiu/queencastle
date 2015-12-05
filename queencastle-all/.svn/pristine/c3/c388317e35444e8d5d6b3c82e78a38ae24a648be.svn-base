@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.relations.UserManagerMapper">
+	<resultMap id="UserManagerResultMap" type="com.queencastle.dao.model.relations.UserManager">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="user_id" property="userId" typeHandler="idHandler" />
+		<result column="manager_id" property="managerId" typeHandler="idHandler" />
+		<result column="cname" property="cname" jdbcType="VARCHAR"/>
+		<result column="level" property="level" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+		
+		<result column="area_id" property="areaId" typeHandler="idHandler" />
+		
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,user_id,manager_id,cname,level,created_at,updated_at,area_id
+	</sql>
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.relations.UserManager">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_user_manager (
+		user_id,manager_id,cname,level,created_at,updated_at,area_id
+		)values
+		(#{userId,typeHandler=idHandler}, #{managerId,typeHandler=idHandler},
+		#{cname},#{level},now(),now(),#{areaId,typeHandler=idHandler})
+	</insert>
+	
+	<select id="getById" resultMap="UserManagerResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_manager
+		where id = #{id,typeHandler=idHandler}
+	</select>
+	
+	<select id="getByUserId" resultMap="UserManagerResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from queen_user_manager
+		where user_id = #{userId,typeHandler=idHandler}
+	</select>
+	
+	
+	<select id="getCountByParams" resultType="java.lang.Integer">
+		select count(*) from queen_user_manager
+	</select>
+	<select id="getByParams" resultMap="UserManagerResultMap" >
+	select
+		<include refid="Base_Column_List" />
+		from queen_user_manager
+		order by id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+	
+	<select id="getByManagerId" resultMap="UserManagerResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_manager where manager_id=#{managerId,typeHandler=idHandler}
+	</select>
+
+	<select id="getProvinceManagerByAreaId" resultMap="UserManagerResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from queen_user_manager where level ='province' and  area_id=#{provinceId,typeHandler=idHandler}
+	</select>
+	 
+	
+
+</mapper>

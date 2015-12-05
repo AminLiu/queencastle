@@ -1,0 +1,40 @@
+<div style="width: 100%; height: 100%;">
+
+	<div style="width:40%;height:500px;position:absolute;left:0;top:0;">
+		<table id="areaTableId" title="地区列表" style="width: 100%; height: 100%;">
+		</table>
+		<div id="areaToolbar">
+<!-- 			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="configAreaCode()">为区域设置编码</a> -->
+			<div style="margin-left:30px;">
+				<label>选择类型筛选</label>
+				<input id="areaSelect"  style="width:100px;"/>
+				<input id="areaName" placeholder="输入查询名称" style="width:100px;"/>
+				<a href="javascript:searchAreaGroupInfo()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a>
+			</div>
+		</div>
+			<div id="provinceCfgDlg" class="easyui-dialog" style="width:360px;height:300px;padding:10px 20px"
+	            closed="true" buttons="#provinceCfgDlg-buttons">
+	     	<form id="pcfgFrm" method="post">
+	     	<div class="fitem">
+	     		<input type="hidden" id="areaId"/>
+		     	<label>群编号:</label>
+		     	<input type="text" id="a_type" />
+		     	<input type="text" id="pcode" name="pcode" placeholder="请输入省群编号"/>
+	     	</div>
+	        </form>
+	    </div>
+	     <div id="provinceCfgDlg-buttons">
+	     	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="provinceCfg()" style="width:90px">确定</a>
+	        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#provinceCfgDlg').dialog('close')" style="width:90px">取消 </a>
+	    </div>
+	</div>
+	
+	<div style="width:60%;height:500px;position:absolute;left:40%;top:0;">
+		<table id="agTableId" title="地区群编号列表" style="width: 100%; height: 100%;">
+		</table>
+		<div id="agToolbar">
+<!-- 			<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="configAreaCode()">设置编码</a> -->
+		</div>
+	</div>
+	<script type="text/javascript" charset="utf-8" th:src="@{/resources/js/relations/aglist.js}"></script>
+</div>

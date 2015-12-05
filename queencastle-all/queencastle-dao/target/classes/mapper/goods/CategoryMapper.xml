@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.goods.CategoryMapper">
+	<resultMap id="CategoryResultMap" type="com.queencastle.dao.model.goods.Category">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="cname" property="cname" jdbcType="VARCHAR" />
+		<result column="ename" property="ename" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id,cname,ename,created_at
+	</sql>
+
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.goods.Category">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_category (
+		 cname,ename,created_at
+		)values
+		( #{cname},#{ename},now())
+	</insert>
+
+	 
+	
+	<select id="getById" resultMap="CategoryResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_category 
+		where
+		id=#{id,typeHandler=idHandler}
+	</select>
+
+	<select id="getAllCategories" resultMap="CategoryResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_category 
+	</select>
+
+
+<select id="getCategorysCountByParams" resultType="java.lang.Integer">
+		select count(*) from queen_category
+	</select>
+	<select id="getCategorysByParams" resultMap="CategoryResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_category order by id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+
+
+</mapper>

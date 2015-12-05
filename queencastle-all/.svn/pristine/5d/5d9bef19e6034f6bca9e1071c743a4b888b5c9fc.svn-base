@@ -1,0 +1,74 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="format-detection" content="telephone=no"/>
+<title>女王注册页</title>
+<style>
+html{height: 100%;padding: 0px;margin: 0px;font-family:"Microsoft YaHei","Tahoma";}
+body{position:absolute;width:100%;height: 100%;overflow-x:hidden;margin:0;background:#fff;} 
+img {width:100%;}
+.pageBackGrpund{background:url("/resources/images/bg.jpg") no-repeat center;position:fixed;top:0;left:0;bottom:0; right:0;z-index:-1;background-size:100% 100%;}
+.pageRegister .logo {width:35%;margin: 0% 32.5% 5% 32.5%;}
+.pageRegister .logo > img {margin-top:10%;}
+input::-webkit-input-placeholder { color: #000 !important; }
+.registerTitle {color:#41009a;font-size:28px;text-align:center;padding-top:10%;}
+.registerInput {width:77%;margin: 4% 11.5% 0 11.5%;background:#f8f7f7;}
+.registerInput > input {width:100%;background:#f8f7f7;border:none;outline:none;padding-left:5%;height:30px;line-height:30px;color:#000;}
+.registerFile {display: inline-block;position:relative;width: 30%;height: 80px;vertical-align:middle;line-height: 30px;}
+.registerFile > input{position:absolute;opacity:0;}
+.registerFile > div{position:absolute;font-size:12px;padding-left:5%;color:#000;left:0;top:0;}
+.registerSelect {position:relative;width:77%;margin: 4% 11.5% 0 11.5%;background:#f8f7f7;height:30px;}
+.registerSelect > div {position:absolute;left:5%;font-size:12px;color:#000;line-height:30px;}
+.registerSelect > select {position:absolute;right:5%;font-size:12px;color:#666;height: 28px; margin: 1px 0;width:65%;}
+.registerBtn {width:77%;height:30px;line-height:30px;margin: 4% 11.5% 0 11.5%;background:#41009a;font-size:14px;color:#fff;text-align:center;}
+@media only screen 
+and (max-device-height : 480px){
+	
+}
+</style>
+
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="resources/js/md5.js"></script>
+
+</head>
+<body>
+<div class="pageBackGrpund"></div>
+<div class="pageRegister">
+	<div class="registerTitle">欢迎入驻女王城堡</div>
+	<div class="logo"><img src="/resources/images/logo.png" /></div>
+	<form action="/registerTester" id="regFrm" method="post" enctype="multipart/form-data">
+	<div style="color:red;"><label id="regMsg"></label></div>
+	<div style="color:red;"><label th:if="${info!=null}" id="loginInfo" th:text="${info}"></label></div>
+	<div class="registerInput"><input type="text" name="phone" id="j_phone" placeholder="手机号码" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"/></div>
+	<div class="registerInput"><input type="password" name="password" id="j_pwd" placeholder="密码" /></div>
+	<div class="registerInput"><input type="password" id="j_r_pwd"  placeholder="重复密码" /></div>
+
+	
+	<div class="registerSelect">
+		<div class="">来自/省</div>
+		<select th:if="${provinces!=null}" id="provinceSelect" name="provinceCode">
+			<option th:each="province:${provinces}" th:value="${province.code}" th:text="${province.cname}"></option>
+		</select>
+	</div>
+	<div class="registerSelect">
+		<div class="">来自/市</div>
+		<select id="citySelect" name="cityCode">
+		</select>
+	</div>
+	<div class="registerInput"><input type="text" id="weixinNo" name="weixinNo"  placeholder="微信号" /></div>
+	<div class="registerInput">
+		<div class="registerFile">
+			<div>微信二维码</div>
+			<input type="file"  name="img" id="img" />
+		</div>
+		<div  style="float:right;height:80px;width:80px;display:inline-block;position:relative;right:0;padding:0;margin-right:0;" id="imgUploadBtn"><img id="emptyImg" width="80px;" height="80px;" src="/resources/images/a3.png"/></div>
+	</div>
+	<div class="registerBtn" id="registerBtn" >注册 </div>
+	</form>
+</div>
+<script type="text/javascript" th:inline="javascript" th:src="@{/resources/js/sys/weixinRegister.js}"></script>	
+</body>
+</html>

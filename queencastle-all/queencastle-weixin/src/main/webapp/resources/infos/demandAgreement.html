@@ -1,0 +1,287 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no" />
+<title>求货服务协议</title>
+<style>
+html {
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
+	font-family: "Microsoft YaHei", "Tahoma";
+}
+
+body {
+	margin: 0;
+}
+
+img {
+	width: 100%;
+}
+
+ul, li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+p {
+	padding: 0;
+	margin: 0;
+}
+
+.textBlue {
+	color: #41009a;
+}
+
+.textGray {
+	color: #666;
+}
+
+.textBlue1 {
+	color: #1abeb8;
+}
+
+.adjustDIV {
+	width: 100%;
+	height: 10px;
+}
+
+.clearfix:after {
+	content: "020";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.clearfix {
+	zoom: 1;
+}
+
+.pageAgreement {
+	background: url("/resources/images/bg1.png") no-repeat center;
+	background-size: 100% 100%;
+	padding-bottom: 40px;
+}
+
+.agreementWrapper {
+	margin: 10px 5%;
+	background: #fff;
+}
+
+.agreementTitle {
+	font-size: 20px;
+	color: #000;
+	text-align: center;
+	padding: 10px 0;
+}
+
+.agreementContent {
+	border: 1px solid #ccc;
+	margin: 0 5%;
+	font-size: 12px;
+	line-height: 20px;
+}
+
+.textIndent {
+	text-indent: 25px;
+}
+
+.accept {
+	font-size: 0;
+	text-align: center;
+	padding: 10px 0;
+}
+
+.accept>div {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.acceptText {
+	font-size: 16px;
+	color: #000;
+}
+
+/* .checkBox { */
+/* 	width: 14px; */
+/* 	height: 14px; */
+/* 	border: 1px solid #ccc; */
+/* 	background: #fff; */
+/* 	margin-right: 8px; */
+/* } */
+
+/* .checkBox.checked { */
+/* 	font-size: 14px; */
+/* 	color: red; */
+/* 	font-weight: bold; */
+/* } */
+
+.nextBtn {
+	padding-bottom: 20px;
+}
+
+.nextBtn a {
+	display: block;
+	width: 90%;
+	height: 35px;
+	line-height: 35px;
+	margin: 0px 5%;
+	font-size: 14px;
+	color: #fff;
+	font-weight: bold;
+	background: #41009a;
+	text-align: center;
+}
+
+.bottomNav {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	background: #41009a;
+}
+
+.bottomNav ul {
+	font-size: 0;
+}
+
+.bottomNav li {
+	display: inline-block;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.navItem1, .navItem2 {
+	width: 48%;
+	font-size: 16px;
+	color: #fff;
+}
+
+.navSplit {
+	width: 4%;
+	height: 44px;
+}
+
+.navIcon {
+	display: inline-block;
+	width: 10%;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.navText {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.navSplitIcon {
+	display: inline-block;
+	width: 1px;
+	height: 26px;
+	background: #fff;
+	margin-top: 10px;
+}
+</style>
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$("#moreBtn").click(function() {
+			var showStyle = $("#moreContent").css("display");
+			if (showStyle == "block") {
+				$("#spanTxt").text("点击展开");
+			}
+			if (showStyle == "none") {
+				$("#spanTxt").text("点击收起");
+			}
+			$("#moreContent").slideToggle("slow");
+
+		});
+		$(".navItem1").click(function(){
+			window.location = '/queenIdx';
+		});
+		$(".navItem2").click(function(){
+			window.location = '/userCenter';
+		});
+		$("#next").click(function(){
+			if($("#check").prop("checked")){
+				window.location="/goods/insert?type=demand&t="+new Date().getTime();
+			}else{
+				alert("您没有同意服务协议");
+			}
+		
+		});
+	});
+</script>
+</head>
+<body class="pageAgreementBg">
+	<div class="pageAgreement">
+		<div class="adjustDIV"></div>
+		<div class="agreementWrapper">
+			<div class="agreementTitle">求货服务协议</div>
+			<div class="agreementContent">
+				<p class="textIndent">
+					求货服务协议（以下简称“本协议”）是杭州彬小沫网络科技有限公司（以下简称“本公司”）与求货服务用户（以下简称“用户”）就求货服务协议相关事项所订立的有效合约。用户通过网络页面点击确认，即表示用户与本公司已达成协议并同意接受本协议的全部约定内容以及与本协议有关的各项规则及本公司平台所包含的其他与本协议或本协议项下各项规则的条款和条件有关的各项规定。用户在接受本协议之前，应仔细阅读相关的协议内容，且本公司已尽到了充分的提示说明义务。如用户不同意相关服务协议或随时对其的修改，用户应停止下一步操作；用户一旦使用或继续使用本求货服务协议的相关服务，即视为用户已确知并完全同意相关服务协议各项内容，包括本公司对各项服务协议随时所做的任何修改。</p>
+				<div id="moreBtn"
+					style="padding: 0 30%; margin: 5px; width: 40%; background: #dedede; text-align: center;">
+					<label id="spanTxt">点击展开</label>
+				</div>
+				<div id="moreContent" style="display: none;">
+					<p class="textIndent">1、禁止发布虚假求货信息，求货信息一旦发布，24小时内禁止取消。如因特殊情况，需取
+						消求货信息，需经平台审核，审核完成后方可取消。求货信息会经由客服审核再进行发
+						布，如认定为虚假信息，第一次提醒，第二次警告，第三次永久拉入黑名单。在求货信
+						息取消前，平台已为其寻找到合适的供货方后，求货方不得取消求货，需按流程完成交 易；
+						求货信息发布后，如需24小时内取消的，经客服审核后，取消求货信息。累计3次 24小时
+						内取消记录及平台已匹配到货源情况下的求货方交易取消，从第4次开始收取求货总金 额的5%定金（封顶5元）；
+						①24小时内取消，不予退还定金； ②超过24小时且已匹配合适货源的情况下，求货方申请取消求货信息，可退还定金；
+						③超过24小时且已匹配合适货源的情况下，定金可以抵消等值金额，反之，求货方取 消交易，则定金不予退还</p>
+
+					<p class="textIndent">2、求货购买到的产品，需按供货方提供的价格政策进行销售，不得影响供货方产品市场价
+						格政策；</p>
+					<p class="textIndent">3、非质量问题及描述不符问题，求货购买的产品，不可退货。由质量问题及描述不符引起
+						的退换货，退换货所产生的来回运费，均由供货方承担；平台为求货方匹配到合适的供 货方后，求货方需12小时内打款至平台；</p>
+					<p class="textIndent">4、如后期遇退货退款，求货方申请退货，并把产品按退货地址寄送给供货方，供货方确认
+						收货后，供货方退款至平台，平台审核后，退款至求货方；</p>
+					<p class="textIndent">5、求货方需提供真实有效的收货地址，一旦交易成立后，不得更改，若因求货方提供的收
+						货地址有误，导致的退换货，所产生的退换货运费由求货方承担。</p>
+					<p>若本协议的部分条款被认定为无效或者无法实施时，本协议中的其他条款仍然有效。
+						杭州彬小沫网络科技有限公司在法律允许的最大范围内对本协议拥有解释权与修改权。 本协议自签署之日起生效。</p>
+				</div>
+			</div>
+			<div class="accept">
+			<!-- √  -->
+				<div class="checkBox checked"><input id="check"  type="checkbox"/></div>
+				
+				<div class="acceptText">我接受服务协议</div>
+			</div>
+			<div id="next" class="nextBtn">
+				<a >下一步</a>
+			</div>
+		</div>
+		<div class="adjustDIV"></div>
+		<div class="bottomNav">
+			<ul>
+				<li class="navItem1">
+					<div class="navIcon">
+						<img src="/resources/images/icon1.png" />
+					</div>
+					<div class="navText">首页</div>
+				</li>
+				<li class="navSplit"><div class="navSplitIcon"></div></li>
+				<li class="navItem2">
+					<div class="navIcon">
+						<img src="/resources/images/icon2.png" />
+					</div>
+					<div class="navText">个人中心</div>
+				</li>
+				<ul>
+		</div>
+	</div>
+
+
+</body>
+</html>

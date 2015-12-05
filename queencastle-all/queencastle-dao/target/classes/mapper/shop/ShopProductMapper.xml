@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.shop.ShopProductMapper">
+	<resultMap id="ShopProductMap" type="com.queencastle.dao.model.shop.ShopProduct">
+	<id column="id" property="id" typeHandler="idHandler" />
+	<result column="category_id" property="category.id" typeHandler="idHandler" />
+	<result column="brand_id" property="brand.id" typeHandler="idHandler" />
+	<result column="amount" property="amount" jdbcType="BIGINT"  />
+	<result column="images" property="images" jdbcType="VARCHAR"/>
+	<result column="standard_ids" property="standardIds" jdbcType="VARCHAR" />
+	<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+	<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id,category_id,brand_id,amount,images,standard_ids,created_at,updated_at
+	</sql>
+	
+	<select id="getById" resultMap="ShopProductMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_shop_product 
+		where
+		id=#{id,typeHandler=idHandler}
+	</select>
+	
+	
+	<insert id="insert" parameterType="com.queencastle.dao.model.shop.ShopProduct">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT
+			LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_shop_product(category_id,brand_id,
+		amount,images,standard_ids,created_at,updated_at)
+		values(#{category.id,typeHandler=idHandler},
+		#{brand.id,typeHandler=idHandler},
+		#{amount},
+		#{images},
+		#{standardIds},
+		now(),now())
+	</insert>
+	
+	
+	<select id="getShopProductCountByParams" resultType="java.lang.Integer">
+		select count(*) from queen_shop_product
+	</select>
+	
+	<select id="getShopProductByParams" resultMap="ShopProductMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_shop_product 
+		 order by id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+
+</mapper>

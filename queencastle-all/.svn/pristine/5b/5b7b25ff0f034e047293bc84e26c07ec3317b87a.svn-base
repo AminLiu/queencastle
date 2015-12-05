@@ -1,0 +1,21 @@
+package com.queencastle.service.test;
+
+import org.junit.Ignore;
+import org.junit.Test;
+
+import com.queencastle.dao.model.goods.Category;
+import com.queencastle.dao.utils.PinYinUtils;
+
+public class CategoryTester extends BaseTest {
+
+    @Test
+    @Ignore
+    public void insert() {
+        Category category = new Category();
+        String cname = "首饰";
+        String ename = PinYinUtils.fullPinyin(cname);
+        category.setCname(cname);
+        category.setEname(ename);
+        categoryService.insert(category);
+    }
+}

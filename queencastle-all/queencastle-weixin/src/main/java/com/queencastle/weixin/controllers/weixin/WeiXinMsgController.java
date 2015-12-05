@@ -1,0 +1,234 @@
+package com.queencastle.weixin.controllers.weixin;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
+
+import com.queencastle.dao.model.User;
+import com.queencastle.dao.model.relations.AuditStatus;
+import com.queencastle.dao.model.relations.RelationType;
+import com.queencastle.dao.model.relations.UserAudit;
+import com.queencastle.dao.model.relations.UserRelation;
+import com.queencastle.dao.model.weixin.DKFMessage;
+import com.queencastle.dao.model.weixin.NewsMessage;
+import com.queencastle.dao.model.weixin.TextMessage;
+import com.queencastle.dao.utils.jedis.ObjectJedisCache;
+import com.queencastle.dao.utils.jedis.StringJedisCache;
+import com.queencastle.service.helper.PermissionHelper;
+import com.queencastle.service.helper.XMLHelper;
+import com.queencastle.service.impl.security.PermissionManage;
+import com.queencastle.service.interf.UserService;
+import com.queencastle.service.interf.relations.UserAuditService;
+import com.queencastle.service.interf.relations.UserGroupService;
+import com.queencastle.service.interf.relations.UserRelationService;
+import com.queencastle.service.interf.weixin.WeiXinService;
+import com.queencastle.service.sessions.PermissionContext;
+import com.queencastle.service.utils.WeiXinHelper;
+import com.queencastle.service.utils.WeiXinMessageHelper;
+
+/**
+ * 处理微信回调信息<br>
+ * <ul>
+ * <li>用户关注服务号</li>
+ * </ul>
+ * 
+ * 
+ * @author YuDongwei
+ *
+ */
+@Controller
+public class WeiXinMsgController {
+    @Autowired
+    private UserService userService;
+
+
+    @Autowired
+    private PermissionManage permissionManage;
+    @Autowired
+    private StringJedisCache sessionIdCache;
+    @Autowired
+    private ObjectJedisCache sessionContextCache;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
+    private UserRelationService userRelationService;
+
+    @Autowired
+    private WeiXinService weiXinService;
+    @Autowired
+    private UserGroupService userGroupService;
+    @Autowired
+    private UserAuditService userAuditService;
+
+    private static Logger logger = LoggerFactory.getLogger(WeiXinMsgController.class);
+
+    @RequestMapping(value = "/weixinCallerBack", produces = "text/plain;charset=UTF-8")
+    public void weixinCallerBack(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        /* 消息的接收、处理、响应 */
+        String timestamp = request.getParameter("timestamp");
+        String nonce = request.getParameter("nonce");
+        String signature = request.getParameter("signature");
+        // String echostr = request.getParameter("echostr");
+
+        // 将请求、响应的编码均设置为UTF-8（防止中文乱码）
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        if (!WeiXinHelper.checkSignature(signature, timestamp, nonce)) {
+            return;
+        }
+
+        Map<String, String> requestMap = XMLHelper.parseXml(request.getInputStream());
+        if (requestMap == null) {
+            return;
+        }
+
+        // 打印出信息
+        for (Map.Entry<String, String> entry : requestMap.entrySet()) {
+            logger.info(entry.getKey() + "---->" + entry.getValue());
+        }
+        String toUser = requestMap.get("FromUserName");
+        String fromUser = requestMap.get("ToUserName");
+        // 关注
+        if (StringUtils.equals("subscribe", requestMap.get("Event"))) {
+            TextMessage textMessage = new TextMessage();
+            // 用户绑定登录
+            User user = getWeixinUser(request, response, toUser);
+            // 用户信息写入cookie
+            handlerUserLogin(request, response, user);
+            //
+            textMessage.setToUserName(toUser);
+            textMessage.setFromUserName(fromUser);
+
+            List<String> contentList = WeiXinHelper.getWelcomeContent();
+            // 如果用户扫描的二维码是推荐出去的，那么可以找到上下级关系
+            String eventKey = requestMap.get("EventKey");
+            if (StringUtils.isNoneBlank(eventKey) && StringUtils.startsWith(eventKey, "qrscene_")) {
+                String pid = eventKey.substring("qrscene_".length());
+                User puser = userService.getById(pid);
+                if (puser != null) {
+                    contentList.set(0, "  嗨，等你好久啦！感谢  " + puser.getOutNick()
+                            + "  带你走进女王城堡喔\ue41f~\n\n");
+                    // 给推荐者也发送消息
+                    weiXinService.sendTemplateProxyMessage(puser.getOpenId(), user);
+                    // 推荐的上下级关系建立
+                    handlerUserRelation(puser.getId(), user);
+                }
+            }
+            textMessage.setContent(StringUtils.join(contentList, " "));
+            response.getWriter().write(textMessage.getXmlContent());
+            // 异步生成用户推荐的永久二维码链接
+            weiXinService.generateForeverMaterial(user.getId());
+            return;
+        }
+        // 场景扫描,如果用户已经是本系统用户但是上下级未定，扫描了别人的二维码，确定是别人的下级关系
+        // 这里适用于已经关注了公众号再次扫描
+        if (StringUtils.equals("SCAN", requestMap.get("Event"))) {
+            // 获取上级关系的用户编号
+            String parentId = requestMap.get("EventKey");
+            // 获取当前用户的编号
+            String currentOpenId = requestMap.get("FromUserName");
+            User user = userService.loadUserByOpenIdAndSource("weixin", currentOpenId);
+            if (StringUtils.isNoneBlank(parentId) && user != null) {
+                // 推荐的上下级关系建立
+                handlerUserRelation(parentId, user);
+            }
+            return;
+
+        }
+        // 接收用户文本消息
+        if (StringUtils.equals("text", requestMap.get("MsgType"))) {
+            String content = requestMap.get("Content");
+            if (StringUtils.equals("1", content)) {
+                // 转发到多客服
+                DKFMessage dkfMessage = new DKFMessage();
+                dkfMessage.setToUserName(toUser);
+                dkfMessage.setFromUserName(fromUser);
+                response.getWriter().write(dkfMessage.getXmlContent());
+                return;
+            } else {
+                TextMessage textMessage = new TextMessage();
+                textMessage.setToUserName(toUser);
+                textMessage.setFromUserName(fromUser);
+                content = "您刚才输入的信息是:" + content;
+                textMessage.setContent(content);
+                response.getWriter().write(textMessage.getXmlContent());
+                return;
+            }
+        }
+        // 获取推荐二维码
+        if (StringUtils.equals("V_RECOMMEND_CODE", requestMap.get("EventKey"))) {
+            User user = userService.loadUserByOpenIdAndSource("weixin", toUser);
+            if (user == null) {
+                return;
+            }
+
+            // 对用户的推荐二维码信息进行查询
+
+            String picUrl = weiXinService.generateForeverMaterial(user.getId());
+            if (StringUtils.isNoneBlank(picUrl)) {
+                String url = "http://www.queencastle.cn/qrcode/getByUserId?userId=" + user.getId();
+                NewsMessage newsMessage =
+                        WeiXinMessageHelper.getNewsMessage(url, picUrl, fromUser, toUser);
+                response.getWriter().write(newsMessage.getXmlContent());
+            }
+
+            return;
+        }
+
+
+
+    }
+
+    private void handlerUserRelation(String parentId, User user) {
+        try {
+            UserRelation userRelation = new UserRelation();
+            userRelation.setParentId(parentId);
+            userRelation.setUserId(user.getId());
+            userRelation.setType(RelationType.recommend);
+            // TODO ：不能出现环形递归情况
+            userRelationService.checkAndInsert(userRelation);
+            // 判断用户是否审核通过,如果审核通过处理群关系
+            UserAudit userAudit = userAuditService.getByUserId(user.getId());
+            if (userAudit != null && userAudit.getAuditStatus() == AuditStatus.success) {
+                // 自建群信息处理
+                userGroupService.handleSelfBuildGroup(parentId, user.getId());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handlerUserLogin(HttpServletRequest request, HttpServletResponse response,
+            User user) {
+        // 如果有过期的session先清理掉
+        PermissionHelper.clearSessionIdFromCookie(request, response, sessionIdCache);
+        PermissionHelper.generateLoginedSession(request, response, user, sessionIdCache,
+                sessionContextCache);
+        PermissionContext.setUser(user);
+    }
+
+    private User getWeixinUser(HttpServletRequest request, HttpServletResponse response,
+            String openId) {
+        // 根据openId判断用户是否已经关注
+        User user = userService.loadUserByOpenIdAndSource("weixin", openId);
+        if (user != null) {
+            return user;
+        }
+        return weiXinService.generateWeiXinUser(openId, weiXinService.getAccessToken());
+    }
+
+}

@@ -1,0 +1,97 @@
+package com.queencastle.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.queencastle.dao.PageInfo;
+import com.queencastle.dao.mapper.RoleMenuInfoMapper;
+import com.queencastle.dao.mapper.UserRoleInfoMapper;
+import com.queencastle.dao.model.RoleMenuInfo;
+import com.queencastle.dao.model.UserRoleInfo;
+import com.queencastle.dao.mybatis.IdTypeHandler;
+import com.queencastle.service.interf.UserRoleInfoService;
+
+@Service
+public class UserRoleInfoServiceImpl extends BaseService implements UserRoleInfoService {
+
+    @Autowired
+    private UserRoleInfoMapper userRoleInfoMapper;
+    @Autowired
+    private RoleMenuInfoMapper roleMenuInfoMapper;
+
+    @Override
+    public int insert(UserRoleInfo userRoleInfo) {
+        return userRoleInfoMapper.insert(userRoleInfo);
+    }
+
+    @Override
+    public UserRoleInfo getById(String id) {
+        return userRoleInfoMapper.getById(id);
+    }
+
+    @Override
+    public int updateById(UserRoleInfo userRoleInfo) {
+        return userRoleInfoMapper.updateById(userRoleInfo);
+    }
+
+    @Override
+    public PageInfo<UserRoleInfo> getUserRoleByParams(int page, int rows, Map<String, Object> map) {
+        PageInfo<UserRoleInfo> pageInfo = new PageInfo<UserRoleInfo>();
+        pageInfo.setPage(page);
+        Integer count = userRoleInfoMapper.getUserRoleCountByParams(map);
+        if (count == null || count == 0) {
+            pageInfo.setTotal(0);
+            pageInfo.setRows(new ArrayList<UserRoleInfo>());
+            return pageInfo;
+        }
+        pageInfo.setTotal(count);
+        page = (page <= 1) ? 1 : page;
+        Pageable pageable = new PageRequest(page - 1, rows);
+
+        List<UserRoleInfo> list = userRoleInfoMapper.getUserRoleByParams(pageable, map);
+        pageInfo.setRows(list);
+        return pageInfo;
+    }
+
+    @Override
+    public List<UserRoleInfo> getByUserId(String userId) {
+
+        if (StringUtils.isNoneBlank(userId)) {
+            return userRoleInfoMapper.getByUserId(userId);
+        }
+        return null;
+    }
+    
+    @Override
+    public List<RoleMenuInfo> getMenuByUserId(String userId){
+    	
+    	if(StringUtils.isNoneBlank(userId)){
+    		
+    		String roleId = null;
+			try {
+				roleId =IdTypeHandler.encode(userRoleInfoMapper.getRoleIdByUserId(userId));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		
+    		if(StringUtils.isNoneBlank(roleId)){
+    			
+    			return roleMenuInfoMapper.getByRoleId(roleId);
+    		}
+    	}
+    	
+		return null;
+    	
+    }
+
+	
+
+}

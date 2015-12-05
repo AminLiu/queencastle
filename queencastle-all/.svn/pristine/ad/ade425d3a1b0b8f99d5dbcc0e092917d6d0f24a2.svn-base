@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.UserMapper">
+	<resultMap id="UserResultMap" type="com.queencastle.dao.model.User">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="username" property="username" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="out_source" property="source" jdbcType="VARCHAR" />
+		<result column="out_nick" property="outNick" jdbcType="VARCHAR" />
+
+		<result column="open_id" property="openId" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="VARCHAR" />
+		<result column="head_img" property="headImg" jdbcType="VARCHAR" />
+
+		<result column="admin" property="admin" jdbcType="INTEGER" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+		
+		<result column="weixin_no" property="weixinNo" jdbcType="VARCHAR" />
+		
+
+	</resultMap>
+
+	<resultMap type="com.queencastle.dao.model.User" id="UserResultIdMap">
+		<result column="id" property="id" typeHandler="idHandler" />
+	</resultMap>
+	
+	
+	<resultMap type="com.queencastle.dao.vo.SimpleUser" id="SimpleResultMap">
+		<result column="id" property="id" typeHandler="idHandler" />
+		<result column="username" property="userName" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id, phone, username, password, out_source,
+		out_nick,open_id,sex,head_img,admin,
+		created_at,updated_at,weixin_no
+	</sql>
+
+	<sql id="search_sql">
+		<where>
+			<if test="map.username != null and map.username !='' ">
+				username like CONCAT(CONCAT('%', #{map.username}),'%')
+			</if>
+		</where>
+	</sql>
+
+	<select id="getById" resultMap="UserResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user
+		where id = #{id,typeHandler=idHandler}
+	</select>
+
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.User">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT
+			LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_user (
+		phone, username, password, out_source,
+		out_nick,open_id,sex,head_img,admin, created_at,updated_at,weixin_no
+		)values
+		(#{phone},#{username},#{password},#{source},#{outNick},#{openId},#{sex},#{headImg},#{admin},now(),now(),#{weixinNo})
+	</insert>
+
+	<update id="updateById" parameterType="com.queencastle.dao.model.User">
+		update queen_user
+		<set>
+			<if test="phone != null and phone !=''">
+				phone=#{phone},
+			</if>
+			<if test="username != null and username !=''">
+				username=#{username},
+			</if>
+			<if test="password != null and password !=''">
+				password=#{password},
+			</if>
+			<if test="source != null and source !=''">
+				out_source=#{source},
+			</if>
+			<if test="outNick != null and outNick !=''">
+				out_nick=#{outNick},
+			</if>
+			<if test="weixinNo != null and weixinNo !=''">
+				weixin_no=#{weixinNo},
+			</if>
+			updated_at=now()
+		</set>
+		where id = #{id,typeHandler=idHandler}
+	</update>
+
+	<select id="getUsersCountByParams" resultType="java.lang.Integer">
+		select count(*) from queen_user
+		<include refid="search_sql"></include>
+	</select>
+	<select id="getUsersByParams" resultMap="UserResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user
+		<include refid="search_sql"></include>
+		order by id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+
+	<select id="getByUsername" resultMap="UserResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user where username=#{username}
+	</select>
+
+	<update id="setUserAdmin">
+		update queen_user set admin=#{flag} where id =
+		#{userId,typeHandler=idHandler}
+	</update>
+
+	<select id="loadUserByOpenIdAndSource" resultMap="UserResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user
+		where out_source=#{source}
+		and open_id=#{openId}
+	</select>
+
+	<select id="getAllUserIds" resultMap="UserResultIdMap">
+		select id from queen_user
+	</select>
+
+	<select id="getAllUserSimple" resultMap="SimpleResultMap" >
+	
+			select id ,username from queen_user
+	</select>
+
+ 
+ 
+ 	<select id="getProvinceUserCountByCode" resultType="java.lang.Integer">
+ 	select count(a.id)  from queen_user a,queen_user_detail b
+			 where a.id = b.user_id
+			 and b.provinceCode=#{code}
+ 	</select>
+
+
+	<select id="getProvinceUserByCode" resultMap="SimpleResultMap" >
+			select a.id ,a.username from queen_user a,queen_user_detail b
+			 where a.id = b.user_id
+			 and b.provinceCode=#{code}
+			 limit #{page.offset}, #{page.size}
+	</select>
+
+
+	<select id="getCityUserCountByCode" resultType="java.lang.Integer">
+ 	select count(a.id)  from queen_user a,queen_user_detail b
+			 where a.id = b.user_id
+			 and b.cityCode=#{code}
+ 	</select>
+	<select id="getCityUserByCode" resultMap="SimpleResultMap" >
+			select a.id ,a.username from queen_user a,queen_user_detail b
+			 where a.id = b.user_id
+			 and b.cityCode=#{code}
+			 limit #{page.offset}, #{page.size}
+	</select>
+
+
+
+
+
+
+</mapper>

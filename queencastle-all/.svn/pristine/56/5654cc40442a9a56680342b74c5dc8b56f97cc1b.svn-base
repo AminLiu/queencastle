@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<title>用户入群省级管理员审核</title>
+<style>
+html {
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
+	font-family: "Microsoft YaHei", "Tahoma";
+}
+
+body {
+	margin: 0;
+}
+
+.pageIndex {
+	background: url("/resources/images/bg1.png") no-repeat center;
+	background-size: 100% 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	z-index: -1;
+	margin-bottom: 0;
+	padding-bottom: 40px;
+	right: 0;
+}
+
+.pageBorder {
+	margin: 5%;
+	width: 90%;
+	height: 100%;
+}
+
+.categoryDiv {
+	text-align: center;
+}
+
+.categorySelect {
+	line-height: 35px;
+	font-size: 16px;
+	width: 30%;
+}
+
+.auditItem {
+	padding: 5px 2px;
+}
+
+.userTitle {
+	font-weight: bold;
+}
+
+.btnGroup {
+	position: relative;
+	width: 100%;
+	font-size: 16px;
+	text-align: center;
+	height: 45px;
+}
+
+.passBtn {
+	position: absolute;
+	left: 0;
+	top: 0;
+	line-height: 35px;
+	background: #41009a;
+	left: 0;
+	color: #fff;
+	padding: 5px;
+	display: inline-block;
+	width: 22%;
+}
+
+.viewBtn {
+	position: absolute;
+	right: 0;
+	top: 0;
+	line-height: 35px;
+	background: #41009a;
+	color: #fff;
+	padding: 5px;
+	display: inline-block;
+	width: 35%;
+}
+
+.passDiv {
+	position: relative;
+	width: 100%;
+	font-size: 16px;
+	text-align: center;
+	height: 45px;
+}
+
+.allPass {
+	position: absolute;
+	right: 0;
+	top: 0;
+	line-height: 35px;
+	background: #41009a;
+	color: #fff;
+	padding: 5px;
+	display: inline-block;
+	width: 35%;
+}
+</style>
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	$(function() {
+		$(".passBtn").click(function(){
+			var userId = $(this).attr("title");
+			$.ajax({
+				method:"post",
+				url:"/audit/provinceManagePass",
+				data:{"userId":userId},
+				success:function(){
+					
+				}
+			});
+			
+		});
+	});
+
+	/*]]>*/
+</script>
+
+</head>
+<body>
+	<div class="pageIndex"></div>
+	<div class="pageBorder">
+		<div class="categoryDiv">
+			<label>是否分配</label> <select class="categorySelect">
+				<option>未分配</option>
+				<option>已分配</option>
+			</select>
+		</div>
+		<div class="cntDiv">
+			<span>共有</span><label th:text="${auditCnt}">10</label><span>名</span>
+		</div>
+		<div class="changeDiv"  th:if="${auditList!=null}">
+			<div class="auditItem" th:each="auditUser:${auditList}">
+				<fieldset>
+					<legend class="userTitle">用户信息</legend>
+					<div>
+						<label>昵称</label><label th:text="${auditUser.nickName}"></label>
+					</div>
+					<div>
+						<label>微信</label><label th:text="${auditUser.weixinNo}"></label>
+					</div>
+					<div>
+						<label>手机号码</label><label th:text="${auditUser.phone}"></label>
+					</div>
+					<div>
+						<label>地址</label><label th:text="${auditUser.address}"></label>
+					</div>
+<!-- 					<div> -->
+<!-- 						<label>编号</label><label th:text="${auditUser.userId}"></label> -->
+<!-- 					</div> -->
+					<div class="btnGroup">
+						<label class="passBtn" th:title="${auditUser.userId}">通过</label> <label class="viewBtn">查看详情</label>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+		<div class="passDiv">
+			<span class="allPass">全部通过</span>
+		</div>
+
+
+
+	</div>
+
+</body>
+</html>

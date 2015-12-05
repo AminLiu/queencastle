@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.relations.UserDetailInfoMapper">
+	<resultMap id="UserDetailInfoResultMap" type="com.queencastle.dao.model.UserDetailInfo">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<id column="user_id" property="userId" typeHandler="idHandler" />
+		<result column="img" property="img" jdbcType="VARCHAR" />
+		<result column="cityCode" property="cityCode" jdbcType="VARCHAR"/>
+		<result column="provinceCode" property="provinceCode" jdbcType="VARCHAR" />
+		
+		<result column="country" property="country" jdbcType="VARCHAR" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+ 
+	<sql id="Base_Column_List">
+		id,user_id,img,cityCode, provinceCode,country,province,city,created_at,updated_at
+	</sql>
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.UserDetailInfo">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_user_detail (
+		user_id,img,cityCode, provinceCode,country,province,city,created_at,updated_at
+		)values
+		(#{userId,typeHandler=idHandler},#{img}, #{cityCode},#{provinceCode},#{country},#{province},#{city},now(),now())
+	</insert>
+	
+	<select id="getById" resultMap="UserDetailInfoResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_detail
+		where id = #{id,typeHandler=idHandler}
+	</select>
+	
+		<select id="getByUserId" resultMap="UserDetailInfoResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_detail
+		where user_id = #{userId,typeHandler=idHandler}
+	</select>
+	
+	<select id="getByCityCode" resultMap="UserDetailInfoResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_detail 
+		where cityCode like concat(#{cityCode},'%')
+	</select>
+
+ <select id="getUserDetailInfoCountByParams" resultType="java.lang.Integer">
+		select count(*) from queen_user_detail
+	</select>
+	<select id="getUserDetailInfoByParams" resultMap="UserDetailInfoResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_user_detail order by id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+
+	<update id="updateById" parameterType="com.queencastle.dao.model.UserDetailInfo">
+		update queen_user_detail 
+		<set>
+		<if test="userId != null and userId !=''">
+			user_id=#{userId,typeHandler=idHandler},
+		</if>
+		<if test="img != null and img !=''">
+			img=#{img},
+		</if>
+		<if test="cityCode != null and cityCode !=''">
+			cityCode=#{cityCode},
+		</if>
+		<if test="provinceCode != null and provinceCode !=''">
+			provinceCode=#{provinceCode},
+		</if>
+		<if test="country != null and country !=''">
+			country=#{country},
+		</if>
+		<if test="province != null and province !=''">
+			province=#{province},
+		</if>
+		<if test="city != null and city !=''">
+			city=#{city},
+		</if>
+			updated_at=now()
+		</set>
+		where id = #{id,typeHandler=idHandler}
+	</update>
+</mapper>

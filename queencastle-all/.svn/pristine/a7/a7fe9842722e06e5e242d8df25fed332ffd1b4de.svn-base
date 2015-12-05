@@ -1,0 +1,18 @@
+package com.queencastle.service.interf;
+
+import java.util.Map;
+
+import com.queencastle.dao.PageInfo;
+import com.queencastle.dao.model.User;
+
+public interface UserService {
+    int insert(User user);
+
+    User getById(String id);
+
+    int updateById(User user);
+
+    PageInfo<User> getUsersByParams(int page, int rows, Map<String, Object> map);
+
+    User getByUsername(String username);
+}

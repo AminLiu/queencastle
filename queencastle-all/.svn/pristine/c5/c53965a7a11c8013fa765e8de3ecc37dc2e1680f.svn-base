@@ -1,0 +1,175 @@
+package com.queencastle.weixin.controllers.weixin;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.queencastle.dao.model.User;
+import com.queencastle.dao.model.UserDetailInfo;
+import com.queencastle.dao.model.area.City;
+import com.queencastle.dao.model.area.Province;
+import com.queencastle.dao.model.relations.AuditStatus;
+import com.queencastle.dao.model.relations.GroupLevel;
+import com.queencastle.dao.model.relations.ManagerAuth;
+import com.queencastle.dao.model.relations.UserAudit;
+import com.queencastle.dao.utils.jedis.StringJedisCache;
+import com.queencastle.dao.vo.AuditVO;
+import com.queencastle.service.interf.UserDetailInfoService;
+import com.queencastle.service.interf.UserService;
+import com.queencastle.service.interf.area.AreaInfoService;
+import com.queencastle.service.interf.relations.AreaGroupService;
+import com.queencastle.service.interf.relations.ManagerAuthService;
+import com.queencastle.service.interf.relations.UserAuditService;
+import com.queencastle.service.interf.relations.UserGroupService;
+import com.queencastle.service.interf.relations.UserMemberService;
+import com.queencastle.service.sessions.PermissionContext;
+
+@Controller
+@RequestMapping("/weixinApi")
+public class WeiXinApiController {
+    private Logger logger = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private AreaInfoService areaInfoService;
+    @Autowired
+    private UserDetailInfoService userDetailInfoService;
+    @Autowired
+    private StringJedisCache accessTokenCache;
+    @Autowired
+    private UserAuditService userAuditService;
+    @Autowired
+    private UserGroupService userGroupService;
+    @Autowired
+    private UserMemberService userMemberService;
+    @Autowired
+    private AreaGroupService areaGroupService;
+    @Autowired
+    private ManagerAuthService managerAuthService;
+
+    @RequestMapping("/queenIdx")
+    public String queenIdx() {
+        return "redirect:/queenIdx";
+    }
+
+    @RequestMapping("/becomeMember")
+    public String becomeMember(Model model) {
+        return "redirect:/becomeMember";
+    }
+
+    @RequestMapping("/demandCenter")
+    public String demandCenter() {
+        return "redirect:/dsManager/getInfosByType?type=demand";
+    }
+
+    @RequestMapping("/supplyCenter")
+    public String supplyCenter() {
+        return "redirect:/dsManager/getInfosByType?type=supply";
+    }
+
+    @RequestMapping("/userCenter")
+    public String userCenter(Model model) {
+        User user = PermissionContext.getUser();
+        if (user != null) {
+            // 判断用户名是否为空，如果为空，说明没有个人信息填写，跳转到完善信息的页面
+            String username = user.getUsername();
+            if (StringUtils.isBlank(username)) {
+                List<Province> provinces = areaInfoService.getAllProvinces();
+                model.addAttribute("provinces", provinces);
+                return "/makeup";
+            } else {
+                return "redirect:/userCenter";
+            }
+        } else {
+            return "/exception";
+        }
+
+    }
+
+    @RequestMapping("/weixinLogin")
+    public String weixinLogin(Model model) {
+        try {
+            User user = PermissionContext.getUser();
+            if (user != null) {
+                // 判断用户名是否为空，如果为空，说明没有个人信息填写，跳转到完善信息的页面
+                String username = user.getUsername();
+                if (StringUtils.isBlank(username)) {
+                    List<Province> provinces = areaInfoService.getAllProvinces();
+                    model.addAttribute("provinces", provinces);
+                    return "/makeup";
+                } else {
+                    return "redirect:/userCenter";
+                    // return "redirect:/queenIdx";
+                }
+            } else {
+                return "/exception";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "/exception";
+    }
+
+    @RequestMapping("/provinceAudit")
+    public String provinceAudit(String userId, Model model) {
+        // 显示所有需要审核的用户的的基本信息,区分出省级管理员已审核和未审核的
+        // 查找出所有系统审核通过的和省级管理员通过的即可满足要求
+        // 获取当前用户所在的省
+        User user = PermissionContext.getUser();
+        if (user != null) {
+            UserDetailInfo detailInfo = userDetailInfoService.getByUserId(user.getId());
+            String provinceCode = detailInfo.getProvinceCode();
+            List<UserAudit> systemList =
+                    userAuditService.getByProvinceCodeAndStatus(provinceCode, AuditStatus.success);
+            List<UserAudit> selfList =
+                    userAuditService.getByProvinceCodeAndStatus(provinceCode, AuditStatus.audit);
+            List<AuditVO> userList = new ArrayList<AuditVO>();
+            List<AuditVO> systemVOList = userAuditService.handleUserAudit(systemList);
+            List<AuditVO> selfVOList = userAuditService.handleUserAudit(selfList);
+            if (!CollectionUtils.isEmpty(systemVOList)) {
+                userList.addAll(systemVOList);
+            }
+            if (!CollectionUtils.isEmpty(selfVOList)) {
+                userList.addAll(selfVOList);
+            }
+
+            model.addAttribute("auditList", userList);
+            model.addAttribute("auditCnt", userList.size());
+            return "weixin/weixinAuditList";
+        }
+
+
+        return "/exception";
+    }
+
+    // 拉出所有需要自己审核的
+    @RequestMapping("/cityAudit")
+    public String cityAudit(String userId, String groupId, Model model) {
+        logger.error("userId----" + userId);
+        logger.error("groupId----" + groupId);
+        User user = PermissionContext.getUser();
+        if (user != null) {
+            logger.error("user.getId()----" + user.getId());
+            UserDetailInfo detailInfo = userDetailInfoService.getByUserId(user.getId());
+            String cityCode = detailInfo.getCityCode();
+            City city = areaInfoService.getByCityCode(cityCode);
+            List<ManagerAuth> auths =
+                    managerAuthService.getByAreaIdAndAuthId(city.getId(), user.getId(),
+                            GroupLevel.city);
+            List<AuditVO> voList = managerAuthService.handlerAuth(auths);
+            model.addAttribute("auditList", voList);
+            model.addAttribute("auditCnt", voList.size());
+            return "weixin/areaAuditList";
+        }
+        return "/exception";
+    }
+
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>系统主页</title>
+<link rel="stylesheet" type="text/css" th:href="@{/resources/js/easyui/themes/bootstrap/easyui.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/resources/js/easyui/themes/icon.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/resources/js/easyui/themes/color.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/resources/css/sysmain.css}" />
+
+<script type="text/javascript" th:src="@{resources/js/jquery-1.10.2.min.js}"></script>
+<script type="text/javascript" th:src="@{resources/js/easyui/jquery.easyui.min.js}"></script>
+<script type="text/javascript" th:src="@{resources/js/easyui/locale/easyui-lang-zh_CN.js}"></script>
+<style type="text/css">
+.fitem{
+	margin:15px 10px 5px 20px;
+}
+.fitem label{
+		display:inline-block;
+		width:70px;
+}
+</style>
+</head>
+<body class="easyui-layout">
+	<div data-options="region:'north'" style="height: 20px"></div>
+	<div data-options="region:'west',collapsed:false" style="width: 180px">
+		<div class="container">
+			<ul th:if="${menuList!=null}" >
+				<li class="dropdown" th:each="menu:${menuList}">
+					<a href="#" data-toggle="dropdown" ><label  th:text="${menu.cname}"></label> <i class="icon-arrow"></i></a>
+					<ul class="dropdown-menu" th:if="${menu.children!=null}">
+						<li  th:each="subMenu:${menu.children}"><a href="#" class="subMenuClz" th:title="${subMenu.href}"><label th:text="${subMenu.cname}"></label></a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+
+	</div>
+	<div data-options="region:'center'" id="operationArea"></div>
+</body>
+<!-- 延迟加载，确保渲染有效 -->
+<script type="text/javascript" src="resources/js/sysmain.js"></script>
+<script type="text/javascript" th:inline="text">
+	$(function() {
+		$('.subMenuClz').click(function(){
+			var titleDescription = $(this).html();
+			var newHref=$(this).attr('title');
+			if(newHref){
+				newHref=newHref+"?t="+Math.random();
+				$('#operationArea').panel({
+					title:"所在位置："+titleDescription,
+					href:newHref,
+					cache:false,
+					loadingMessage:"页面加载中"
+				});
+			}
+		});
+	});
+</script>
+</html>

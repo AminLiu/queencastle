@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.goods.DemandSupplyInfoMapper">
+	<resultMap id="DsResultMap" type="com.queencastle.dao.model.goods.DemandSupplyInfo">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="user_id" property="userId" typeHandler="idHandler" />
+		<result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+		<result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="product_id" property="product.id" typeHandler="idHandler" />
+		<result column="amount" property="amount" jdbcType="INTEGER" />
+		<result column="price" property="price" jdbcType="INTEGER" />
+		<result column="ds_type" property="dsType" jdbcType="VARCHAR" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+		<result column="updated_at" property="updateAt" jdbcType="TIMESTAMP" />
+		<result column="result" property="check" jdbcType="INTEGER"/>
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="praise_cnt" property="praiseCnt"   />
+		
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id,user_id,start_date,end_date,product_id,amount,price,ds_type,memo,created_at,updated_at,result,address,praise_cnt
+	</sql>
+	<sql id="Search_Column_List">
+		a.id,a.user_id,a.start_date,a.end_date,a.product_id,a.amount,a.price,a.ds_type,a.memo,a.created_at,
+		a.updated_at,a.result,a.address,a.praise_cnt
+	</sql>
+	
+	<sql id="search">
+		<where>
+			a.product_id=b.id
+			<if test="map.pname != null">
+				and b.cname like concat('%',#{map.pname},'%')
+			</if>
+			<if test="map.startDay != null">
+				and a.start_date &gt;= #{map.startDay}
+			</if>
+			<if test="map.endDay != null">
+				and a.end_date &lt;= #{map.endDay}
+			</if>
+			<if test="map.type != null">
+				and a.ds_type=#{map.type}
+			</if>
+		</where>
+	</sql>
+
+	<insert id="insert" parameterType="com.queencastle.dao.model.goods.DemandSupplyInfo">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_demendinfo (
+		 user_id,start_date,end_date,product_id,amount,price,ds_type,memo,created_at,updated_at,result,address,praise_cnt
+		)values
+		(#{userId,typeHandler=idHandler}, #{startDate},#{endDate},#{product.id,typeHandler=idHandler},
+		#{amount},#{price},#{dsType},#{memo},now(),now(),#{check},#{address},#{praiseCnt})
+	</insert>
+
+	 
+	
+	<select id="getById" resultMap="DsResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from queen_demendinfo 
+		where
+		id=#{id,typeHandler=idHandler}
+	</select>
+
+	<select id="getByParams" resultMap="DsResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from queen_demendinfo 
+		 where ds_type=#{paramMap.type} 
+		order by 
+		<if test="paramMap.field == 'time' and paramMap.sortOrder == 'up'">
+			created_at asc
+		</if>
+		<if test="paramMap.field == 'time' and paramMap.sortOrder == 'down'">
+			created_at desc
+		</if>
+		<if test="paramMap.field == 'price'  and paramMap.sortOrder == 'up'">
+			price asc
+		</if>
+		<if test="paramMap.field == 'price'  and paramMap.sortOrder == 'down'">
+			price desc
+		</if>
+		 
+	</select>
+
+	<select id="getByQueryParams"  resultMap="DsResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from queen_demendinfo 
+		 where ds_type=#{queryMap.type} 
+  		order by  
+		<if test=" queryMap.timeSearch != null and queryMap.timeSearch == 'timeUp' ">
+			created_at asc,
+		</if>
+		<if test=" queryMap.timeSearch != null and queryMap.timeSearch == 'timeDown'">
+			created_at desc,
+		</if>
+		<if test="queryMap.priceSearch != null and queryMap.priceSearch == 'priceUp'  ">
+			price asc,
+		</if>
+		<if test="queryMap.priceSearch != null and queryMap.priceSearch == 'priceDown' ">
+			price desc,
+		</if>
+		<if test="queryMap.attentionSearch != null and queryMap.attentionSearch == 'praiseUp' ">
+			praise_cnt asc
+		</if>
+		<if test="queryMap.attentionSearch != null and queryMap.attentionSearch == 'praiseDown' ">
+			praise_cnt desc
+		</if>
+	
+	</select>
+
+	<select id="getDemandSupplysCountByParams" resultType="java.lang.Integer">
+		select count(a.id) from queen_demendinfo a,queen_product b <include refid="search"/>
+	</select>
+	
+	<select id="getDemandSupplysByParams" resultMap="DsResultMap">
+		select
+		<include refid="Search_Column_List" />
+		from queen_demendinfo a,queen_product b
+		<include refid="search"/>
+		 order by a.id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+	
+	
+	<select id="getAllDemandSupplyInfo" resultMap="DsResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from queen_demendinfo 
+		order by id desc
+	</select>
+	<update id="updateCheck" >
+		update queen_demendinfo set result=#{result} where id=#{id,typeHandler=idHandler}
+	</update>
+
+	<select id="getAllByType" resultMap="DsResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from queen_demendinfo where ds_type=#{type}
+	</select>
+    
+    <select id="getAllByUserId" resultMap="DsResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from queen_demendinfo where user_id=#{userId,typeHandler=idHandler}
+		and  praise_cnt&gt;=1
+	</select>
+	
+	<select id="getThreeByUserId" resultMap="DsResultMap">
+	select 
+		<include refid="Base_Column_List" />
+	from queen_demendinfo where user_id=#{userId,typeHandler=idHandler}
+	and id!=#{infoId,typeHandler=idHandler} limit 3
+	</select>
+	
+	<update id="addCnt">
+	update queen_demendinfo set praise_cnt=praise_cnt+1
+	where 	id=#{id,typeHandler=idHandler}
+	</update>
+ 
+	<update id="minusCnt">
+	update queen_demendinfo set praise_cnt=if( praise_cnt-1&lt;0,0,praise_cnt-1)
+	where 	id=#{id,typeHandler=idHandler}
+	</update>
+
+
+
+
+</mapper>

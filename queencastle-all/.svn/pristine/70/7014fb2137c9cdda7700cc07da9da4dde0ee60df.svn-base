@@ -1,0 +1,114 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="format-detection" content="telephone=no"/>
+<title>个人中心</title>
+<style>
+html{height: 100%;padding: 0px;margin: 0px;font-family:"Microsoft YaHei","Tahoma";}
+body{margin:0;}
+img {width:100%;}
+ul, li {list-style:none;margin:0;padding:0;}
+dl, dd {margin:0;}
+.textBlue {color:#41009a;}
+.textGray{color:#666;}
+.textBlue1 {color:#1abeb8;}
+.adjustDIV {width:100%;height:20px;}
+.clearfix:after{content: "020"; display: block; height: 0; clear: both; visibility: hidden;  }
+.clearfix {zoom: 1; }
+.personalCenter {background:url("/resources/images/bg1.png") no-repeat center;background-size:100% 100%;padding-bottom:50px;}
+
+.userPhoto {text-align:center;padding:10px 0;}
+.userImg {display:inline-block;background-size:100% 100%;}
+.userImg img {display:inline-block;width:85px;height:85px;margin:5px;border-radius:50%;}
+.userName {font-size:14px;color:#000;font-weight:bold;padding-top:5px;}
+
+.userInfo {width:90%;margin:0 5%;background:#fff;}
+.userInfo dt {background:#8d66c2;color:#fff;font-size:16px;padding:8px 0 8px 5px;}
+.userInfo dl {width: 96%;margin: 0 2%;padding: 2.5% 0;}
+.userInfo dl a {display:block;}
+.userInfo dd a {color:#979597;font-size:14px;padding:12px 0 12px 10px;margin: 0 10px;}
+.borderBottom {border-bottom:1px solid #e0dee0;}
+.supplyCenter span {display:inline-block;width:30px;height:22px;vertical-align:middle;background:url("/resources/images/p3.png") center no-repeat;background-size:100% 100%;margin-right:5px;}
+.trainingCenter span {display:inline-block;width:30px;height:22px;vertical-align:middle;background:url("/resources/images/p4.png") center no-repeat;background-size:100% 100%;margin-right:5px;}
+.teamCenter span {display:inline-block;width:30px;height:22px;vertical-align:middle;background:url("/resources/images/p5.png") center no-repeat;background-size:100% 100%;margin-right:5px;}
+
+.bottomNav {position:fixed;bottom:0;width:100%;background:#41009a;}
+.bottomNav ul {font-size:0;}
+.bottomNav li {display:inline-block;vertical-align:middle;text-align:center;}
+.navItem1, .navItem2 {width:48%;font-size:16px;color:#fff;}
+.navSplit {width:4%;height:44px;}
+.navIcon {display:inline-block;width:10%;vertical-align:middle;margin-right:5px;}
+.navText {display:inline-block;vertical-align:middle;}
+.navSplitIcon {display:inline-block;width:1px;height:26px;background:#fff;margin-top: 10px;}
+
+@media only screen and (min-device-width: 375px) {
+	.personalCenter {padding-bottom:0;}
+	.userInfo {width:90%;margin:0 5%;background:#fff;padding-bottom:50px;}
+}
+
+</style>
+</head>
+<body>
+<div class="personalCenter">
+	<div class="userPhoto">
+		<div class="userImg">
+			<img src="/resources/images/p2.png" th:if="${headImg==null}"  />
+			<img src="/resources/images/p2.png" th:if="${headImg!=null}" th:src="${headImg}"/>
+		</div>
+		<div class="userName" th:text="${username}">微信昵称</div>
+	</div>
+	<div class="userInfo">
+		<dl>
+			<dt><a class="supplyCenter"><span></span>货源中心</a></dt>
+			<dd><a class="borderBottom" th:href="@{/dsManager/getInfosByType?type=demand}">求货中心</a></dd>
+			<dd><a th:href="@{/dsManager/getInfosByType?type=supply}">供货中心</a></dd>
+			<dd><a th:href="@{/dsManager/attention}">我的关注</a></dd>
+			<dd><a th:href="@{/recommend}">我的推荐</a></dd>
+			<dt><a class="trainingCenter"><span></span>培训中心</a></dt>
+			<dd><a class="borderBottom">我的培训</a></dd>
+			<dd><a>我的供货</a></dd>
+			<dt><a class="teamCenter"><span></span>团队中心</a></dt>
+			<dd><a>我的团队</a></dd>
+		</dl>
+	</div>
+	<div class="bottomNav">
+		<ul>
+			<li class="navItem1">
+				<div class="navIcon"><img src="/resources/images/icon1.png" /></div>
+				<div class="navText">首页</div> 
+			</li>
+			<li class="navSplit"><div class="navSplitIcon"></div></li>
+			<li class="navItem2">
+				<div class="navIcon"><img src="/resources/images/icon2.png" /></div>
+				<div class="navText">个人中心</div> 
+			</li>
+		</ul>
+	</div>
+</div>
+
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+ <script   type="text/javascript" th:inline="javascript" >
+/*<![CDATA[*/
+$(function(){
+	//让背景填充整个屏幕和内容区
+	if($(".pageIndex").height() < $(window).height() ){
+		$(".pageIndex").height($(window).height());
+	}
+ 
+	$(".navItem1").click(function(){
+		window.location = /*[[@{/queenIdx}]]*/;
+	});
+	$(".navItem2").click(function(){
+		window.location = /*[[@{/userCenter}]]*/;
+	});
+	
+	
+});
+ 
+/*]]>*/
+</script>		
+</body>
+</html>

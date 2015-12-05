@@ -1,0 +1,119 @@
+package com.queencastle.service.impl.relations;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import com.queencastle.dao.PageInfo;
+import com.queencastle.dao.mapper.relations.ManagerAuthMapper;
+import com.queencastle.dao.model.User;
+import com.queencastle.dao.model.UserDetailInfo;
+import com.queencastle.dao.model.area.City;
+import com.queencastle.dao.model.area.Province;
+import com.queencastle.dao.model.relations.GroupLevel;
+import com.queencastle.dao.model.relations.ManagerAuth;
+import com.queencastle.dao.vo.AuditVO;
+import com.queencastle.service.interf.UserDetailInfoService;
+import com.queencastle.service.interf.UserService;
+import com.queencastle.service.interf.area.AreaInfoService;
+import com.queencastle.service.interf.relations.ManagerAuthService;
+
+@Service
+public class ManagerAuthServiceImpl implements ManagerAuthService {
+    @Autowired
+    private ManagerAuthMapper managerAuthMapper;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private AreaInfoService areaInfoService;
+    @Autowired
+    private UserDetailInfoService userDetailInfoService;
+
+    @Override
+    public int insert(ManagerAuth managerAuth) {
+        return managerAuthMapper.insert(managerAuth);
+    }
+
+    @Override
+    public ManagerAuth getById(String id) {
+        if (StringUtils.isNoneBlank(id)) {
+            return managerAuthMapper.getById(id);
+        }
+        return null;
+    }
+
+    @Override
+    public int updateStatusById(ManagerAuth managerAuth) {
+
+        return managerAuthMapper.updateStatusById(managerAuth);
+    }
+
+    @Override
+    public PageInfo<ManagerAuth> getByParams(int page, int rows, Map<String, Object> map) {
+        PageInfo<ManagerAuth> pageInfo = new PageInfo<ManagerAuth>();
+        pageInfo.setPage(page);
+        Integer count = managerAuthMapper.getCountByParams(map);
+        if (count == null || count == 0) {
+            pageInfo.setTotal(0);
+            pageInfo.setRows(new ArrayList<ManagerAuth>());
+            return pageInfo;
+        }
+        pageInfo.setTotal(count);
+        page = (page <= 1) ? 1 : page;
+        Pageable pageable = new PageRequest(page - 1, rows);
+
+        List<ManagerAuth> list = managerAuthMapper.getByParams(pageable, map);
+        pageInfo.setRows(list);
+        return pageInfo;
+
+
+    }
+
+    @Override
+    public List<ManagerAuth> getByAreaIdAndAuthId(String areaId, String authId, GroupLevel level) {
+        if (StringUtils.isNoneBlank(areaId) && StringUtils.isNoneBlank(authId)) {
+            return managerAuthMapper.getByAreaIdAndAuthId(areaId, authId, level);
+        }
+        return null;
+    }
+
+    @Override
+    public List<AuditVO> handlerAuth(List<ManagerAuth> auths) {
+        List<AuditVO> list = new ArrayList<AuditVO>();
+        if (!CollectionUtils.isEmpty(auths)) {
+            for (ManagerAuth auth : auths) {
+                list.add(convertVO(auth));
+            }
+        }
+        return list;
+    }
+
+    private AuditVO convertVO(ManagerAuth auth) {
+        AuditVO vo = new AuditVO();
+        // 获取用户的基本信息
+        String userId = auth.getUserId();
+        User user = userService.getById(userId);
+        vo.setUserId(userId);
+        vo.setNickName(user.getOutNick());
+        vo.setWeixinNo(user.getWeixinNo());
+        vo.setPhone(user.getPhone());
+
+        UserDetailInfo detailInfo = userDetailInfoService.getByUserId(userId);
+        if (detailInfo != null) {
+            String cityCode = detailInfo.getCityCode();
+            String provinceCode = detailInfo.getProvinceCode();
+            Province province = areaInfoService.getProvinceByprovinceCode(provinceCode);
+            City city = areaInfoService.getByCityCode(cityCode);
+            vo.setAddress(province.getCname() + city.getCname());
+        }
+
+        return vo;
+    }
+}

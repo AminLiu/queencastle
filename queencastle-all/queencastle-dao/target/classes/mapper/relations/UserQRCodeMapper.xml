@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.relations.UserQRCodeMapper">
+	<resultMap id="UserQRCodeResultMap" type="com.queencastle.dao.model.relations.UserQRCode">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="user_id" property="userId" typeHandler="idHandler" />
+		<result column="ticket" property="ticket" jdbcType="VARCHAR"/>
+		<result column="img" property="img" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id,user_id,ticket,img,created_at
+	</sql>
+	
+	<insert id="insert" parameterType="com.queencastle.dao.model.relations.UserQRCode">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT	LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_qrcode (
+		user_id,ticket,img,created_at
+		)values
+		(#{userId,typeHandler=idHandler}, #{ticket},#{img},now() )
+	</insert>
+	
+	
+	<select id="getByUserId" resultMap="UserQRCodeResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from queen_qrcode
+		where user_id = #{userId,typeHandler=idHandler}
+	</select>
+	
+
+</mapper>

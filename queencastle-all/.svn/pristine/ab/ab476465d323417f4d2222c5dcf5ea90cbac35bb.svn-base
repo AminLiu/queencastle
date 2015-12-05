@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.queencastle.dao.mapper.shop.PropertyDictMapper">
+	<resultMap id="PropertyDictResultMap" type="com.queencastle.dao.model.PropertyDict">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="cname" property="cname" jdbcType="VARCHAR" />
+		<result column="domain_id" property="domainId" typeHandler="idHandler"
+			jdbcType="BIGINT" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap id="PropertyDomainResultMap" type="com.queencastle.dao.model.PropertyDomain">
+		<id column="id" property="id" typeHandler="idHandler" />
+		<result column="cname" property="cname" jdbcType="VARCHAR" />
+		<result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+
+	<sql id="Domain_Column_List">
+		id,cname,created_at
+	</sql>
+
+	<sql id="Dict_Column_List">
+		id,cname, domain_id,created_at
+	</sql>
+
+
+
+	<insert id="insertDomain" parameterType="com.queencastle.dao.model.PropertyDomain">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT
+			LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_property_domain (cname,created_at)
+		values(#{cname},now())
+	</insert>
+
+	<insert id="insertDict" parameterType="com.queencastle.dao.model.PropertyDict">
+		<selectKey resultType="long" keyProperty="idRaw">
+			SELECT
+			LAST_INSERT_ID() AS id
+		</selectKey>
+		insert into queen_property_dict
+		(cname, domain_id,created_at)
+		values
+		(#{cname},#{domainId,typeHandler=idHandler},now())
+	</insert>
+
+
+	<select id="getDomainById" resultMap="PropertyDomainResultMap">
+		select
+		<include refid="Domain_Column_List" />
+		from queen_property_domain where id=#{domainId,typeHandler=idHandler}
+	</select>
+
+	<select id="getDictById" resultMap="PropertyDictResultMap">
+		select
+		<include refid="Dict_Column_List" />
+		from queen_property_dict where id=#{dictId,typeHandler=idHandler}
+	</select>
+
+	<select id="getListByDomainId" resultMap="PropertyDictResultMap">
+		select
+		<include refid="Dict_Column_List" />
+		from queen_property_dict where
+		domain_id=#{domainId,typeHandler=idHandler}
+
+	</select>
+
+	<select id="getpropertyDictCountByParams" resultType="java.lang.Integer">
+		select
+		count(*) from queen_property_dict
+	</select>
+	
+	<select id="getpropertyDomainCountByParams" resultType="java.lang.Integer">
+		select
+		count(*) from queen_property_domain
+	</select>
+
+	<select id="getPropertyDictByParams" resultMap="PropertyDictResultMap">
+		select
+		<include refid="Dict_Column_List" />
+		from queen_property_dict
+		order by id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+	
+	<select id="getPropertyDomainByParams" resultMap="PropertyDomainResultMap">
+		select
+		<include refid="Domain_Column_List" />
+		from queen_property_domain
+		order by id desc
+		limit #{page.offset}, #{page.size}
+	</select>
+
+</mapper>

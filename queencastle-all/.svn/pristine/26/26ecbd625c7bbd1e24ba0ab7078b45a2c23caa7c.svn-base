@@ -1,0 +1,135 @@
+package com.queencastle.service.impl.relations;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import com.queencastle.dao.PageInfo;
+import com.queencastle.dao.mapper.relations.UserManagerMapper;
+import com.queencastle.dao.model.relations.UserManager;
+import com.queencastle.dao.vo.UserManagerVO;
+import com.queencastle.service.interf.relations.UserManagerService;
+
+@Service
+public class UserManagerServiceImpl implements UserManagerService {
+
+    @Autowired
+    private UserManagerMapper userManagerMapper;
+
+    @Override
+    public int insert(UserManager userManager) {
+        return userManagerMapper.insert(userManager);
+    }
+
+    @Override
+    public PageInfo<UserManager> getByParams(int page, int rows, Map<String, Object> map) {
+
+        PageInfo<UserManager> pageInfo = new PageInfo<UserManager>();
+        pageInfo.setPage(page);
+        Integer count = userManagerMapper.getCountByParams(map);
+        if (count == null || count == 0) {
+            pageInfo.setTotal(0);
+            pageInfo.setRows(new ArrayList<UserManager>());
+            return pageInfo;
+        }
+        pageInfo.setTotal(count);
+        page = (page <= 1) ? 1 : page;
+        Pageable pageable = new PageRequest(page - 1, rows);
+
+        List<UserManager> list = userManagerMapper.getByParams(pageable, map);
+        pageInfo.setRows(list);
+        return pageInfo;
+
+    }
+
+    @Override
+    public UserManagerVO getMyWholeTeam(String userId) {
+        UserManagerVO result = new UserManagerVO();
+        // 当前结点
+        UserManager userManager = getByUserId(userId);
+        if (userManager != null) {
+            result = convertVO(userManager);
+            // 子节点
+            List<UserManager> list = getByManagerId(userManager.getId());
+            if (!CollectionUtils.isEmpty(list)) {
+                List<UserManagerVO> members = new ArrayList<UserManagerVO>();
+                for (UserManager um : list) {
+                    members.add(getMyWholeTeam(um.getUserId()));
+                }
+                result.setMembers(members);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public UserManagerVO getMyAndDirectTeam(String userId) {
+        if (StringUtils.isNoneBlank(userId)) {
+            UserManager userManager = getByUserId(userId);
+            if (userManager != null) {
+                UserManagerVO result = convertVO(userManager);
+                List<UserManager> list = getByManagerId(userManager.getManagerId());
+                List<UserManagerVO> members = new ArrayList<UserManagerVO>();
+                if (!CollectionUtils.isEmpty(list)) {
+                    for (UserManager um : list) {
+                        UserManagerVO member = convertVO(um);
+                        members.add(member);
+                    }
+                }
+                result.setMembers(members);
+
+                return result;
+            }
+        }
+        return null;
+    }
+
+    private UserManagerVO convertVO(UserManager userManager) {
+        UserManagerVO vo = new UserManagerVO();
+        vo.setManagerId(userManager.getId());
+        vo.setCname(userManager.getCname());
+        vo.setLevel(userManager.getLevel());
+        return vo;
+    }
+
+    @Override
+    public UserManager getByUserId(String userId) {
+        if (StringUtils.isNoneBlank(userId)) {
+            return userManagerMapper.getByUserId(userId);
+        }
+        return null;
+    }
+
+    @Override
+    public List<UserManager> getByManagerId(String managerId) {
+        if (StringUtils.isNoneBlank(managerId)) {
+            List<UserManager> list = userManagerMapper.getByManagerId(managerId);
+            return list;
+        }
+        return null;
+    }
+
+    @Override
+    public UserManager getById(String id) {
+        if (StringUtils.isNoneBlank(id)) {
+            return userManagerMapper.getById(id);
+        }
+        return null;
+    }
+
+    @Override
+    public UserManager getProvinceManagerByAreaId(String provinceId) {
+        if (StringUtils.isNoneBlank(provinceId)) {
+            return userManagerMapper.getProvinceManagerByAreaId(provinceId);
+        }
+        return null;
+    }
+
+}

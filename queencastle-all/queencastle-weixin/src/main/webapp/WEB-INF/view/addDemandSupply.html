@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="format-detection" content="telephone=no"/>
+<title>新增产品</title>
+<link rel="stylesheet" href="/resources/css/jquery.mobile-1.4.5.min.css"/>
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+<script src="/resources/js/jquery.mobile-1.4.5.min.js"></script>
+<script src="/resources/js/jquery.form.js"></script>
+<script type="text/javascript" th:inline="javascript">
+ 
+$(function(){
+ 
+});
+
+
+</script>
+
+</head>
+<body>
+<form method="post" id="ajaxFrm" action="addDemandSupply"  enctype="multipart/form-data" data-ajax='false'>
+<input type="hidden" name="type" th:value="${type}" id="type"/>
+	<div data-role="fieldcontain">
+		<fieldset data-role="fieldcontain">
+        	<label for="productId">选择产品 </label>
+       		<select name="productId" id="productId" th:if="${products!=null}"  data-native-menu="false">
+         		<option th:each="product:${products}" th:value="${product.id}" th:text="${product.cname}"></option>
+        	</select>
+      	</fieldset>
+	</div>
+  	<div data-role="fieldcontain">
+  		<label for="amount">选择产品数量 </label>
+	    <input type="number" name="amount" id="amount" />
+	</div>
+	<div data-role="fieldcontain">
+  		<label for="price">选择产品价格 </label>
+	    <input type="number" name="price" id="price" />
+	</div>
+	<div data-role="fieldcontain">
+		<label for="startDate">开始日期</label>
+	    <input type="date"   name="startDate"  value="" />
+	</div>
+	 
+	<div data-role="fieldcontain">
+		<label for="endDate">结束日期</label>
+	    <input type="date"   name="endDate"   value="" />
+	</div>
+	 <div data-role="fieldcontain">
+		   <label for="memo">附加信息:</label>
+			<textarea name="memo" id="memo"></textarea>
+	</div>
+	
+	
+    <input type="submit" data-inline="true" value="提交"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<div style="width: 100%; height: 100%;">
+	<div style="width:100%;height:450px;float:left;">
+		<table id="userGLevelTableId" title="用户群列表" style="width: 100%; height: 450px">
+		</table>
+		<div id="userGLevelToolbar">
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="buildNewGroup()">新增群</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editGroupLevel()">修改群信息</a>
+		<div id="tbxxx" style="padding:3px">
+			<span>群类型:</span>
+			<select id="groupLSelect" style="width:120px;font-size:14px;">
+			<option value="">全部</option>
+			<option value="province">省</option>
+			<option value="city">地区</option>
+			<option value="area">县区</option>
+			</select>
+		</div>
+		</div>	
+	</div>
+	
+	 <div id="uglDlg" class="easyui-dialog" style="width:360px;height:390px;padding:10px 20px"
+            closed="true" buttons="#uglDlg-buttons">
+        <form id="uglDlgFrm" method="post"  enctype="multipart/form-data">
+         <input   name="id"   id="id" type="hidden"/>
+         <input name="areaId" id="areaId" type="hidden"/>
+            <div class="fitem">
+                <label>群名称:</label>
+                <input id="cGname" name="cname"      required="true"/>
+            </div>
+             <div class="fitem">
+                <label>群地区(省):</label>
+               <input id="areaProvinceId"/>
+            </div>
+            <div class="fitem">
+                <label>群地区(市):</label>
+                 <input id="areaCityId"/>
+            </div>
+            
+               <div class="fitem">
+                    <input type="text" placeholder="前缀"   style="background-color:#DEDEDE;width:50px;display:inline-block;" name="areaPrefix" id="areaPrefix"/>
+               	 	<input type="text" placeholder="编号" style="display:inline-block;" name="areaSuffix" id="areaSuffix"/>
+               </div>
+           <div class="fitem">
+                <label>群简介:</label>
+                <textarea id="profile" name="profile"    required="true"></textarea>
+            </div>
+             <div class="fitem">
+                <label>群二维码:</label>
+                <input id="img" name="img"   class="sysFile"   style="width:260px;"/> 
+            </div>      	
+        </form>
+      
+    </div>
+     <div id="uglDlg-buttons">
+     	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="buildUserGroup()" style="width:70px;height:20px">保存 </a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#uglDlg').dialog('close')" style="width:70px;height:20px">取消 </a>
+    </div> 
+	
+	
+	
+	<script type="text/javascript" charset="utf-8" th:src="@{/resources/js/relations/ugLevellist.js}"></script>
+</div>

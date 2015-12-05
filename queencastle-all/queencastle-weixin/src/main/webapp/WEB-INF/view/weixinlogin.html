@@ -1,0 +1,58 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="format-detection" content="telephone=no"/>
+<title>女王登录页</title>
+<style type="text/css">
+html{height: 100%;padding: 0px;margin: 0px;font-family:"Microsoft YaHei","Tahoma";}
+body{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;margin:0;}
+img {width:100%;}
+ul, li {list-style:none;margin:0;padding:0;}
+
+input::-webkit-input-placeholder { color: #000 !important; }
+.pageLogin {background:url("/resources/images/bg.jpg") no-repeat center;background-size:100% 100%;}
+.pageLogin .logo {width:35%;margin: 0% 32.5% 5% 32.5%;}
+.pageLogin .logo > img {margin-top:10%;}
+.loginInput input {width:77%;height:35px;line-height:35px;padding-left:2%;margin:1% 11.5% 2% 11.5%;background:#fff;border:none;outline:none;}
+.loginBtn {width:77%;height:35px;line-height:35px;margin:1% 11.5% 2% 11.5%;background:#41009a;font-size:16px;color:#fff;text-align:center;}
+.loginTip {position:relative;width:77%;height:6%;margin:1% 11.5% 4% 11.5%;}
+.loginTip > a:nth-of-type(1) {position:absolute;left:0;top:0;font-size:14px;color:#fff;border-bottom:1px solid #fff;}
+.loginTip > a:nth-of-type(2) {position:absolute;right:0;top:0;font-size:14px;color:#fff;border-bottom:1px solid #fff;}
+/* .loginWeixin {position:absolute;bottom:18%;left:0;width:20%;margin:0% 40% 0% 40%;} */
+/* .companyWrapper {position:absolute;bottom:5%;left:0;width:100%;text-align:center;} */
+.loginWeixin {display:block;width:20%;margin:20% 40% 5% 40%;}
+.companyWrapper {width:100%;text-align:center;}
+.compangInfo {font-size:14px;color:#fff;text-align:center;}
+</style>
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="resources/js/md5.js"></script>
+
+</head>
+<body class="pageLoginBg">
+<div class="pageLogin">
+	<div>
+		<div class="logo"><img src="/resources/images/logo.png" /></div>
+		<form id="loginFrm" action="/userLogin" method="post">
+			<div class="loginInput" style="color:red;text-align:center;"><label id="userLoginMsg"></label></div>
+			<div class="loginInput" style="color:red;text-align:center;"><label th:if="${info!=null}" id="loginInfo" th:text="${info}"></label></div>
+			<div class="loginInput"><input type="text" id="j_username"  name="username" placeholder="请输入用户名" /></div>
+			<div class="loginInput"><input type="password" id="j_password" name="password" placeholder="请输入密码" /></div>
+			<div class="loginBtn" id="loginBtn">登录</div>
+		</form>
+		<div class="loginTip">
+			<a href="/register">注册新用户</a> <a>忘记密码？</a>
+		</div>
+		<a th:href="${authUrl}" class="loginWeixin"><img src="/resources/images/login_weixin.png" /></a>
+		<div class="companyWrapper">
+			<div class="compangInfo">杭州彬小沫网络有限公司</div>
+			<div class="compangInfo">女王城堡@2015.queen‘s  castle</div>
+		</div>
+	</div>
+</div>
+<script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" th:inline="javascript" th:src="@{/resources/js/sys/weixinLogin.js}"></script>		
+</body>
+</html>

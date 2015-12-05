@@ -1,0 +1,291 @@
+package com.queencastle.weixin.controllers.weixin;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
+
+import com.queencastle.dao.model.User;
+import com.queencastle.dao.model.UserDetailInfo;
+import com.queencastle.dao.model.area.City;
+import com.queencastle.dao.model.area.Province;
+import com.queencastle.dao.model.loggs.LogType;
+import com.queencastle.dao.model.loggs.UserLog;
+import com.queencastle.dao.model.relations.AuditStatus;
+import com.queencastle.dao.model.relations.GroupLevel;
+import com.queencastle.dao.model.relations.GroupType;
+import com.queencastle.dao.model.relations.ManagerAuth;
+import com.queencastle.dao.model.relations.UserAudit;
+import com.queencastle.dao.model.relations.UserGroup;
+import com.queencastle.dao.model.relations.UserManager;
+import com.queencastle.dao.model.weixin.UserIntention;
+import com.queencastle.service.config.GlobalValue;
+import com.queencastle.service.interf.UserDetailInfoService;
+import com.queencastle.service.interf.UserService;
+import com.queencastle.service.interf.area.AreaInfoService;
+import com.queencastle.service.interf.loggs.UserLogService;
+import com.queencastle.service.interf.relations.AreaGroupService;
+import com.queencastle.service.interf.relations.ManagerAuthService;
+import com.queencastle.service.interf.relations.UserAuditService;
+import com.queencastle.service.interf.relations.UserGroupService;
+import com.queencastle.service.interf.relations.UserManagerService;
+import com.queencastle.service.interf.relations.UserMemberService;
+import com.queencastle.service.interf.weixin.UserIntentionService;
+import com.queencastle.service.interf.weixin.WeiXinService;
+import com.queencastle.service.sessions.PermissionContext;
+import com.queencastle.service.utils.KFAccountHelper;
+import com.queencastle.service.utils.WeiXinHelper;
+
+@Controller
+@RequestMapping("/audit")
+public class UserWeiXinAuditController {
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private UserAuditService userAuditService;
+    @Autowired
+    private UserLogService userLogService;
+    @Autowired
+    private UserIntentionService userIntentionService;
+    @Autowired
+    private AreaInfoService areaInfoService;
+    @Autowired
+    private UserDetailInfoService userDetailInfoService;
+    @Autowired
+    private UserManagerService userManagerService;
+    @Autowired
+    private AreaGroupService areaGroupService;
+    @Autowired
+    private UserGroupService userGroupService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Autowired
+    private WeiXinService weiXinService;
+    @Autowired
+    private UserMemberService userMemberService;
+    @Autowired
+    private ManagerAuthService managerAuthService;
+
+
+    @Transactional
+    @RequestMapping("/applyAudit")
+    public String applyAudit(@ModelAttribute("userIntention") UserIntention userIntention) {
+        User user = PermissionContext.getUser();
+        userIntention.setUserId(user.getId());
+        userIntentionService.insert(userIntention);
+        UserAudit userAudit = new UserAudit();
+        userAudit.setApplyUser(user);
+        userAudit.setAuditUser(new User());
+        userAudit.setAuditStatus(AuditStatus.undone);
+        userAudit.setReason("");
+        userAuditService.insert(userAudit);
+        UserLog userLog = new UserLog();
+        userLog.setContent("提交审核");
+        userLog.setLogType(LogType.audit);
+        userLog.setObjectId(userAudit.getId());
+        userLog.setUserId(user.getId());
+        userLogService.insert(userLog);
+        return "redirect:/undone";
+    }
+
+    @ResponseBody
+    @RequestMapping("/provinceManagePass")
+    public boolean provinceManagePass(String userId) {
+        User user = PermissionContext.getUser();
+        if (user == null) {
+            return false;
+        }
+        // 查看当前用户是否已经审核通过
+        UserAudit tmp = userAuditService.getByUserId(userId);
+        if (tmp != null && tmp.getAuditStatus() != AuditStatus.undone) {
+            //
+            logger.error("userId-- 重复审核" + userId);
+            return false;
+        }
+        String currentUserId = user.getId();
+        // for test
+        logger.error("userId--" + userId);
+        UserManager manager = userManagerService.getByUserId(currentUserId);
+        logger.error("manager--" + manager);
+        // UserManager manager = userManagerService.getByUserId(userId);
+        UserDetailInfo detailInfo = userDetailInfoService.getByUserId(currentUserId);
+        if (detailInfo == null) {
+            return false;
+        }
+
+        String provinceCode = detailInfo.getProvinceCode();
+        Province province = areaInfoService.getProvinceByprovinceCode(provinceCode);
+        String cityCode = detailInfo.getCityCode();
+        City city = areaInfoService.getByCityCode(cityCode);
+        List<UserManager> list = userManagerService.getByManagerId(manager.getId());
+        if (CollectionUtils.isEmpty(list)) {
+            logger.error("省级管理员[" + user.getPhone() + "]没有地区管理员，无法分配任务");
+            return false;
+        }
+
+        // 收集管理员的用户编号
+        List<String> managerIds = new ArrayList<String>();
+        for (UserManager um : list) {
+            managerIds.add(um.getUserId());
+        }
+        logger.error("managerIds--" + managerIds);
+        // 市级管理员是群主
+        // 发送消息
+        // 获取可用的群
+        List<UserGroup> groups =
+                userGroupService.getAllSubUsableByAreaId(province.getId(), GroupLevel.province);
+        if (CollectionUtils.isEmpty(groups)) {
+            logger.error("省级管理员[" + user.getPhone() + "]没有可用的群，无法分配任务");
+            return false;
+        }
+
+        // 收集群主的用户编号
+        List<String> masterIds = new ArrayList<String>();
+        for (UserGroup group : groups) {
+            masterIds.add(group.getMasterId());
+        }
+        logger.error("masterIds--" + masterIds);
+        List<String> resultIds = new ArrayList<String>();
+        // 对应的管理员是否已经是地方群的群主
+        for (String tmpUserId : managerIds) {
+            if (masterIds.contains(tmpUserId)) {
+                resultIds.add(tmpUserId);
+            }
+        }
+        //
+        if (CollectionUtils.isEmpty(resultIds)) {
+            logger.error("省级管理员[" + user.getPhone() + "]发现地区管理员没有指派到对应的群，无法分配任务");
+            return false;
+        }
+        int index = RandomUtils.nextInt(0, resultIds.size());
+        String masterId = resultIds.get(index);
+        logger.error("resultIds--" + resultIds + "---masterId--" + masterId);
+        // 根据组编号，重新获取群主
+        // UserGroup group = userGroupService.getByMasterId(masterId, GroupType.system);
+        List<UserGroup> masterGroups = userGroupService.getByMasterId(masterId, GroupType.system);
+        if (CollectionUtils.isEmpty(masterGroups)) {
+            logger.error("系统出错,省级管理员[" + user.getPhone() + "]无法分配任务，下属管理员没有群");
+            return false;
+        }
+        index = RandomUtils.nextInt(0, masterGroups.size());
+        logger.error("-------------1-------------");
+        UserGroup group = masterGroups.get(index);
+        if (group == null || StringUtils.isBlank(group.getMasterId())) {
+            logger.error("系统出错,省级管理员[" + user.getPhone() + "]无法分配任务，下属管理员，并非这个群群主");
+            return false;
+        }
+        String messageUserId = group.getMasterId();
+        logger.error("-------------2-------------");
+        User messageUser = userService.getById(messageUserId);
+        User applyUser = userService.getById(userId);
+
+        // 审核记录修改
+        UserAudit userAudit = userAuditService.getByUserId(userId);
+        userAudit.setApplyUser(applyUser);
+        userAudit.setAuditUser(user);
+        userAudit.setAuditStatus(AuditStatus.audit);
+        userAudit.setReason("audit agree");
+        userAuditService.updateStatusAndReason(userAudit);
+        logger.error("-------------3-------------");
+        ManagerAuth mAuth = new ManagerAuth();
+        mAuth.setAreaId(city.getId());
+        mAuth.setUserId(userId);
+        mAuth.setAuthId(messageUserId);
+        mAuth.setLevel(GroupLevel.city);
+        mAuth.setStatus(AuditStatus.undone);
+        mAuth.setGroupId(group.getId());
+        managerAuthService.insert(mAuth);
+        // 发送消息
+        String openId = messageUser.getOpenId();
+        // 发送通过链接,需要发送模板消息
+        String accessToken = weiXinService.getAccessToken();
+        String msg = "地址:" + province.getCname() + city.getCname();
+        String paramUrl =
+                "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5d969d791a2f8855&redirect_uri=http%3a%2f%2fwww.queencastle.cn%2fweixinApi%2fcityAudit%3FuserId%3D"
+                        + userId
+                        + "%26groupId%3d"
+                        + group.getId()
+                        + "&response_type=code&scope=snsapi_base&state=bdx#wechat_redirect";
+        // for test
+        // WeiXinHelper.templateProxyMessage(restTemplate, "o0EQqtztBibckN5O-Lz1ivxkok8k", paramUrl,
+        // applyUser, accessToken, msg);
+        WeiXinHelper.templateProxyMessage(restTemplate, openId, paramUrl, applyUser, accessToken,
+                msg);
+
+        return true;
+    }
+
+    // 每个人被分配到不同的群里
+    @ResponseBody
+    @RequestMapping("/cityManagePass")
+    public boolean cityManagePass(String userId) {
+        User user = PermissionContext.getUser();
+        if (user != null) {
+            UserDetailInfo detailInfo = userDetailInfoService.getByUserId(user.getId());
+            if (detailInfo != null) {
+                String cityCode = detailInfo.getCityCode();
+                City city = areaInfoService.getByCityCode(cityCode);
+                List<ManagerAuth> list =
+                        managerAuthService.getByAreaIdAndAuthId(city.getId(), user.getId(),
+                                GroupLevel.city);
+                if (!CollectionUtils.isEmpty(list)) {
+                    // 过滤出未审核的
+                    List<ManagerAuth> undoList = new ArrayList<ManagerAuth>();
+                    for (ManagerAuth auth : list) {
+                        if (auth.getStatus() == AuditStatus.undone) {
+                            undoList.add(auth);
+                        }
+                    }
+                    if (undoList.size() > 0) {
+                        ManagerAuth toSentAuth = null;
+                        for (ManagerAuth auth : undoList) {
+                            // 获取到这个用户的信息
+                            boolean flagA = StringUtils.equals(auth.getUserId(), userId);
+                            boolean flagB = StringUtils.equals(auth.getAuthId(), user.getId());
+                            boolean found = flagA && flagB;
+                            if (found) {
+                                toSentAuth = auth;
+                                break;
+                            }
+                        }
+                        if (toSentAuth != null) {
+                            logger.error("--------------1---------");
+                            String accessToken = weiXinService.getAccessToken();
+                            String openId = userService.getById(userId).getOpenId();
+                            String groupId = toSentAuth.getGroupId();
+                            UserGroup group = userGroupService.getById(groupId);
+                            String url =
+                                    "http://www.queencastle.cn/qrcode/getByGroupId?groupId="
+                                            + groupId;
+                            // openId = "o0EQqtztBibckN5O-Lz1ivxkok8k";
+                            KFAccountHelper.sendMews(openId, "女王城堡通行证", url, GlobalValue.QINIU_HOST
+                                    + group.getImg(), accessToken, restTemplate);
+                            logger.error("--------------2---------");
+                            // 改变状态
+                            toSentAuth.setStatus(AuditStatus.sent);
+                            managerAuthService.updateStatusById(toSentAuth);
+                            logger.error("--------------3---------");
+                        }
+
+                    }
+
+                }
+            }
+        }
+
+        return true;
+    }
+}

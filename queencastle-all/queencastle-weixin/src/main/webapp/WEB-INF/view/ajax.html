@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="format-detection" content="telephone=no"/>
+<title> ajax form submit</title>
+<link rel="stylesheet" href="/resources/css/jquery.mobile-1.4.5.min.css"/>
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+<script src="/resources/js/jquery.mobile-1.4.5.min.js"></script>
+<!-- <script src="http://malsup.github.com/jquery.form.js"></script> -->
+
+<script src="/resources/js/jquery.form.js"></script>
+<script src="/resources/js/jquery.validate.min.js"></script>
+<script src="/resources/js/messages_zh.js"></script>
+<!-- <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.js"></script> -->
+
+<script type="text/javascript" th:inline="javascript">
+$(function(){
+	//http://jquery.malsup.com/form/
+// 	  $('#ajaxFrm').ajaxForm({
+// 	        dataType:  'json',
+// 	        success:   function(data){
+// 	        	alert(data);
+// 	        	alert("success");
+// 	        	window.location="http://www.baidu.com";
+// 	        }
+// 	    });
+	  $('#ajaxFrm').validate({
+		    focusCleanup:true,focusInvalid:false,
+		    errorClass: "unchecked",
+		    validClass: "checked",
+		    errorElement: "span",
+		    errorPlacement:function(error,element){
+		      var s=element.parent().find("span[htmlFor='" + element.attr("id") + "']");
+		      if(s!=null){
+		        s.remove();
+		      }
+		      error.appendTo(element.parent());
+		    },
+		    success: function(label) {
+		      //label.addClass("valid").text("Ok!")
+		      label.removeClass("unchecked").addClass("checked");
+		    },
+		    rules:{
+		    	intro:{required:true},
+		      
+		    }
+		  });  
+	    
+	    
+	    
+	    
+	    
+});
+</script>
+</head>
+<body>
+<form method="post" id="ajaxFrm" action="/ajaxSubmit"  enctype="multipart/form-data" data-ajax='false' >
+	<div data-role="fieldcontain">
+	   <label for="intro">产品介绍</label>
+		<textarea name="intro" id="intro"  class="required"></textarea>
+	</div>
+	<div data-role="fieldcontain">
+	   <label for="imgs">产品图片</label>
+	   <input type="file"  name="imgs"/> 
+	</div>
+    <input type="submit" data-inline="true" value="提交"/>
+</form>
+</body>
+</html>

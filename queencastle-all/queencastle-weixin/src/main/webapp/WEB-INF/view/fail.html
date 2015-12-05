@@ -1,0 +1,80 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="format-detection" content="telephone=no"/>
+<title>审核未通过</title>
+<style>
+html{height: 100%;padding: 0px;margin: 0px;font-family:"Microsoft YaHei","Tahoma";}
+body{margin:0;}
+img {width:100%;}
+ul, li {list-style:none;margin:0;padding:0;}
+ 
+.pageIndex {background:url("/resources/images/bg1.png") no-repeat center;background-size:100% 100%;padding-bottom:40px;}
+
+ 
+.bottomNav {position:fixed;bottom:0;width:100%;background:#41009a;}
+.bottomNav ul {font-size:0;}
+.bottomNav li {display:inline-block;vertical-align:middle;text-align:center;}
+.navItem1, .navItem2 {width:48%;font-size:16px;color:#fff;}
+.navSplit {width:4%;height:44px;}
+.navIcon {display:inline-block;width:10%;vertical-align:middle;margin-right:5px;}
+.navText {display:inline-block;vertical-align:middle;}
+.navSplitIcon {display:inline-block;width:1px;height:26px;background:#fff;margin-top: 10px;}
+
+</style>
+</head>
+<body class="pageIndexBg">
+<div class="pageIndex">
+ <div style="width:90%; height:300px;padding:40% 5%;  vertical-align:middle;text-align: center;">
+ 	<div><label style="font-size:16px;color:gray;font-weight:bold;">温馨提示</label></div>
+ 	<div><label style="font-size:18px;color:blue;font-weight:bold;">您的审核未通过，具体原因请联系客服</label></div>
+ 	<div style="margin-top:10px;">
+ 		<label style="font-size:16px;color:#FFFFFF;width:40%;padding:2% 3%;font-weight:bold; display:inline-block;background:#41009a;">联系客服</label>
+ 		<label class="queenIdxCLZ" style="font-size:16px;color:#FFFFFF;width:40%;padding:2% 3%;font-weight:bold;display:inline-block;background:#41009a;">城堡介绍</label>
+ 	</div>
+ </div>
+	<div class="bottomNav">
+		<ul>
+			<li class="navItem1">
+				<div class="navIcon"><img src="/resources/images/icon1.png" /></div>
+				<div class="navText">首页</div> 
+			</li>
+			<li class="navSplit"><div class="navSplitIcon"></div></li>
+			<li class="navItem2">
+				<div class="navIcon"><img src="/resources/images/icon2.png" /></div>
+				<div class="navText">个人中心</div> 
+			</li>
+		</ul>
+	</div>
+</div>
+
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+
+<script   type="text/javascript" th:inline="javascript" >
+/*<![CDATA[*/
+$(function(){
+	//让背景填充整个屏幕和内容区
+	if($(".pageIndex").height() < $(window).height() ){
+		$(".pageIndex").height($(window).height());
+	}
+ 
+	$(".navItem1").click(function(){
+		window.location = /*[[@{/queenIdx}]]*/;
+	});
+	$(".navItem2").click(function(){
+		window.location = /*[[@{/userCenter}]]*/;
+	});
+	$(".queenIdxCLZ").click(function(){
+		window.location = /*[[@{/queenIdx}]]*/;
+	});
+});
+ 
+/*]]>*/
+</script>	
+ 
+
+</body>
+</html>

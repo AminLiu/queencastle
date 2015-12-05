@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="format-detection" content="telephone=no"/>
+<title>基本表单组件</title>
+<link rel="stylesheet" href="/resources/css/jquery.mobile-1.4.5.min.css"/>
+<script src="/resources/js/jquery-1.10.2.min.js"></script>
+<script src="/resources/js/jquery.mobile-1.4.5.min.js"></script>
+</head>
+<body>
+  <form method="post" action="/"  >
+  	<div data-role="fieldcontain">
+	    <input type="search" placeholder="请输入您要查找的内容" name="search" id="search" value="" />
+	</div>
+     <div data-role="fieldcontain" class="ui-field-contain">
+     <label for="name">用户名</label>
+	    <input type="text" placeholder="请输入您的用户名" name="name" id="text" value=""  />
+	</div>
+	 <div data-role="fieldcontain">
+		   <label for="info">附加信息:</label>
+			<textarea name="addinfo" id="info"></textarea>
+	</div>
+	<div data-role="fieldcontain">
+		<label for="startDate">开始日期</label>
+	    <input type="date"     name="startDate"  value="" />
+	</div>
+	 
+	<div data-role="fieldcontain">
+		<label for="endDate">结束日期</label>
+	    <input type="date"   name="endDate"   value="" />
+	</div>
+	
+	<div data-role="fieldcontain">
+	    <fieldset data-role="controlgroup" data-type="horizontal">
+		 <legend>请选择您的颜色：</legend>
+	        <input type="radio" name="radio-choice-1" id="radio-choice-1" value="choice-1" />
+	        <label for="radio-choice-1">蓝</label>
+	        <input type="radio" name="radio-choice-1" id="radio-choice-2" value="choice-2"  />
+	        <label for="radio-choice-2">绿</label>
+	        <input type="radio" name="radio-choice-1" id="radio-choice-3" value="choice-3"  />
+	        <label for="radio-choice-3">黑</label>
+	    </fieldset>
+	</div>
+	 
+	<div data-role="fieldcontain">
+	    <fieldset data-role="controlgroup" >
+	     <legend>请选择您的效果：</legend>
+	        <input type="checkbox" name="blue" id="effect1" class="custom" />
+	        <label for="effect1">效果1</label>
+	        <input type="checkbox" name="green" id="effect2" class="custom" />
+	        <label for="effect2">效果2</label>
+	        <input type="checkbox" name="pink" id="effect2" class="custom"  />
+	        <label for="effect2">效果3</label>
+	    </fieldset>
+	</div>
+	
+	<div data-role="fieldcontain">
+	 <fieldset data-role="fieldcontain">
+        <label for="day">选择天</label>
+        <select name="day" id="day">
+         <option value="mon">星期一</option>
+         <option value="tue">星期二</option>
+         <option value="wed">星期三</option>
+         <option value="thu">星期四</option>
+         <option value="fri">星期五</option>
+         <option value="sat">星期六</option>
+         <option value="sun">星期日</option>
+        </select>
+      </fieldset>
+	</div>
+		<div data-role="fieldcontain">
+		 <fieldset data-role="fieldcontain">
+        <label for="day">选择天</label>
+        <select name="day" id="day">
+		<optgroup label="工作日">
+         <option value="mon">星期一</option>
+         <option value="tue">星期二</option>
+         <option value="wed">星期三</option>
+         <option value="thu">星期四</option>
+         <option value="fri">星期五</option>
+		</optgroup>
+		<optgroup label="周末">
+         <option value="sat">星期六</option>
+         <option value="sun">星期日</option>
+		</optgroup>
+        </select>
+      </fieldset>
+		</div>
+		<div data-role="fieldcontain">
+		 <fieldset data-role="fieldcontain">
+        <label for="day">选择天</label>
+        <select name="day" id="day" data-native-menu="false">
+         <option value="mon">星期一</option>
+         <option value="tue">星期二</option>
+         <option value="wed">星期三</option>
+         <option value="thu">星期四</option>
+         <option value="fri">星期五</option>
+         <option value="sat">星期六</option>
+         <option value="sun">星期日</option>
+        </select>
+      </fieldset>
+		</div>
+		<div data-role="fieldcontain">
+        <fieldset data-role="controlgroup">
+          <legend>安排会议：</legend>
+            <label for="day">选择日期：</label>
+            <select name="day" id="day">
+              <option value="mon">Monday</option>
+              <option value="tue">Tuesday</option>
+              <option value="wed">Wednesday</option>
+              <option value="thu">Thursday</option>
+              <option value="fri">Friday</option>
+              <option value="sat">Saturday</option>
+              <option value="sun">Sunday</option>
+            </select>
+
+            <label for="time">选择时间：</label>
+            <select name="time" id="time">
+              <option value="08">08:00</option>
+              <option value="09">09:00</option>
+              <option value="10">10:00</option>
+              <option value="11">11:00</option>
+              <option value="12">12:00</option>
+              <option value="13">13:00</option>
+              <option value="14">14:00</option>
+              <option value="15">15:00</option>
+              <option value="16">16:00</option>
+            </select>
+        </fieldset>
+      </div>
+      <div data-role="fieldcontain">
+        <fieldset data-role="controlgroup" data-type="horizontal">
+          <legend>安排会议：</legend>
+            <label for="day">选择日期：</label>
+            <select name="day" id="day">
+              <option value="mon">Monday</option>
+              <option value="tue">Tuesday</option>
+              <option value="wed">Wednesday</option>
+              <option value="thu">Thursday</option>
+              <option value="fri">Friday</option>
+              <option value="sat">Saturday</option>
+              <option value="sun">Sunday</option>
+            </select>
+
+            <label for="time">选择时间：</label>
+            <select name="time" id="time">
+              <option value="08">08:00</option>
+              <option value="09">09:00</option>
+              <option value="10">10:00</option>
+              <option value="11">11:00</option>
+              <option value="12">12:00</option>
+              <option value="13">13:00</option>
+              <option value="14">14:00</option>
+              <option value="15">15:00</option>
+              <option value="16">16:00</option>
+            </select>
+        </fieldset>
+      </div>
+          <div data-role="fieldcontain">
+          <fieldset data-role="fieldcontain">
+        <label for="day">选择日期</label>
+        <select name="day" id="day">
+          <option value="mon">Monday</option>
+          <option value="tue">Tuesday</option>
+          <option value="wed" selected="selected">Wednesday</option>
+          <option value="thu">Thursday</option>
+          <option value="fri">Friday</option>
+          <option value="sat">Saturday</option>
+          <option value="sun">Sunday</option>
+        </select>
+      </fieldset>
+          </div>
+           <div data-role="fieldcontain">
+           <fieldset data-role="collapsible">
+        <legend>选填内容！</legend>
+          <label for="name">全名：</label>
+          <input type="text" name="text" id="name"/>
+          <p>喜爱的颜色：</p>
+        <div data-role="controlgroup">
+          <label for="red">红色</label>
+          <input type="checkbox" name="favcolor" id="red" value="red"/>
+          <label for="green">绿色</label>
+          <input type="checkbox" name="favcolor" id="green" value="green"/>
+          <label for="blue">蓝色</label>
+          <input type="checkbox" name="favcolor" id="blue" value="blue"/>
+        </div>	
+      </fieldset>
+          </div>
+           <div data-role="fieldcontain">
+          </div>
+           <div data-role="fieldcontain">
+          </div>
+           <div data-role="fieldcontain">
+          </div>
+      <input type="submit" data-inline="true" value="提交"/>
+    </form>
+
+
+</body>
+</html>
